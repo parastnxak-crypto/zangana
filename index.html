@@ -4,6 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <title>DANGI KURDISTAN</title>
+<meta name="description" content="DANGI KURDISTAN — voice chat rooms, gifts, games and friends for Kurds worldwide.">
+<meta name="theme-color" content="#c9a24a">
+<script>window.FIREBASE_CONFIG={apiKey:"AIzaSyCmdPrHBDsUM7Xz_PN-vtTPxgMXPVJUB5s",authDomain:"dangi-kurdistan.firebaseapp.com",projectId:"dangi-kurdistan",storageBucket:"dangi-kurdistan.firebasestorage.app",messagingSenderId:"115647053456",appId:"1:115647053456:web:957856fc1e9be10f312215"};</script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Poppins:wght@400;500;600;700;800&family=Noto+Sans+Arabic:wght@400;500;700;800&display=swap" rel="stylesheet">
 <style>
@@ -531,7 +537,7 @@ function saveMe(patch){
 }
 function writeFail(e){
   console.warn(e);
-  if (e && e.code==="invalid_argument") { S.canWrite=false; toast("You can only view — you don't have permission to post"); }
+  if (e && (e.code==="invalid_argument"||e.code==="permission-denied")) { S.canWrite=false; toast("You can only view — you don't have permission to post"); }
   else if (e && e.code==="quota_exceeded") toast("Storage is full");
   else toast("Something went wrong, please try again");
 }
@@ -547,6 +553,7 @@ function prof(uid){ return S.profiles[uid] || (uid===S.uid?S.me:null) || {nick:"
 function avHTML(p,size=44){ const bg=AVBG[(p.c||0)%AVBG.length]; const src=avatarSrc(p); return `<div class="av ${size<40?"sm":""}" style="width:${size}px;height:${size}px;background:${bg};font-size:${Math.round(size*.55)}px">${src?`<img src="${esc(src)}" alt="" loading="lazy">`:`<span>${esc(p.av||"👤")}</span>`}</div>`; }
 
 async function boot(){
+  if (useFirebase()) return bootFirebase();
   let db=null,user=null,room=null;
   if (window.claude && claude.use) {
     [db,user,room,S.sample] = await Promise.all([claude.use("db"),claude.use("user"),claude.use("room"),claude.use("sample")].map(p=>p.catch(()=>null)));
@@ -580,7 +587,7 @@ function subscribeAll(){
     if(S.pendingRoom&&S.me&&S.rooms.some(r=>r.id===S.pendingRoom)){ const id=S.pendingRoom; S.pendingRoom=null; enterRoom(id); }
     render(); }, e=>console.warn(e));
   S.db.collection("posts").orderBy("at","desc").limit(60).onSnapshot(s=>{ S.posts=s.docs.map(d=>({id:d.id,...d.data()})); render(); }, e=>console.warn(e));
-  S.db.collection("notifs").where("to","==",S.uid).orderBy("at","desc").limit(100).onSnapshot(s=>{ S.notifs=s.docs.map(d=>({id:d.id,...d.data()})); render(); },()=>{});
+  S.db.collection("notifs").where("to","==",S.uid).limit(200).onSnapshot(s=>{ S.notifs=s.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>(b.at||0)-(a.at||0)); render(); },()=>{});
   S.db.doc("system/announce").onSnapshot(s=>{ S.announce=s.exists?s.data():null; render(); },()=>{});
   S.db.collection("dms").where("members","array-contains",S.uid).onSnapshot(s=>{ S.dms=s.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>(b.at||0)-(a.at||0)); render(); }, e=>console.warn(e));
 }
@@ -624,6 +631,7 @@ async function startOnboarding(){
     if(!$("#ob_ok").checked) return toast(t("Please accept the Community Guidelines"));
     S.me={nick:n.slice(0,20),av:st.av,c:st.c,country:$("#ob_c").value,lang:S.lang,dmPolicy:"all",blocked:[],bio:"",coins:5000,xp:0,following:[],giftsSent:0,gamesWon:0,lastDaily:"",spinDay:"",reads:{},sid:hashNum(S.uid),at:Date.now()};
     if(st.photo==="acct") S.me.pf="acct";
+    if(S.fb){ if(S.myName) S.me.vname=S.myName; if(S.myAvatar) S.me.vphoto=S.myAvatar; }
     const body={...S.me}; S.me._id=S.uid;
     closeModal(true); render(); toast("Welcome! Here are 5,000 🪙 to start");
     saving = S.db.doc("profiles/"+S.uid).set(body).catch(writeFail);
@@ -1899,6 +1907,10 @@ const DICT_ROWS=[
 ["You can create up to 3 rooms per day","ڕۆژانە تا ٣ ژوور دەتوانیت دروست بکەیت","Tu dikarî rojê heta 3 odeyan ava bikî","يمكنك إنشاء 3 غرف يومياً كحد أقصى","Günde en fazla 3 oda oluşturabilirsin"],
 ["Fake or offensive profile photo","وێنەی پرۆفایلی ساختە یان ناشیرین","Wêneyê profîlê yê sexte an kirêt","صورة ملف مزيفة أو مسيئة","Sahte veya uygunsuz profil fotoğrafı"],
 ["Profile photos","وێنەی پرۆفایل","Wêneyên profîlê","صور الملفات","Profil fotoğrafları"],
+["Continue with Google","بەردەوامبە بە Google","Bi Google bidomîne","المتابعة باستخدام Google","Google ile devam et"],
+["Use your Google account. No passwords to remember.","هەژماری Googleـەکەت بەکاربهێنە. پێویست بە وشەی نهێنی نییە.","Hesabê xwe yê Google bi kar bîne. Şîfre ne pêwîst e.","استخدم حساب Google الخاص بك. لا حاجة لكلمات مرور.","Google hesabını kullan. Şifre gerekmez."],
+["Signed in as","چوویتە ژوورەوە وەک","Wek têketî","تم تسجيل الدخول باسم","Giriş yapan"],
+["Sign out","چوونەدەرەوە","Derkeve","تسجيل الخروج","Çıkış yap"],
 ];
 
 /* ================================================================
@@ -2042,6 +2054,7 @@ function openSettings(){
     <button class="mission" style="width:100%" onclick="openPrivacy()"><div class="t" style="text-align:start"><b>Privacy Policy</b><small>What we store and why</small></div>›</button>
     ${isAppOwner()?`<button class="mission" style="width:100%;border-color:#e0393e" onclick="openAdmin()"><div style="font-size:24px">🛡️</div><div class="t" style="text-align:start"><b>Admin panel</b><small>Reports, bans and announcements</small></div>›</button>`:""}
     <button class="mission" style="width:100%" onclick="openDeleteAccount()"><div class="t" style="text-align:start"><b style="color:var(--red)">Delete my account</b><small>Removes your profile from DANGI</small></div>›</button>
+    ${S.fb?`<div class="mission"><div style="font-size:24px">🔐</div><div class="t"><b>Signed in as</b><small class="nt">${esc(S.myName)} · ${esc(S.myEmail)}</small></div><button class="gbtn dark" style="padding:6px 12px" onclick="fbSignOut()">Sign out</button></div>`:""}
     <p class="center" style="color:var(--muted);font-size:11px;margin-top:14px">DANGI KURDISTAN v3.0 · Made for Kurds worldwide 🌍</p>`,{title:"⚙️ Settings"});
 }
 function openBlocked(){
@@ -2069,7 +2082,7 @@ async function doDeleteAccount(){
 }
 
 /* ---------- app owner: admin panel, global bans, announcements ---------- */
-const isAppOwner=()=>S.local?true:!!(S.user&&S.user.isOwner&&S.user.isOwner());
+const isAppOwner=()=>S.local?true:S.fb?ADMIN_EMAILS.includes((S.myEmail||"").toLowerCase()):!!(S.user&&S.user.isOwner&&S.user.isOwner());
 async function openAdmin(){
   openModal(`<div class="empty">⏳</div>`,{title:"🛡️ Admin panel"});
   let reps=[]; try{ const s=await S.db.collection("reports").limit(200).get(); s.docs.forEach(d=>(d.data().items||[]).forEach((it,i)=>reps.push({...it,by:d.id,i}))); }catch(e){}
@@ -2218,8 +2231,9 @@ function showSignIn(){
     <div class="logo-title" style="margin:10px 0 4px">DANGI KURDISTAN</div>
     <h2 style="margin:18px 0 8px">🔐 Real accounts only</h2>
     <p style="color:var(--muted);line-height:1.6">Sign in to join DANGI KURDISTAN</p>
+    ${S.fb?`<button class="gbtn" style="width:100%;padding:13px;margin:6px 0 16px;display:flex;align-items:center;justify-content:center;gap:10px;background:#fff;box-shadow:0 2px 8px rgba(0,0,0,.15);border:1px solid #ddd" onclick="fbSignIn()"><svg width="20" height="20" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.6 20.1H42V20H24v8h11.3C33.7 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.6-.4-3.9z"/><path fill="#FF3D00" d="m6.3 14.7 6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.2 0-9.6-3.3-11.3-7.9l-6.5 5C9.5 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.1H42V20H24v8h11.3c-.8 2.2-2.2 4.2-4.1 5.6l6.2 5.2C37 39.2 44 34 44 24c0-1.3-.1-2.6-.4-3.9z"/></svg><b style="color:#333">Continue with Google</b></button>`:""}
     <div class="mission" style="text-align:start"><div style="font-size:26px">✅</div><div class="t"><b>Verified account</b><small>Every member uses a real, verified account. This keeps out fake accounts, bots and spam.</small></div></div>
-    <div class="mission" style="text-align:start"><div style="font-size:26px">👤</div><div class="t"><b>One person, one account</b><small>Sign in to Claude with your account, then open this page again.</small></div></div>
+    <div class="mission" style="text-align:start"><div style="font-size:26px">👤</div><div class="t"><b>One person, one account</b><small>${S.fb?esc(t("Use your Google account. No passwords to remember.")):esc(t("Sign in to Claude with your account, then open this page again."))}</small></div></div>
   </div>`;
 }
 
@@ -2232,10 +2246,10 @@ async function resolveVerified(){
   try{ const ps=await S.user.profiles(ids); for(const id of ids){ const p=ps[id]; S.vp[id]=p&&p.name?{name:p.name,av:p.avatarUrl||""}:null; } schedRender(); }catch(e){}
   vpBusy=false;
 }
-const isVerified=id=>S.local?["karwan","zilan","rwan","me"].includes(id):!!(S.vp[id]||(id===S.uid&&S.myName));
+const isVerified=id=>S.fb?!!prof(id).vname:S.local?["karwan","zilan","rwan","me"].includes(id):!!(S.vp[id]||(id===S.uid&&S.myName));
 const vBadge=id=>isVerified(id)?`<span class="vchk" title="Verified account">✔</span>`:"";
 function verifiedLine(id){
-  const v=id===S.uid?{name:S.myName}:S.vp[id];
+  const v=S.fb?{name:prof(id).vname}:id===S.uid?{name:S.myName}:S.vp[id];
   if(S.local) return `<div class="vline">✔ <span>Verified account</span></div>`;
   return v&&v.name?`<div class="vline">✔ <span>Verified account</span> · <b class="nt">${esc(v.name)}</b></div>`:"";
 }
@@ -2250,7 +2264,7 @@ function photoFor(id,ph){
 }
 function avatarSrc(p){
   if(!p||!p._id) return p&&p._pending||null;
-  if(p.pf==="acct"){ const a=p._id===S.uid?S.myAvatar:(S.vp[p._id]&&S.vp[p._id].av); if(a&&!a.startsWith("data:")) return a; }
+  if(p.pf==="acct"){ const a=S.fb?p.vphoto:p._id===S.uid?S.myAvatar:(S.vp[p._id]&&S.vp[p._id].av); if(a&&/^https:\/\//.test(a)&&!a.startsWith("data:")) return a; }
   if(p.ph) return photoFor(p._id,p.ph);
   return null;
 }
@@ -2323,6 +2337,93 @@ function spamOK(text,where,max=5,ms=10000){
   if(/(https?:\/\/|www\.|\b[a-z0-9-]+\.(com|net|org|io|me|ly|xyz)\b|t\.me\/|wa\.me\/)/i.test(text)&&(Date.now()-(S.me.at||0)<864e5||level(S.me.xp)<3)){ toast(t("New accounts can't send links yet")); return false; }
   if(/(.)\1{14,}/.test(text)){ toast(t("You already sent that message")); return false; }
   return true;
+}
+
+/* ================================================================
+   FIREBASE MODE (zangana.vercel.app): Google sign-in + Firestore
+   ================================================================ */
+const ADMIN_EMAILS=["parastn.xak@gmail.com","hama.bahroz1122@gmail.com"];
+const useFirebase=()=>!!(window.firebase&&window.FIREBASE_CONFIG&&!(window.claude&&window.claude.use));
+
+function fireDB(fs){
+  const wrapDoc=r=>({id:r.id,path:r.path,
+    get:()=>r.get(), set:d=>r.set(d), update:d=>r.set(d,{merge:true}), delete:()=>r.delete(),
+    onSnapshot:(n,e)=>r.onSnapshot(n,e), collection:p=>wrapCol(r.collection(p)), acquire:async()=>({acquired:true})});
+  const wrapCol=c=>({path:c.path, doc:id=>wrapDoc(id?c.doc(id):c.doc()), add:async d=>wrapDoc(await c.add(d)),
+    where:(...a)=>c.where(...a), orderBy:(...a)=>c.orderBy(...a), limit:n=>c.limit(n), get:()=>c.get(), onSnapshot:(n,e)=>c.onSnapshot(n,e)});
+  return {doc:p=>wrapDoc(fs.doc(p)), collection:p=>wrapCol(fs.collection(p))};
+}
+
+/* presence (who is online, who sits on which seat) stored in Firestore */
+function fireRoom(fs,uid){
+  const ref=fs.doc("presence/"+uid); const mine={uid,inRoom:null,seat:null}; let all=[];
+  const lobbyCbs=new Set(), roomCbs=new Map();
+  const push=()=>ref.set({...mine,at:Date.now()}).catch(()=>{});
+  const peers=f=>{ const now=Date.now(); return all.filter(p=>p&&p.uid&&(p.uid===uid||now-(p.at||0)<150000)).map(p=>p.uid===uid?{...p,...mine}:p).filter(f)
+    .map(p=>({by:p.uid,peer:p.uid,isMe:p.uid===uid,sameTab:p.uid===uid,kind:"viewer",guest:false,presence:p,updatedAt:p.at||0})); };
+  const emit=()=>{ const lp=peers(()=>true); lobbyCbs.forEach(f=>f({peers:lp,joined:[],left:[],updated:[]}));
+    roomCbs.forEach((set,id)=>{ const rp=peers(p=>p.inRoom===id); set.forEach(f=>f({peers:rp,joined:[],left:[],updated:[]})); }); };
+  fs.collection("presence").limit(500).onSnapshot(s=>{ all=s.docs.map(d=>d.data()); if(!all.some(p=>p.uid===uid)) all.push({...mine,at:Date.now()}); emit(); },()=>{});
+  setInterval(()=>{ push(); emit(); },60000);
+  window.addEventListener("pagehide",()=>{ ref.set({uid,inRoom:null,seat:null,at:0}).catch(()=>{}); });
+  push();
+  const set=(patch)=>{ Object.assign(mine,patch); push(); emit(); return Promise.resolve(); };
+  return {
+    onPeers(f){ lobbyCbs.add(f); setTimeout(emit,0); return ()=>lobbyCbs.delete(f); },
+    presence:set, connected:()=>true,
+    async join(name){
+      const id=name.replace(/^r-/,""); mine.inRoom=id; push(); const cbs=new Set(); roomCbs.set(id,cbs);
+      return { name, presence:set, connected:()=>true,
+        onPeers(f){ cbs.add(f); setTimeout(emit,0); return ()=>cbs.delete(f); },
+        async leave(){ roomCbs.delete(id); mine.seat=null; if(mine.inRoom===id) mine.inRoom=null; push(); emit(); } };
+    }
+  };
+}
+
+async function fbSignIn(){
+  const p=new firebase.auth.GoogleAuthProvider(); p.setCustomParameters({prompt:"select_account"});
+  try{ await S.fb.auth.signInWithPopup(p); }
+  catch(e){
+    if(["auth/popup-blocked","auth/operation-not-supported-in-this-environment","auth/web-storage-unsupported"].includes(e.code)) { try{ await S.fb.auth.signInWithRedirect(p); }catch(e2){ toast(e2.message); } }
+    else if(e.code!=="auth/popup-closed-by-user"&&e.code!=="auth/cancelled-popup-request") toast(e.message||String(e));
+  }
+}
+async function fbSignOut(){ try{ if(S.cur) await leaveRoom(); await S.room.presence({inRoom:null,seat:null}); }catch(e){} await S.fb.auth.signOut(); location.hash=""; location.reload(); }
+
+async function seedIfEmpty(){
+  if(!isAppOwner()) return;
+  try{
+    const s=await S.db.collection("rooms").limit(1).get(); if(!s.empty) return;
+    const now=Date.now(), rooms=[["100100","Public Lounge","🏰",0,"ku","chat"],["200200","Songs & Poetry","🎻",3,"ku","poetry"],["300300","Game Hall","🎮",7,"ku","games"],["400400","Kurds of Europe","🌙",6,"de","friends"]];
+    for(const [id,name,icon,theme,country,cat] of rooms) await S.db.doc("rooms/"+id).set({name,icon,theme,country,cat,score:0,ownerId:S.uid,admins:[],notice:"Welcome to "+name+" 🌹 Please be respectful",at:now});
+  }catch(e){ console.warn("seed",e); }
+}
+
+let fbStarted=false;
+async function bootFirebase(){
+  firebase.initializeApp(window.FIREBASE_CONFIG);
+  const fs=firebase.firestore(); try{ fs.settings({ignoreUndefinedProperties:true,merge:true}); }catch(e){}
+  const auth=firebase.auth();
+  S.fb={fs,auth}; S.local=false; S.db=fireDB(fs); S.user=null; S.sample=null;
+  try{ await auth.getRedirectResult(); }catch(e){ console.warn(e); }
+  auth.onAuthStateChanged(async u=>{
+    if(!u){ S.me=null; return showSignIn(); }
+    if(fbStarted) return; fbStarted=true;
+    S.uid=u.uid; S.myEmail=u.email||"";
+    try{ const tok=await u.getIdTokenResult(); S.myName=tok.claims.name||""; S.myAvatar=tok.claims.picture||""; }catch(e){ S.myName=u.displayName||""; S.myAvatar=""; }
+    S.room=fireRoom(fs,u.uid);
+    $("#view").innerHTML="";
+    try{ const b=await S.db.doc("bans/"+S.uid).get(); if(b.exists&&(b.data().until||0)>Date.now()) return showSuspended(b.data().until); }catch(e){}
+    subscribeAll();
+    const snap=await S.db.doc("profiles/"+S.uid).get().catch(()=>null);
+    if(snap&&snap.exists){
+      S.me=snap.data(); S.me._id=S.uid;
+      const patch={}; if(S.myName&&S.me.vname!==S.myName) patch.vname=S.myName; if(S.myAvatar&&S.me.vphoto!==S.myAvatar) patch.vphoto=S.myAvatar;
+      if(Object.keys(patch).length) saveMe(patch); else render();
+      hideSplash(); routeHash();
+    } else startOnboarding();
+    lobbyPresence(); seedIfEmpty();
+  });
 }
 
 /* ============ local demo seed ============ */
