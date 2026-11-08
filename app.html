@@ -362,6 +362,11 @@ input,textarea,select{font-family:inherit;font-size:15px}
 
 /* ===== voice ===== */
 .talkbtn{width:48px;height:48px;border-radius:50%;flex-shrink:0;font-size:22px;background:radial-gradient(circle at 40% 35%,#ffe9a3,#c9a24a 70%);border:2px solid #fff3c4;box-shadow:0 0 14px rgba(243,201,79,.45);touch-action:none;user-select:none;-webkit-user-select:none}
+.talkbtn.live{background:radial-gradient(circle,#69f0a0,#1f9d55);border-color:#c9ffe0;animation:liveP 1.6s ease-in-out infinite}
+@keyframes liveP{50%{box-shadow:0 0 0 10px rgba(76,217,123,.18)}}
+.seat .s .mb{position:absolute;bottom:-5px;left:-5px;font-size:11px;background:#1c1b21;border-radius:50%;width:18px;height:18px;display:flex;align-items:center;justify-content:center;border:1px solid #444;opacity:.85}
+.seat .s .mb.on{background:#1f9d55;border-color:#69f0a0;opacity:1}
+.lvtap{position:absolute;top:120px;left:50%;transform:translateX(-50%);z-index:8;background:#1f9d55;color:#fff;border-radius:22px;padding:10px 18px;font-weight:700;box-shadow:0 6px 18px rgba(0,0,0,.4)}
 .talkbtn.rec{background:radial-gradient(circle,#ff7b7b,#c92a2a);border-color:#ffd0d0;animation:recP 1s ease-in-out infinite}
 .recbar{position:absolute;left:10px;right:10px;bottom:68px;background:rgba(201,42,42,.94);color:#fff;border-radius:14px;padding:8px 12px;display:none;align-items:center;gap:8px;z-index:7;font-size:13px}
 .recbar.show{display:flex}
@@ -583,7 +588,7 @@ function hideSplash(){ $("#splash").classList.add("hide"); }
 
 function subscribeAll(){
   S.db.collection("profiles").limit(500).onSnapshot(s=>{ const m={}; s.docs.forEach(d=>m[d.id]={...d.data(),_id:d.id}); S.profiles=m; resolveVerified(); if(m[S.uid]&&S.me&&!S.me._local) {/* keep local copy authoritative */} render(); }, e=>console.warn(e));
-  S.db.collection("rooms").orderBy("score","desc").limit(200).onSnapshot(s=>{ S.rooms=s.docs.map(d=>({id:d.id,...d.data()})); if(S.cur){ const r=S.rooms.find(x=>x.id===S.cur.id); if(r){ S.cur.data=r; if(isBannedIn(r,S.uid)){ toast(t("You were removed from this room")); leaveRoom(); } else { renderRoomHead(); renderSeats(); } } else if(!S.local){ toast("This room was deleted"); leaveRoom(); } }
+  S.db.collection("rooms").orderBy("score","desc").limit(200).onSnapshot(s=>{ S.rooms=s.docs.map(d=>({id:d.id,...d.data()})); if(S.cur){ const r=S.rooms.find(x=>x.id===S.cur.id); if(r){ S.cur.data=r; if(isBannedIn(r,S.uid)){ toast(t("You were removed from this room")); leaveRoom(); } else { if(LV.on&&isMutedIn(r,S.uid)){ micOff(true); toast(t("You are muted in this room")); } renderRoomHead(); renderSeats(); } } else if(!S.local){ toast("This room was deleted"); leaveRoom(); } }
     if(S.pendingRoom&&S.me&&S.rooms.some(r=>r.id===S.pendingRoom)){ const id=S.pendingRoom; S.pendingRoom=null; enterRoom(id); }
     render(); }, e=>console.warn(e));
   S.db.collection("posts").orderBy("at","desc").limit(60).onSnapshot(s=>{ S.posts=s.docs.map(d=>({id:d.id,...d.data()})); render(); }, e=>console.warn(e));
@@ -832,7 +837,8 @@ async function enterRoom(id){
       const nr=await S.room.join("r-"+id);
       if(!S.cur||S.cur.id!==id){ nr.leave(); return; }
       S.cur.named=nr;
-      nr.onPeers(ch=>{ if(S.cur&&S.cur.id===id){ S.cur.peers=ch.peers; renderSeats(); renderRoomHead(); } });
+      if(liveVoice()) lvJoin(id);
+      nr.onPeers(ch=>{ if(S.cur&&S.cur.id===id){ S.cur.peers=ch.peers; renderSeats(); renderRoomHead(); if(liveVoice()) lvSync(ch.peers); } });
       nr.presence({uid:S.uid,seat:null}).catch(()=>{});
     }catch(e){ console.warn(e); }
   }
@@ -844,6 +850,7 @@ async function enterRoom(id){
 }
 async function leaveRoom(silent){
   if(!S.cur) return;
+  if(typeof lvLeave==="function") lvLeave();
   const c=S.cur; S.cur=null;
   c.unsub.forEach(f=>{try{f()}catch(e){}});
   try{ c.named && await c.named.leave(); }catch(e){}
@@ -857,8 +864,8 @@ function shareRoom(){
 function roomPeople(){
   // unique by uid from named-room peers (+ demo in local)
   const out=new Map();
-  for(const p of (S.cur.peers||[])){ const uid=p.by||(p.presence&&p.presence.uid); if(!uid) continue; const prev=out.get(uid); if(!prev||(p.presence&&p.presence.seat!=null)) out.set(uid,{uid,seat:p.presence?p.presence.seat:null,me:p.isMe}); }
-  if (!S.room || !S.cur.named) out.set(S.uid,{uid:S.uid,seat:S.cur.seat,me:true});
+  for(const p of (S.cur.peers||[])){ const uid=p.by||(p.presence&&p.presence.uid); if(!uid) continue; const prev=out.get(uid); if(!prev||(p.presence&&p.presence.seat!=null)) out.set(uid,{uid,seat:p.presence?p.presence.seat:null,mic:!!(p.presence&&p.presence.mic),me:p.isMe}); }
+  if (!S.room || !S.cur.named) out.set(S.uid,{uid:S.uid,seat:S.cur.seat,mic:LV.on,me:true});
   if (S.local && S.cur.data.demo) S.cur.data.demo.forEach(d=>out.set(d.uid,{uid:d.uid,seat:d.seat,me:false}));
   return [...out.values()];
 }
@@ -879,7 +886,7 @@ function renderSeats(){
   let h="";
   for(let i=0;i<MAX_SEATS;i++){
     const p=bySeat[i];
-    if(p){ const pr=prof(p.uid); h+=`<button class="seat" data-u="${esc(p.uid)}" onclick="${p.uid===S.uid?"toggleSeat()":"openUser(this.dataset.u)"}"><div class="s taken ${p.uid===S.uid?"me":""} ${speaking===p.uid?"speak":talking.has(p.uid)?"talk":""}" style="background:${AVBG[(pr.c||0)%AVBG.length]}">${p.uid===owner?'<span class="crown">👑</span>':""}${esc(pr.av||"👤")}</div><span class="n">${esc(pr.nick||"...")}</span></button>`; }
+    if(p){ const pr=prof(p.uid); h+=`<button class="seat" data-u="${esc(p.uid)}" onclick="${p.uid===S.uid?"toggleSeat()":"openUser(this.dataset.u)"}"><div class="s taken ${p.uid===S.uid?"me":""} ${speaking===p.uid||LV.speaking.has(p.uid)?"speak":talking.has(p.uid)?"talk":""}" style="background:${AVBG[(pr.c||0)%AVBG.length]}">${p.uid===owner?'<span class="crown">👑</span>':""}${(()=>{const src=avatarSrc(pr);return src?`<img src="${esc(src)}" alt="" style="width:100%;height:100%;border-radius:50%;object-fit:cover">`:esc(pr.av||"👤")})()}${liveVoice()?`<span class="mb ${(p.uid===S.uid?LV.on:p.mic)?"on":""}">${(p.uid===S.uid?LV.on:p.mic)?"🎙️":"🔇"}</span>`:""}</div><span class="n">${esc(pr.nick||"...")}</span></button>`; }
     else if((S.cur.data.lockedSeats||[]).includes(i)) h+=`<button class="seat" onclick="${isRoomAdmin(S.uid)?`openSeatMenu(${i})`:`toast(t('This seat is locked'))`}"><div class="s" style="opacity:.6">🔒</div><span class="n">${i+1}</span></button>`;
     else h+=`<button class="seat" onclick="${isRoomAdmin(S.uid)&&i>0?`openSeatMenu(${i})`:`takeSeat(${i})`}"><div class="s">${i===0?'<span class="crown">👑</span>':""}<svg class="mic" viewBox="0 0 24 24" fill="#fff"><path d="M12 14a3 3 0 0 0 3-3V5a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.9V21h2v-3.1A7 7 0 0 0 19 11z"/></svg></div><span class="n">${i===0?"Owner":i+1}</span></button>`;
   }
@@ -894,7 +901,7 @@ function takeSeat(i,quiet){
 }
 function toggleSeat(){
   const ppl=roomPeople(); const mine=ppl.find(p=>p.uid===S.uid);
-  if(mine&&mine.seat!=null){ S.cur.seat=null; if(S.cur.named) S.cur.named.presence({uid:S.uid,seat:null}).catch(()=>{}); renderSeats(); toast("You left the seat"); }
+  if(mine&&mine.seat!=null){ if(LV.on) micOff(true); S.cur.seat=null; if(S.cur.named) S.cur.named.presence({uid:S.uid,seat:null}).catch(()=>{}); renderSeats(); toast("You left the seat"); }
   else{ const taken=new Set(ppl.filter(p=>p.seat!=null).map(p=>p.seat)); for(let i=1;i<MAX_SEATS;i++) if(!taken.has(i)) return takeSeat(i); toast("All seats are taken"); }
 }
 function renderMsgs(){
@@ -1242,7 +1249,7 @@ function ac(){
   return AC;
 }
 document.addEventListener("pointerdown",()=>ac(),{passive:true});
-function toggleSound(){ S.sound=!S.sound; try{localStorage.setItem("dk_snd",S.sound?"1":"0")}catch(e){} const b=$("#sndbtn"); if(b) b.textContent=S.sound?"🔊":"🔇"; toast(S.sound?"🔊 Sound on":"🔇 Sound off"); if(S.sound) playSnd("chime"); }
+function toggleSound(){ S.sound=!S.sound; try{localStorage.setItem("dk_snd",S.sound?"1":"0")}catch(e){} const b=$("#sndbtn"); if(b) b.textContent=S.sound?"🔊":"🔇"; toast(S.sound?"🔊 Sound on":"🔇 Sound off"); if(S.sound) playSnd("chime"); if(typeof lvSoundSync==="function") lvSoundSync(); }
 function tone(f,t,d,type="sine",vol=.2,f2){ const o=AC.createOscillator(),g=AC.createGain(); o.type=type; o.frequency.setValueAtTime(f,t); if(f2) o.frequency.exponentialRampToValueAtTime(f2,t+d); g.gain.setValueAtTime(.0001,t); g.gain.exponentialRampToValueAtTime(vol,t+.012); g.gain.exponentialRampToValueAtTime(.0001,t+d); o.connect(g).connect(MASTER); o.start(t); o.stop(t+d+.05); }
 function noise(t,d,vol=.3,ft="bandpass",f=1000,f2,q=1){
   if(!NOISE){ NOISE=AC.createBuffer(1,AC.sampleRate*2,AC.sampleRate); const a=NOISE.getChannelData(0); for(let i=0;i<a.length;i++) a[i]=Math.random()*2-1; }
@@ -1531,6 +1538,7 @@ let micBlocked=MIC_BLOCKED_AT_START;
 const TALK={rec:null,t0:0,timer:null,cancel:false,starting:false};
 function setupTalk(){
   const b=$("#talkbtn"); if(!b) return;
+  if(liveVoice()){ b.onpointerdown=null; b.onpointerup=null; b.onclick=()=>micToggle(); micUi(); return; }
   b.onpointerdown=e=>{ if(micBlocked) return; e.preventDefault(); if(TALK.rec) talkStop(true); else talkStart(); };
   b.onpointerup=()=>{ if(TALK.rec && Date.now()-TALK.t0>800) talkStop(true); };  // hold-to-talk: release sends
   b.onclick=()=>{ if(micBlocked){ $("#talkfile").click(); } };                    // phone recorder fallback
@@ -1567,7 +1575,7 @@ async function sendTalkBlob(blob){
 
 function openVoiceHub(){
   openModal(`<div style="display:flex;gap:12px;align-items:center;background:rgba(243,201,79,.1);border:1px solid rgba(243,201,79,.35);border-radius:14px;padding:12px;margin-bottom:14px">
-      <div style="font-size:34px">🎤</div><div style="font-size:12.5px;line-height:1.5"><b style="font-size:14px;color:#f3c94f">Push to talk</b><br>Anyone can talk — no seat needed. Hold 🎤 and release to send, or tap once to start and again to send. Everyone in the room hears it automatically.${micBlocked?`<br><span style="color:#ffb3b3">Your browser blocks the mic here, so 🎤 opens your phone's voice recorder.</span>`:""}</div></div>
+      <div style="font-size:34px">🎤</div><div style="font-size:12.5px;line-height:1.5">${liveVoice()?`<b style="font-size:14px;color:#4cd97b">${esc(t("Live voice"))}</b><br>${esc(t("Tap 🎤 to turn your mic on and talk live. Tap again to turn it off. Everyone in the room hears you in real time."))}`:`<b style="font-size:14px;color:#f3c94f">Push to talk</b><br>Anyone can talk — no seat needed. Hold 🎤 and release to send, or tap once to start and again to send. Everyone in the room hears it automatically.`}${!liveVoice()&&micBlocked?`<br><span style="color:#ffb3b3">Your browser blocks the mic here, so 🎤 opens your phone's voice recorder.</span>`:""}</div></div>
     <button class="gbtn dark" style="width:100%;padding:11px;margin-bottom:14px" onclick="openRecorder({kind:'room'})">🎙️ Record, listen, then send</button>
     <div class="shead" style="margin:4px 0 10px"><h3 style="font-size:15px">🔊 Sound effects</h3><small style="color:#aaa">Everyone in the room hears it</small></div>
     <div class="sfxgrid">${SFX.map(s=>`<button class="sfx" onclick="sendSfx('${s.k}')"><span class="em">${s.e}</span>${s.n}</button>`).join("")}</div>
@@ -1911,6 +1919,14 @@ const DICT_ROWS=[
 ["Use your Google account. No passwords to remember.","هەژماری Googleـەکەت بەکاربهێنە. پێویست بە وشەی نهێنی نییە.","Hesabê xwe yê Google bi kar bîne. Şîfre ne pêwîst e.","استخدم حساب Google الخاص بك. لا حاجة لكلمات مرور.","Google hesabını kullan. Şifre gerekmez."],
 ["Signed in as","چوویتە ژوورەوە وەک","Wek têketî","تم تسجيل الدخول باسم","Giriş yapan"],
 ["Sign out","چوونەدەرەوە","Derkeve","تسجيل الخروج","Çıkış yap"],
+["Live voice","دەنگی ڕاستەوخۆ","Dengê zindî","صوت مباشر","Canlı ses"],
+["Tap 🎤 to turn your mic on and talk live. Tap again to turn it off. Everyone in the room hears you in real time.","🎤 دابگرە بۆ کردنەوەی مایک و قسەکردنی ڕاستەوخۆ. دووبارە دایبگرە بۆ داخستنی. هەموو کەسێکی ژوورەکە ڕاستەوخۆ گوێیان لێتە.","Ji bo vekirina mîkê û axaftina zindî 🎤 bitikîne. Dîsa bitikîne da bigirî. Her kesê odeyê te zindî dibihîze.","اضغط 🎤 لتشغيل المايك والتحدث مباشرة. اضغط مرة أخرى لإيقافه. الجميع في الغرفة يسمعونك فوراً.","Mikrofonu açıp canlı konuşmak için 🎤'a dokun. Kapatmak için tekrar dokun. Odadaki herkes seni anında duyar."],
+["Mic on — everyone in the room can hear you","مایک کرایەوە — هەموو کەسێکی ژوورەکە گوێیان لێتە","Mîk vekirî ye — her kesê odeyê te dibihîze","المايك مفعّل — الجميع في الغرفة يسمعك","Mikrofon açık — odadaki herkes seni duyuyor"],
+["Mic off","مایک داخرا","Mîk girtî ye","المايك مغلق","Mikrofon kapalı"],
+["Turn mic on","کردنەوەی مایک","Mîkê veke","تشغيل المايك","Mikrofonu aç"],
+["Turn mic off","داخستنی مایک","Mîkê bigire","إيقاف المايك","Mikrofonu kapat"],
+["Allow microphone access in your browser to talk","بۆ قسەکردن ڕێگە بە مایکرۆفۆن بدە لە وێبگەڕەکەت","Ji bo axaftinê destûrê bide mîkrofonê","اسمح بالوصول إلى المايك في المتصفح للتحدث","Konuşmak için tarayıcıda mikrofon iznini ver"],
+["Tap to hear the voices","کلیک بکە بۆ بیستنی دەنگەکان","Ji bo bihîstina dengan bitikîne","اضغط لسماع الأصوات","Sesleri duymak için dokun"],
 ];
 
 /* ================================================================
@@ -2425,6 +2441,142 @@ async function bootFirebase(){
     lobbyPresence(); seedIfEmpty();
   });
 }
+
+/* ================================================================
+   LIVE VOICE — tap 🎤 to turn your mic on, tap again to turn it off.
+   Everyone in the room hears you live (WebRTC, peer to peer).
+   Signaling goes through Firestore: rtc/{room}/sig
+   ================================================================ */
+const LV={on:false,stream:null,pcs:new Map(),room:null,unsub:null,audios:new Map(),meters:new Map(),levels:new Map(),speaking:new Set(),timer:null,needTap:false};
+const LV_ICE={iceServers:[
+  {urls:["stun:stun.l.google.com:19302","stun:stun1.l.google.com:19302","stun:stun2.l.google.com:19302"]},
+  {urls:["turn:openrelay.metered.ca:80","turn:openrelay.metered.ca:443","turn:openrelay.metered.ca:443?transport=tcp"],username:"openrelayproject",credential:"openrelayproject"}]};
+const liveVoice=()=>!!(S.fb&&window.RTCPeerConnection&&navigator.mediaDevices&&navigator.mediaDevices.getUserMedia);
+
+/* signaling bus (replaceable for tests) */
+const lvBus={
+  listen(room,cb){ return S.fb.fs.collection(`rtc/${room}/sig`).where("to","==",S.uid).onSnapshot(s=>s.docChanges().forEach(ch=>{
+      if(ch.type!=="added") return; const d=ch.doc.data(); ch.doc.ref.delete().catch(()=>{}); if(Date.now()-(d.at||0)<90000) cb(d); }),e=>console.warn("sig",e)); },
+  send(room,to,type,sdp){ return S.fb.fs.collection(`rtc/${room}/sig`).add({from:S.uid,to,type,sdp:JSON.stringify(sdp),at:Date.now()}).catch(e=>console.warn("sig send",e)); }
+};
+
+function lvJoin(room){
+  if(!liveVoice()) return; lvLeave(true);
+  LV.room=room; LV.unsub=lvBus.listen(room,d=>lvSignal(d).catch(e=>console.warn("lv",e)));
+  clearInterval(LV.timer); LV.timer=setInterval(lvTick,350);
+}
+function lvLeave(keepUi){
+  if(LV.on) micOff(true);
+  for(const id of [...LV.pcs.keys()]) lvDrop(id);
+  if(LV.unsub){ try{LV.unsub()}catch(e){} LV.unsub=null; }
+  clearInterval(LV.timer); LV.room=null; LV.speaking.clear(); LV.needTap=false;
+}
+function lvSync(peers){
+  if(!LV.room) return;
+  const ids=new Set((peers||[]).map(p=>p.by||(p.presence&&p.presence.uid)).filter(id=>id&&id!==S.uid));
+  for(const id of ids) if(!LV.pcs.has(id)&&S.uid<id) lvCall(id).catch(e=>console.warn("lv call",e));
+  for(const id of [...LV.pcs.keys()]) if(!ids.has(id)) lvDrop(id);
+}
+function lvNewPc(id){
+  const pc=new RTCPeerConnection(LV_ICE);
+  const o={pc,tr:null,id,at:Date.now()};
+  pc.ontrack=e=>lvPlay(id,e.streams&&e.streams[0]||new MediaStream([e.track]));
+  pc.onconnectionstatechange=()=>{ if(pc.connectionState==="failed"){ lvDrop(id); setTimeout(()=>{ if(S.cur&&LV.room) lvSync(S.cur.peers||[]); },2500); } };
+  LV.pcs.set(id,o); return o;
+}
+function lvGathered(pc){ return new Promise(r=>{ if(pc.iceGatheringState==="complete") return r(); const t=setTimeout(r,2500); pc.addEventListener("icegatheringstatechange",()=>{ if(pc.iceGatheringState==="complete"){ clearTimeout(t); r(); } }); }); }
+async function lvCall(id){
+  const o=lvNewPc(id);
+  o.tr=o.pc.addTransceiver("audio",{direction:"sendrecv"});
+  if(LV.on&&LV.stream) await o.tr.sender.replaceTrack(LV.stream.getAudioTracks()[0]);
+  await o.pc.setLocalDescription(await o.pc.createOffer());
+  await lvGathered(o.pc);
+  lvBus.send(LV.room,id,"offer",o.pc.localDescription.toJSON());
+}
+async function lvSignal(d){
+  if(!LV.room||!d||!d.from||d.from===S.uid) return;
+  const sdp=JSON.parse(d.sdp);
+  if(d.type==="offer"){
+    if(LV.pcs.has(d.from)) lvDrop(d.from);
+    const o=lvNewPc(d.from);
+    await o.pc.setRemoteDescription(sdp);
+    o.tr=o.pc.getTransceivers()[0]; if(o.tr) o.tr.direction="sendrecv";
+    if(o.tr&&LV.on&&LV.stream) await o.tr.sender.replaceTrack(LV.stream.getAudioTracks()[0]);
+    await o.pc.setLocalDescription(await o.pc.createAnswer());
+    await lvGathered(o.pc);
+    lvBus.send(LV.room,d.from,"answer",o.pc.localDescription.toJSON());
+  } else if(d.type==="answer"){
+    const o=LV.pcs.get(d.from); if(o&&o.pc.signalingState==="have-local-offer") await o.pc.setRemoteDescription(sdp);
+  }
+}
+function lvDrop(id){
+  const o=LV.pcs.get(id); if(o){ try{o.pc.close()}catch(e){} LV.pcs.delete(id); }
+  const a=LV.audios.get(id); if(a){ a.srcObject=null; a.remove(); LV.audios.delete(id); }
+  const m=LV.meters.get(id); if(m){ try{m.src.disconnect()}catch(e){} LV.meters.delete(id); }
+  LV.levels.delete(id);
+}
+function lvPlay(id,stream){
+  let a=LV.audios.get(id);
+  if(!a){ a=document.createElement("audio"); a.autoplay=true; a.setAttribute("playsinline",""); a.style.display="none"; document.body.appendChild(a); LV.audios.set(id,a); }
+  if(a.srcObject!==stream) a.srcObject=stream;
+  a.muted=!S.sound;
+  const p=a.play(); if(p&&p.catch) p.catch(()=>{ LV.needTap=true; lvTapUi(); });
+  lvMeter(id,stream);
+}
+function lvTapUi(){
+  if(!LV.needTap||$("#lvtap")||!$("#roomView").classList.contains("show")) return;
+  const b=document.createElement("button"); b.id="lvtap"; b.className="lvtap"; b.textContent="🔊 "+t("Tap to hear the voices");
+  b.onclick=()=>{ LV.audios.forEach(a=>a.play().catch(()=>{})); ac(); LV.needTap=false; b.remove(); };
+  $("#roomView").appendChild(b);
+}
+function lvMeter(id,stream){
+  const c=ac(); if(!c||LV.meters.has(id)) return;
+  try{ const src=c.createMediaStreamSource(stream), an=c.createAnalyser(), z=c.createGain(); an.fftSize=512; z.gain.value=0; src.connect(an); an.connect(z); z.connect(c.destination); LV.meters.set(id,{src,an,buf:new Float32Array(an.fftSize)}); }catch(e){ console.warn("meter",e); }
+}
+let lvTickBusy=false;
+async function lvTick(){
+  if(lvTickBusy) return; lvTickBusy=true;
+  try{
+    const now=Date.now(), TH=0.01;
+    // remote + local levels from WebRTC stats (works on every browser, no audio graph needed)
+    for(const [id,o] of LV.pcs){
+      try{ const st=await o.pc.getStats(); st.forEach(x=>{
+        if(x.type==="inbound-rtp"&&x.kind==="audio"&&(x.audioLevel||0)>TH) LV.levels.set(id,now);
+        if(LV.on&&x.type==="media-source"&&x.kind==="audio"&&(x.audioLevel||0)>TH) LV.levels.set("me",now);
+      }); }catch(e){}
+    }
+    // fallback analyser (used when you are alone in the room)
+    LV.meters.forEach((m,id)=>{ m.an.getFloatTimeDomainData(m.buf); let s=0; for(const v of m.buf) s+=v*v; if(Math.sqrt(s/m.buf.length)>0.012) LV.levels.set(id,now); });
+    const set=new Set(); LV.levels.forEach((ts,id)=>{ if(now-ts<700&&(id!=="me"||LV.on)) set.add(id==="me"?S.uid:id); });
+    const changed=set.size!==LV.speaking.size||[...set].some(x=>!LV.speaking.has(x));
+    if(changed){ LV.speaking=set; if(S.cur) renderSeats(); }
+  } finally { lvTickBusy=false; }
+}
+async function micToggle(){ return LV.on?micOff():micOn(); }
+async function micOn(){
+  if(!S.cur) return;
+  if(isMutedIn(S.cur.data,S.uid)) return toast(t("You are muted in this room"));
+  try{ LV.stream=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true,noiseSuppression:true,autoGainControl:true}}); }
+  catch(e){ return toast("🎤 "+t("Allow microphone access in your browser to talk")); }
+  LV.on=true; ensureSeat();
+  const tk=LV.stream.getAudioTracks()[0];
+  LV.pcs.forEach(o=>{ if(o.tr) o.tr.sender.replaceTrack(tk).catch(()=>{}); });
+  const m=LV.meters.get("me"); if(m){ try{m.src.disconnect()}catch(e){} LV.meters.delete("me"); }
+  lvMeter("me",LV.stream);
+  if(S.cur.named) S.cur.named.presence({mic:true}).catch(()=>{});
+  micUi(); renderSeats(); toast("🎙️ "+t("Mic on — everyone in the room can hear you"));
+}
+function micOff(silent){
+  LV.on=false;
+  LV.pcs.forEach(o=>{ if(o.tr) o.tr.sender.replaceTrack(null).catch(()=>{}); });
+  if(LV.stream){ LV.stream.getTracks().forEach(t=>t.stop()); LV.stream=null; }
+  const m=LV.meters.get("me"); if(m){ try{m.src.disconnect()}catch(e){} LV.meters.delete("me"); }
+  LV.levels.delete("me");
+  if(S.cur&&S.cur.named) S.cur.named.presence({mic:false}).catch(()=>{});
+  micUi(); if(S.cur) renderSeats(); if(!silent) toast("🔇 "+t("Mic off"));
+}
+function micUi(){ const b=$("#talkbtn"); if(!b||!liveVoice()) return; b.classList.toggle("live",LV.on); b.classList.toggle("off",!LV.on); b.textContent=LV.on?"🎙️":"🎤"; b.title=LV.on?t("Turn mic off"):t("Turn mic on"); }
+function lvSoundSync(){ LV.audios.forEach(a=>a.muted=!S.sound); }
 
 /* ============ local demo seed ============ */
 function seedLocal(){
