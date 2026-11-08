@@ -660,6 +660,62 @@ input:focus,textarea:focus,select:focus{outline:none;box-shadow:0 0 0 3px rgba(2
 .crgo .inv.won{background:linear-gradient(180deg,#ffe28a,#e0a321);color:#4a2a00;text-shadow:none}
 .crgo .inv.lost{background:linear-gradient(180deg,#ff8a80,#c4170c)}
 @media (max-width:360px){ .crrow b{font-size:13px}.crrow button{width:26px}.crgo{height:36px}.crgo .inv{font-size:11.5px} }
+/* ===== Lucky 77 Pro ===== */
+.l7{position:absolute;inset:0;z-index:45;display:flex;flex-direction:column;background:#1a0650;color:#fff;font-family:Poppins,"Noto Sans Arabic",system-ui,sans-serif;animation:crIn .35s cubic-bezier(.2,.8,.2,1);overflow:hidden;padding-bottom:var(--safe-b,0)}
+.l7.inroom{top:34%;border-radius:22px 22px 0 0;box-shadow:0 -10px 30px rgba(0,0,0,.5);border-top:2px solid #b36bff}
+.l7bg{position:absolute;inset:0;background:linear-gradient(180deg,#2a0b78 0%,#4a1aa8 38%,#6a2ad0 62%,#3a0f8c 100%);overflow:hidden}
+.l7floor{position:absolute;left:-40%;right:-40%;bottom:0;height:60%;background:
+ repeating-linear-gradient(90deg,rgba(210,170,255,.35) 0 2px,transparent 2px 64px),repeating-linear-gradient(0deg,rgba(210,170,255,.3) 0 2px,transparent 2px 44px),linear-gradient(180deg,rgba(130,60,230,.1),rgba(160,80,255,.55));transform:perspective(260px) rotateX(58deg);transform-origin:50% 100%}
+.l7beam{position:absolute;top:-10%;width:34%;height:70%;background:linear-gradient(180deg,rgba(255,90,230,.55),transparent);filter:blur(10px);opacity:.7;clip-path:polygon(40% 0,60% 0,100% 100%,0 100%)}
+.l7beam.b1{left:-6%;transform:rotate(18deg)}.l7beam.b2{right:-6%;transform:rotate(-18deg)}
+.l7stage{position:relative;flex:1;min-height:0;display:flex;align-items:center;justify-content:center}
+.l7wheel{position:relative;width:100%;height:100%;max-width:520px;filter:drop-shadow(0 10px 18px rgba(0,0,0,.45))}
+.l7vent{position:absolute;top:30%;width:15%;height:34%;background:repeating-linear-gradient(180deg,#3a2a7a 0 7px,#1c1048 7px 12px);border:2px solid #c8942c;opacity:.9}
+.l7vent.v1{left:0;border-radius:0 18px 18px 0;transform:skewY(18deg)}.l7vent.v2{right:0;border-radius:18px 0 0 18px;transform:skewY(-18deg)}
+.l7rb{position:absolute;width:36px;height:36px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#b04bf0,#5b1fb0);border:2px solid #ffd45a;color:#fff;font-size:16px;font-weight:800;box-shadow:0 3px 8px rgba(0,0,0,.4);display:flex;align-items:center;justify-content:center;z-index:3}
+.l7rb.a{left:8px;top:8px}.l7rb.b{left:50px;top:8px}.l7rb.c{right:50px;top:8px}.l7rb.d{right:8px;top:8px}
+.l7i{width:100%;height:100%;display:block;overflow:visible}
+.l7boxes{position:relative;display:flex;gap:7px;padding:8px 9px 6px;margin:0 6px;background:linear-gradient(180deg,#5a1fb5,#3a0f86);border:3px solid #e8b53e;border-bottom:0;border-radius:18px 18px 0 0;box-shadow:inset 0 2px 0 rgba(255,255,255,.25),0 -4px 14px rgba(0,0,0,.35)}
+.l7box{flex:1;position:relative;display:flex;flex-direction:column;align-items:center;gap:1px;background:linear-gradient(180deg,#6a22c8,#3c0f8a);border:2px solid #2a0b66;border-radius:14px;padding:3px 4px 4px;color:#fff;transition:transform .12s,filter .2s,box-shadow .2s}
+.l7box:active:not(.off){transform:scale(.96)}.l7box.off{filter:saturate(.7) brightness(.85)}
+.l7box .pot{font-size:11px;font-weight:700;color:#ffe9a8;line-height:1.1}
+.l7box .frame{width:100%;aspect-ratio:1.45;max-height:64px;background:radial-gradient(ellipse at 50% 30%,#4a9cff,#1b4fb8 75%);border:3px solid #f0be45;border-radius:46% 46% 40% 40%/58% 58% 36% 36%;padding:5px 8px;box-shadow:inset 0 0 12px rgba(0,0,40,.55)}
+.l7box .mul{font-size:21px;font-weight:900;line-height:1;background:linear-gradient(180deg,#fff0a0,#ffb62e);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 1px 0 #8a4e00)}
+.l7box .mine{font-size:12px;font-weight:800;color:#ffd45a;min-height:15px}
+.l7box.has{box-shadow:0 0 0 2px #ffd45a,0 0 14px rgba(255,212,90,.6)}
+.l7box.hit{animation:l7hit .5s ease-in-out 5;box-shadow:0 0 0 3px #fff,0 0 22px #ffd45a}
+@keyframes l7hit{50%{filter:brightness(1.7);transform:scale(1.05)}}
+.l7res{position:relative;display:flex;align-items:center;gap:6px;margin:0 6px;padding:3px 10px;background:linear-gradient(180deg,#2c0c70,#1c0650);border-left:3px solid #e8b53e;border-right:3px solid #e8b53e;font-size:11px;color:#d6c4ff;font-weight:600}
+#l7hist{display:flex;gap:7px;align-items:center;flex:1;overflow:hidden}
+#l7hist span{position:relative;width:22px;height:20px;flex:none;opacity:.85}#l7hist span.new{opacity:1;transform:scale(1.15)}
+#l7hist em{position:absolute;left:-4px;bottom:-9px;font-size:7px;font-style:normal;font-weight:800;background:#2b8bff;border-radius:6px;padding:0 3px;color:#fff;line-height:11px}
+.l7bot{position:relative;display:flex;align-items:center;justify-content:space-between;gap:6px;margin:0 6px;padding:7px 8px 9px;background:linear-gradient(180deg,#26086a,#14043e);border:3px solid #e8b53e;border-top:2px solid #7a3bd0;border-radius:0 0 16px 16px}
+.l7chips{display:flex;gap:6px;flex:1;justify-content:space-between;max-width:290px}
+.l7chip{width:44px;height:44px;flex:none;border-radius:50%;background:var(--c);border:3px dashed rgba(255,255,255,.9);box-shadow:inset 0 0 0 4px var(--c),inset 0 0 0 6px rgba(255,255,255,.55),0 3px 6px rgba(0,0,0,.5);color:#fff;font-weight:800;font-size:12px;display:flex;align-items:center;justify-content:center;transition:transform .15s}
+.l7chip span{text-shadow:0 1px 2px rgba(0,0,0,.6)}
+.l7chip.on{transform:translateY(-6px) scale(1.12);box-shadow:inset 0 0 0 4px var(--c),inset 0 0 0 6px rgba(255,255,255,.55),0 0 0 3px #ffd45a,0 0 14px #ffd45a}
+.l7right{display:flex;flex-direction:column;gap:4px;align-items:stretch;min-width:92px}
+.l7rep{padding:6px 8px;border-radius:9px;background:linear-gradient(180deg,#d7dbe6,#8d93a6);border:2px solid #6c7186;color:#33384a;font-weight:800;font-size:14px;box-shadow:0 2px 0 #565b70}.l7rep.off{opacity:.55}
+.l7bal{display:flex;align-items:center;justify-content:center;gap:5px;background:linear-gradient(180deg,#3a1b8c,#1d0a58);border:2px solid #b78aff;border-radius:10px;padding:2px 7px;color:#ffe08a;font-weight:800;font-size:14px}
+.l7win{position:absolute;left:50%;top:44%;transform:translate(-50%,-50%) scale(.4);opacity:0;pointer-events:none;text-align:center;z-index:5;padding:12px 26px;border-radius:20px;background:radial-gradient(circle,rgba(30,10,90,.92),rgba(30,10,90,.8));border:3px solid #ffd45a;box-shadow:0 0 30px rgba(255,212,90,.6)}
+.l7win small{display:block;font-size:12px;color:#ffe9a8;font-weight:700}.l7win b{font-size:34px;font-weight:900;background:linear-gradient(180deg,#fff3a8,#ffb62e);-webkit-background-clip:text;background-clip:text;color:transparent}
+.l7win b.lo{background:none;color:#ff9aa8;font-size:24px}.l7win.lose{border-color:#7a6aa8;box-shadow:none}
+.l7win.show{animation:l7pop 2.6s ease both}.l7win.big{border-color:#ff5ce6;box-shadow:0 0 40px #ff5ce6}
+@keyframes l7pop{0%{transform:translate(-50%,-50%) scale(.4);opacity:0}12%{transform:translate(-50%,-50%) scale(1.1);opacity:1}20%{transform:translate(-50%,-50%) scale(1)}85%{opacity:1}100%{transform:translate(-50%,-60%) scale(1);opacity:0}}
+.l7panel{display:none;position:absolute;left:8px;top:52px;width:min(250px,70%);max-height:70%;overflow:auto;background:rgba(22,6,70,.96);border:2px solid #ffd45a;border-radius:14px;padding:10px 12px;z-index:6;font-size:12px}
+.l7panel.show{display:block;animation:crIn .2s}.l7panel .x{position:absolute;right:6px;top:4px;color:#fff;font-size:15px}
+.l7panel h4{margin:0 0 6px;font-size:14px;color:#ffe08a}.l7panel .pr{display:flex;align-items:center;gap:8px;padding:4px 0;border-bottom:1px solid rgba(255,255,255,.1)}.l7panel .pr span{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.l7panel .pr b{color:#ffd45a}
+.l7panel p{margin:6px 0;line-height:1.45;color:#e7dcff}.l7panel .em{opacity:.7}.l7panel .hr{display:flex;align-items:center;gap:6px}.l7panel .hr svg{width:34px;height:30px}.l7panel .hr b{color:#ffd45a;margin-right:6px}
+.l7intro{position:absolute;inset:0;z-index:9;display:flex;flex-direction:column;align-items:center;justify-content:center;background:radial-gradient(circle at 50% 45%,#6a2ad0,#2a0b78 70%);transition:opacity .6s}.l7intro.out{opacity:0;pointer-events:none}
+.l7logo{position:relative;text-align:center;animation:l7logo .9s cubic-bezier(.2,1.4,.4,1) both}
+@keyframes l7logo{from{transform:scale(.3);opacity:0}}
+.l7logo .pro{position:relative;left:26%;font-size:34px;font-weight:900;line-height:.8;background:linear-gradient(180deg,#fff3a8,#f0a31a);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 2px 0 #7a4a05)}
+.l7logo .lk{display:flex;align-items:center;gap:6px;padding:4px 20px;border:4px dotted #fff3b0;border-radius:36px;background:rgba(80,20,120,.5);box-shadow:0 0 22px #ffcf40}
+.l7logo .lk span{font-size:50px;font-weight:900;font-style:italic;background:linear-gradient(180deg,#fff7b0,#ffb421);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 3px 0 #8a4e00)}
+.l7logo .lk i{font-size:56px;font-weight:900;font-style:italic;background:linear-gradient(180deg,#ffb15a,#e8341c);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 3px 0 #6a1a00)}
+.l7intro .f1,.l7intro .f2{position:absolute;width:64px;height:54px}.l7intro .f1{right:10%;top:30%;animation:l7fl 1.6s ease-in-out infinite alternate}.l7intro .f2{left:10%;top:34%;animation:l7fl 1.6s ease-in-out infinite alternate-reverse}
+@keyframes l7fl{to{transform:translateY(-12px) rotate(8deg)}}
+@media (max-height:700px){.l7box .frame{max-height:48px}.l7chip{width:38px;height:38px;font-size:11px}.l7box .mul{font-size:18px}}
 </style>
 </head>
 <body>
@@ -1163,6 +1219,181 @@ function crTick(){
   if(st.phase==="fly"||st.phase==="bet") crSlotsUiThrottled();
 }
 let crUiT=0; function crSlotsUiThrottled(){ const n=Date.now(); if(n-crUiT>120){ crUiT=n; crSlotsUi(); } }
+/* ================= LUCKY 77 PRO =================
+   Wheel of 9 sectors (77 x1, watermelon x4, plum x4). Every round (result, timing, spin angle) is derived
+   from the clock, so everybody in the room sees the same wheel. Virtual DANGI coins only. */
+const L7={open:false,el:null,raf:0,room:"lobby",r:-1,bets:[0,0,0],last:[0,0,0],chip:500,docs:[],unsub:null,lastPhase:null,lastSec:-1,lastSec9:-1,settled:-1,players:false,help:false};
+const L7_BET=15000,L7_SPIN=5500,L7_SHOW=4500,L7_LEN=L7_BET+L7_SPIN+L7_SHOW,L7_MUL=[2,8,2],L7_CHIPS=[[500,"500","#1fae55"],[700,"700","#2f86ff"],[1000,"1K","#ee3b3b"],[5000,"5K","#e8459d"],[10000,"10K","#8b4de0"]];
+const l7Sym=i=>i===0?1:(i%2?2:0);
+const l7Res=r=>Math.min(8,Math.floor(crRand(11,r)*9));
+const l7Norm=x=>((x%360)+360)%360;
+const l7F=r=>l7Norm(-l7Res(r)*40+(crRand(13,r)-.5)*26);
+function l7State(now){
+  const r=Math.floor(now/L7_LEN), tIn=now-r*L7_LEN; let phase="bet";
+  if(tIn>=L7_BET+L7_SPIN) phase="show"; else if(tIn>=L7_BET) phase="spin";
+  return {r,tIn,phase,res:l7Res(r),left:L7_BET-tIn};
+}
+function l7Angle(st){
+  const prev=l7F(st.r-1), fin=l7F(st.r);
+  if(st.phase==="bet") return prev;
+  if(st.phase==="show") return fin;
+  const u=(st.tIn-L7_BET)/L7_SPIN, e=1-Math.pow(1-u,3.2), tgt=prev+360*5+l7Norm(fin-prev);
+  return prev+(tgt-prev)*e;
+}
+function l7Hist(r){ const a=[]; for(let k=0;k<9;k++) a.push(l7Sym(l7Res(r-k))); return a; }
+const l7Ico=(k,cls="")=>`<svg class="l7i ${cls}" viewBox="0 0 120 100"><use href="#l7s${k}"/></svg>`;
+function l7Defs(){ return `<svg width="0" height="0" style="position:absolute"><defs>
+  <linearGradient id="l7gold" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff3a8"/><stop offset=".45" stop-color="#ffc83a"/><stop offset="1" stop-color="#b8740b"/></linearGradient>
+  <linearGradient id="l7g77" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff7ad9"/><stop offset=".55" stop-color="#b13cf0"/><stop offset="1" stop-color="#6a1fc2"/></linearGradient>
+  <radialGradient id="l7flesh" cx=".5" cy=".3" r=".8"><stop offset="0" stop-color="#ff8c8c"/><stop offset=".6" stop-color="#ec2f3f"/><stop offset="1" stop-color="#b3122a"/></radialGradient>
+  <radialGradient id="l7plum" cx=".35" cy=".3" r=".85"><stop offset="0" stop-color="#d27cf0"/><stop offset=".5" stop-color="#8d2cc2"/><stop offset="1" stop-color="#45106e"/></radialGradient>
+  <symbol id="l7s0" viewBox="0 0 120 100"><g transform="rotate(-12 60 52)"><path d="M10 44C16 96 104 96 110 44C92 30 28 30 10 44Z" fill="#2f9a3f" stroke="#1d6b2b" stroke-width="2"/><path d="M13 44C28 56 92 56 107 44" fill="none" stroke="#1d6b2b" stroke-width="1" opacity=".0"/><path d="M17 46C25 88 95 88 103 46C88 36 32 36 17 46Z" fill="#f1fbd9"/><path d="M22 47C30 82 90 82 98 47C84 39 36 39 22 47Z" fill="url(#l7flesh)"/><g fill="#2a0b10"><ellipse cx="44" cy="58" rx="2.6" ry="4.2" transform="rotate(-20 44 58)"/><ellipse cx="60" cy="63" rx="2.6" ry="4.2"/><ellipse cx="76" cy="58" rx="2.6" ry="4.2" transform="rotate(20 76 58)"/><ellipse cx="52" cy="72" rx="2.4" ry="3.8" transform="rotate(-10 52 72)"/><ellipse cx="69" cy="72" rx="2.4" ry="3.8" transform="rotate(10 69 72)"/></g><path d="M28 48C34 42 50 40 58 41" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".55"/><ellipse cx="60" cy="38" rx="50" ry="9" fill="none" stroke="#d8f0a8" stroke-width="2" opacity=".0"/></g></symbol>
+  <symbol id="l7s1" viewBox="0 0 120 100"><text x="60" y="76" text-anchor="middle" font-family="Poppins,Impact,Arial Black,sans-serif" font-weight="900" font-style="italic" font-size="84" letter-spacing="-4" fill="url(#l7g77)" stroke="#ffcf40" stroke-width="6" paint-order="stroke" stroke-linejoin="round">77</text></symbol>
+  <symbol id="l7s2" viewBox="0 0 120 100"><g transform="rotate(14 60 54)"><path d="M62 24C58 14 60 8 66 4" fill="none" stroke="#5a3a1a" stroke-width="3.4" stroke-linecap="round"/><path d="M64 22C74 6 98 8 104 20C92 34 72 34 64 22Z" fill="#35b24a" stroke="#1d7a2e" stroke-width="1.6"/><path d="M68 22C80 18 92 19 100 21" fill="none" stroke="#1d7a2e" stroke-width="1.2"/><path d="M60 26C34 22 14 42 16 64C18 86 44 96 62 90C84 94 106 80 104 58C102 38 84 24 60 26Z" fill="url(#l7plum)" stroke="#34094f" stroke-width="2"/><path d="M60 28C54 44 54 70 62 90" fill="none" stroke="#34094f" stroke-width="1.6" opacity=".45"/><ellipse cx="38" cy="46" rx="9" ry="14" transform="rotate(30 38 46)" fill="#fff" opacity=".4"/></g></symbol>
+</defs></svg>`; }
+function l7WheelSvg(){
+  const P=(r,a)=>{ const q=a*Math.PI/180; return [(r*Math.sin(q)).toFixed(2),(-r*Math.cos(q)).toFixed(2)]; };
+  let sec="",sy="";
+  for(let i=0;i<9;i++){
+    const a0=i*40-20,a1=i*40+20,[x0,y0]=P(168,a0),[x1,y1]=P(168,a1);
+    const col=i===0?"#5a3fe0":(i%2?"#2a86f0":"#1d62cf");
+    sec+=`<path d="M0 0L${x0} ${y0}A168 168 0 0 1 ${x1} ${y1}Z" fill="${col}" stroke="#bfe0ff" stroke-opacity=".55" stroke-width="1.6"/>`;
+    sy+=`<g transform="rotate(${i*40}) translate(0 -112) rotate(${(i%2?8:-8)*(i===0?0:1)})"><use href="#l7s${l7Sym(i)}" x="${i===0?-46:-36}" y="${i===0?-34:-30}" width="${i===0?92:72}" height="${i===0?76:60}"/></g>`;
+  }
+  let riv=""; for(let k=0;k<24;k++){ const [x,y]=P(185,k*15); riv+=`<circle cx="${x}" cy="${y}" r="3.4" fill="#fff6c8" stroke="#a8680a" stroke-width=".8"/>`; }
+  return `<svg class="l7wheel" viewBox="-230 -222 460 470" preserveAspectRatio="xMidYMid meet">
+    <defs><radialGradient id="l7hub" cx=".5" cy=".4" r=".7"><stop offset="0" stop-color="#7a3df0"/><stop offset="1" stop-color="#2a0c6b"/></radialGradient>
+      <radialGradient id="l7glass" cx=".5" cy=".5" r=".5"><stop offset=".82" stop-color="#6a3fe0" stop-opacity="0"/><stop offset="1" stop-color="#c9a8ff" stop-opacity=".28"/></radialGradient></defs>
+    <path d="M-150 205C-120 160 -60 190 0 168C60 190 120 160 150 205C120 215 60 205 0 232C-60 205 -120 215 -150 205Z" fill="url(#l7gold)" stroke="#7a4a05" stroke-width="2"/>
+    <path d="M-52 196C-24 178 24 178 52 196L40 214C20 200 -20 200 -40 214Z" fill="#ffd84d" stroke="#7a4a05" stroke-width="1.6"/>
+    <circle r="205" fill="url(#l7gold)" stroke="#7a4a05" stroke-width="3"/><circle r="193" fill="#2c1a6e" stroke="#7a4a05" stroke-width="2"/>${riv}
+    <circle r="174" fill="none" stroke="url(#l7gold)" stroke-width="9"/>
+    <g id="l7rot">${sec}${sy}</g>
+    <circle r="168" fill="url(#l7glass)"/>
+    <path d="M-34 -176L34 -176L0 -50Z" fill="#ff5ce6" fill-opacity=".30"/>
+    <path d="M-36 -178L0 -46L36 -178" fill="none" stroke="url(#l7gold)" stroke-width="9" stroke-linejoin="round" stroke-linecap="round"/>
+    <path d="M-36 -178L0 -46L36 -178" fill="none" stroke="#7a4a05" stroke-width="1.4" stroke-linejoin="round" opacity=".6"/>
+    <path d="M-16 -204L0 -222L16 -204L0 -186Z" fill="url(#l7gold)" stroke="#7a4a05" stroke-width="2"/><circle cy="-204" r="5" fill="#ff4fd8" stroke="#fff" stroke-width="1.4"/>
+    <circle r="56" fill="url(#l7gold)" stroke="#7a4a05" stroke-width="2"/><circle r="48" fill="url(#l7hub)" stroke="#1a0850" stroke-width="3"/><circle r="40" fill="none" stroke="#b49bff" stroke-opacity=".5" stroke-width="2"/>
+    <text id="l7c" y="14" text-anchor="middle" font-family="Poppins,sans-serif" font-weight="800" font-size="42" fill="#fff" stroke="#14063a" stroke-width="3" paint-order="stroke">15</text></svg>`;
+}
+function luckyOpen(){
+  closeModal(); if(L7.open) return;
+  L7.open=true; L7.room=S.cur?S.cur.id:"lobby"; L7.r=-1; L7.lastPhase=null; L7.players=false; L7.help=false; L7.docs=[]; L7.settled=-1;
+  const el=document.createElement("div"); el.id="luckyx"; el.className="l7"+(S.cur?" inroom":"");
+  (S.cur?$("#roomView"):$("#app")).appendChild(el); L7.el=el;
+  el.innerHTML=l7Defs()+`
+  <div class="l7bg"><div class="l7floor"></div><div class="l7beam b1"></div><div class="l7beam b2"></div></div>
+  <div class="l7stage">
+    <div class="l7vent v1"></div><div class="l7vent v2"></div>
+    ${l7WheelSvg()}
+    <button class="l7rb a" onclick="luckyClose()">↩</button><button class="l7rb b" onclick="l7Players()">👥</button>
+    <button class="l7rb c" onclick="l7Help()">?</button><button class="l7rb d" id="l7snd" onclick="toggleSound();l7Snd()">🔊</button>
+    <div class="l7win" id="l7win"></div>
+    <div class="l7panel" id="l7pl"></div><div class="l7panel help" id="l7hp"></div>
+  </div>
+  <div class="l7boxes">${[0,1,2].map(k=>`<button class="l7box" id="l7b${k}" onclick="l7Bet(${k})"><div class="pot"><b id="l7p${k}">0</b></div><div class="frame">${l7Ico(k)}</div><div class="mul">${L7_MUL[k]}x</div><div class="mine"><b id="l7m${k}">0</b></div></button>`).join("")}</div>
+  <div class="l7res"><span>${esc(t("Result"))}:</span><div id="l7hist"></div></div>
+  <div class="l7bot"><div class="l7chips">${L7_CHIPS.map(([v,l,c])=>`<button class="l7chip" id="l7ch${v}" style="--c:${c}" onclick="l7Chip(${v})"><span>${l}</span></button>`).join("")}</div>
+    <div class="l7right"><button class="l7rep" id="l7rep" onclick="l7Repeat()">${esc(t("Repeat"))}</button><div class="l7bal"><span class="coin s">K</span><b id="l7bal">0</b></div></div></div>
+  <div class="l7intro" id="l7intro"><div class="l7logo"><div class="pro">PRO</div><div class="lk"><span>Lucky</span><i>77</i></div></div>${l7Ico(0,"f1")}${l7Ico(2,"f2")}</div>`;
+  l7Snd(); l7Chip(L7.chip); l7Restore();
+  setTimeout(()=>{ const i=$("#l7intro"); if(i){ i.classList.add("out"); setTimeout(()=>i.remove(),600); } },1500);
+  const loop=()=>{ if(!L7.open) return; l7Tick(); L7.raf=requestAnimationFrame(loop); };
+  L7.raf=requestAnimationFrame(loop);
+}
+function l7Save(){ try{ localStorage.setItem("l7bet",JSON.stringify({u:S.uid,r:L7.r,b:L7.bets,room:L7.room})); }catch(e){} }
+function l7Restore(){ // a bet from a previous visit / reload is settled or kept
+  try{ const o=JSON.parse(localStorage.getItem("l7bet")||"null"); localStorage.removeItem("l7bet"); if(!o||o.u!==S.uid||!o.b||!o.b.some(x=>x>0)) return;
+    const st=l7State(Date.now());
+    if(o.r===st.r&&st.phase==="bet"){ L7.bets=o.b; L7.r=st.r; return; }
+    const win=o.b[l7Sym(l7Res(o.r))]*L7_MUL[l7Sym(l7Res(o.r))]; if(win>0){ addCoinsQuiet(win); toast("🎰 +"+fmt(win)); } }catch(e){}
+}
+function luckyClose(){
+  L7.open=false; cancelAnimationFrame(L7.raf); if(L7.unsub){ try{L7.unsub()}catch(e){} L7.unsub=null; }
+  const st=l7State(Date.now());
+  if(L7.bets.some(x=>x>0)){
+    if(L7.r===st.r&&st.phase==="bet"){ addCoinsQuiet(L7.bets.reduce((a,b)=>a+b,0)); l7Write(true); }
+    else if(L7.settled!==L7.r){ const k=l7Sym(l7Res(L7.r)), w=L7.bets[k]*L7_MUL[k]; if(w>0){ addCoinsQuiet(w); toast("🎰 +"+fmt(w)); } }
+  }
+  L7.bets=[0,0,0]; try{ localStorage.removeItem("l7bet"); }catch(e){}
+  if(L7.el){ L7.el.remove(); L7.el=null; }
+}
+function l7Snd(){ const b=$("#l7snd"); if(b) b.textContent=S.sound?"🔊":"🔇"; }
+function l7Chip(v){ L7.chip=v; L7_CHIPS.forEach(([c])=>{ const e=$("#l7ch"+c); if(e) e.classList.toggle("on",c===v); }); playSnd&&v&&L7.el&&playSnd("pop"); }
+function l7Bet(k){
+  const st=l7State(Date.now()); if(st.phase!=="bet"||st.left<400) return toast("⏳ "+t("Betting closed"));
+  if((S.me.coins||0)<L7.chip) return toast("🪙 "+t("Not enough coins"));
+  if(L7.r!==st.r){ L7.r=st.r; L7.bets=[0,0,0]; }
+  addCoinsQuiet(-L7.chip); L7.bets[k]+=L7.chip; l7Write(); l7Save(); playSnd&&playSnd("pop"); l7Ui();
+}
+function l7Repeat(){
+  const st=l7State(Date.now()); if(st.phase!=="bet"||st.left<400) return toast("⏳ "+t("Betting closed"));
+  if(L7.r!==st.r){ L7.r=st.r; L7.bets=[0,0,0]; }
+  if(L7.bets.some(x=>x>0)){ addCoinsQuiet(L7.bets.reduce((a,b)=>a+b,0)); L7.bets=[0,0,0]; l7Write(true); l7Save(); l7Ui(); return; }  // clear
+  const tot=L7.last.reduce((a,b)=>a+b,0); if(!tot) return toast(t("No previous bet"));
+  if((S.me.coins||0)<tot) return toast("🪙 "+t("Not enough coins"));
+  addCoinsQuiet(-tot); L7.bets=L7.last.slice(); l7Write(); l7Save(); playSnd&&playSnd("pop"); l7Ui();
+}
+function l7Write(del){
+  for(let k=0;k<3;k++){ const id=`${L7.room}_L${L7.r}_${S.uid}_${k}`.replace(/[\/]/g,"-");
+    try{ S.db.doc("crash/"+id).set({room:L7.room,rk:"L"+L7.r,uid:S.uid,slot:k,amt:del?0:L7.bets[k],out:0,at:Date.now()}).catch(()=>{}); }catch(e){} }
+}
+function l7Sub(r){
+  if(L7.unsub){ try{L7.unsub()}catch(e){} L7.unsub=null; } L7.docs=[];
+  try{ L7.unsub=S.db.collection("crash").where("room","==",L7.room).where("rk","==","L"+r).limit(400).onSnapshot(s=>{ L7.docs=s.docs.map(d=>d.data()).filter(b=>b.amt>0); l7Ui(); },()=>{}); }catch(e){}
+}
+function l7Pot(){ const p=[0,0,0]; L7.docs.forEach(d=>{ if(d.uid!==S.uid&&d.slot>=0&&d.slot<3) p[d.slot]+=d.amt; }); return p.map((v,k)=>v+(L7.bets[k]||0)); }
+function l7Ui(){
+  if(!L7.el) return; const st=l7State(Date.now()), pot=l7Pot(), open=st.phase==="bet";
+  for(let k=0;k<3;k++){ $("#l7p"+k).textContent=fmt(pot[k]); $("#l7m"+k).textContent=fmt(L7.bets[k]||0); const b=$("#l7b"+k); b.classList.toggle("has",(L7.bets[k]||0)>0); b.classList.toggle("off",!open); }
+  const rep=$("#l7rep"), has=L7.bets.some(x=>x>0), lbl=has&&open?t("Clear"):t("Repeat"); if(rep.textContent!==lbl) rep.textContent=lbl; rep.classList.toggle("off",!open);
+  if(L7.players) l7PlayersUi();
+}
+function l7Players(){ L7.players=!L7.players; L7.help=false; $("#l7hp").classList.remove("show"); $("#l7pl").classList.toggle("show",L7.players); if(L7.players) l7PlayersUi(); }
+function l7PlayersUi(){
+  const by={}; L7.docs.forEach(d=>{ by[d.uid]=(by[d.uid]||0)+d.amt; }); if((L7.bets||[]).some(x=>x>0)) by[S.uid]=L7.bets.reduce((a,b)=>a+b,0);
+  const rows=Object.entries(by).sort((a,b)=>b[1]-a[1]).slice(0,12).map(([u,v])=>{ const p=prof(u); return `<div class="pr">${p?avHTML(p,28):""}<span>${esc((p&&p.nick)||"…")}</span><b>${fmt(v)}</b></div>`; }).join("");
+  $("#l7pl").innerHTML=`<button class="x" onclick="l7Players()">✕</button><h4>👥 ${esc(t("Players"))} (${Object.keys(by).length})</h4>${rows||`<p class="em">${esc(t("No bets yet"))}</p>`}`;
+}
+function l7Help(){ L7.help=!L7.help; L7.players=false; $("#l7pl").classList.remove("show"); const h=$("#l7hp"); h.classList.toggle("show",L7.help);
+  if(L7.help) h.innerHTML=`<button class="x" onclick="l7Help()">✕</button><h4>🎰 Lucky 77 Pro</h4><p>${esc(t("Choose a chip, tap a symbol to bet, then watch the wheel."))}</p>
+   <div class="hr">${l7Ico(0)}<b>2x</b>${l7Ico(1)}<b>8x</b>${l7Ico(2)}<b>2x</b></div><p>${esc(t("If the wheel stops on your symbol you win the bet times the multiplier."))}</p><p>${esc(t("A new round starts every 25 seconds, the same for everyone in the room."))}</p>`; }
+function l7Win(txt,cls){ const w=$("#l7win"); if(!w) return; w.className="l7win show "+(cls||""); w.innerHTML=txt; clearTimeout(L7.wt); L7.wt=setTimeout(()=>{ w.className="l7win"; },2600); }
+function l7Settle(st){
+  if(L7.settled===st.r) return; L7.settled=st.r;
+  const k=l7Sym(st.res), tot=L7.bets.reduce((a,b)=>a+b,0), win=L7.bets[k]*L7_MUL[k];
+  if(L7.r===st.r&&tot>0){
+    L7.last=L7.bets.slice();
+    if(win>0){ addCoinsQuiet(win); playSnd&&playSnd(k===1?"sparkle":"chime"); l7Win(`<small>${esc(t("You won"))}</small><b>+${fmt(win)}</b>`,k===1?"big":"");
+      if(k===1&&S.cur&&L7.room===S.cur.id) postRoom({type:"game",text:`🎰 hit 77 (8x) in Lucky 77 Pro and won ${fmt(win)} coins!`}); }
+    else l7Win(`<small>${esc(t("No luck this time"))}</small><b class="lo">−${fmt(tot)}</b>`,"lose");
+    try{ localStorage.removeItem("l7bet"); }catch(e){}
+  }
+  const b=$("#l7b"+k); if(b){ b.classList.add("hit"); }
+}
+function l7Tick(){
+  const now=Date.now(), st=l7State(now);
+  if(st.r!==L7.r){ // new round
+    if(L7.r>=0&&L7.bets.some(x=>x>0)&&L7.settled!==L7.r){ /* previous round already settled in show phase */ }
+    L7.r=st.r; L7.bets=[0,0,0]; l7Sub(st.r); [0,1,2].forEach(k=>{ const b=$("#l7b"+k); b&&b.classList.remove("hit"); }); L7.lastPhase=null;
+  }
+  if(st.phase!==L7.lastPhase){
+    if(st.phase==="spin"){ playSnd&&playSnd("whoosh"); }
+    if(st.phase==="show") l7Settle(st);
+    if(st.phase==="bet"){ const h=$("#l7hist"); if(h) h.dataset.k=""; }
+    L7.lastPhase=st.phase; l7Ui();
+  }
+  const ang=l7Angle(st), rot=$("#l7rot"); if(rot) rot.setAttribute("transform",`rotate(${ang.toFixed(2)})`);
+  const sec9=Math.round(l7Norm(-ang)/40)%9; if(st.phase==="spin"&&sec9!==L7.lastSec9){ try{ tone(1300,ac().currentTime+.005,.04,"square",.05); }catch(e){} } L7.lastSec9=sec9;
+  const c=$("#l7c"); if(c){ let tx; if(st.phase==="bet") tx=Math.max(0,Math.ceil(st.left/1000)); else if(st.phase==="spin") tx="…"; else tx=L7_MUL[l7Sym(st.res)]+"x"; if(c.textContent!=tx) c.textContent=tx;
+    c.setAttribute("font-size",st.phase==="show"?34:42); c.setAttribute("fill",st.phase==="bet"&&st.left<4000?"#ffd84d":"#fff");
+    const s=Math.ceil(st.left/1000); if(st.phase==="bet"&&s!==L7.lastSec&&s<=3&&s>0){ try{ tone(880,ac().currentTime+.01,.1,"sine",.08); }catch(e){} } L7.lastSec=s; }
+  const bal=$("#l7bal"); if(bal) bal.textContent=fmt(S.me.coins||0);
+  const h=$("#l7hist"), key=st.phase==="show"||st.phase==="bet"?st.r+(st.phase==="show"?"s":"b"):st.r+"p";
+  if(h&&h.dataset.k!==key){ h.dataset.k=key; const arr=[]; const base=st.phase==="bet"?st.r-1:(st.phase==="show"?st.r:st.r-1);
+    for(let i=0;i<9;i++) arr.push(l7Sym(l7Res(base-i))); h.innerHTML=arr.map((k,i)=>`<span class="${i===0?"new":""}">${l7Ico(k)}${i===0?"<em>NEW</em>":""}</span>`).join(""); }
+}
 function hideSplash(){ $("#splash").classList.add("hide"); }
 
 function subscribeAll(){
@@ -1260,7 +1491,7 @@ function viewHome(){
   const m=S.me, l=level(m.xp), nx=lvlXp(l+1), cur=lvlXp(l), pct=Math.min(100,Math.round(((m.xp||0)-cur)/(nx-cur)*100));
   const dailyReady = m.lastDaily!==today();
   const feats=[["🏆","Top Players","openRankings('wealth')"],["📜","Daily Missions","openMissions()"],["🎁","Sign-in Rewards","openDaily()"],["🏅","Level Awards","openLevels()"]];
-  const games=[["🚀","Crash Rocket","Fly & cash out","linear-gradient(160deg,#1a4bb8,#06143a)","crashOpen()"],["🎡","Lucky Wheel","Daily spin","linear-gradient(160deg,#ff512f,#dd2476)","gWheel()"],
+  const games=[["🎰","Lucky 77 Pro","Spin & win 8x","linear-gradient(160deg,#7a2ad8,#2a0b78)","luckyOpen()"],["🚀","Crash Rocket","Fly & cash out","linear-gradient(160deg,#1a4bb8,#06143a)","crashOpen()"],["🎡","Lucky Wheel","Daily spin","linear-gradient(160deg,#ff512f,#dd2476)","gWheel()"],
     ["❌","Tic-Tac-Toe","+100 🪙","linear-gradient(160deg,#1d976c,#93f9b9)","gTTT()"],
     ["🃏","Memory Match","+80 🪙","linear-gradient(160deg,#4776e6,#8e54e9)","gMemory()"],
     ["🔢","Guess the Number","+60 🪙","linear-gradient(160deg,#f7971e,#ffd200)","gGuess()"],
@@ -1439,7 +1670,7 @@ async function enterRoom(id){
 async function leaveRoom(silent){
   if(!S.cur) return;
   if(typeof lvLeave==="function") lvLeave();
-  clearInterval(S.pkTimer); if(CR.open) crashClose();
+  clearInterval(S.pkTimer); if(CR.open) crashClose(); if(L7.open) luckyClose();
   const c=S.cur; S.cur=null;
   c.unsub.forEach(f=>{try{f()}catch(e){}});
   try{ c.named && await c.named.leave(); }catch(e){}
@@ -1528,7 +1759,7 @@ function _unusedSend(t){
 }
 function openFun(){
   const items=[["🎲","Dice","funDice()"],["🔢","Lucky Number","funLucky()"],["❓","Truth or Dare","funTD()"],["🪙","Coin Flip","funCoin()"],["⚔️","1v1 Dice","funDuel()"],["⏱️","Room Timer","funTimer()"]];
-  const games=[["🚀","Crash Rocket","crashOpen()"],["🎡","Lucky Wheel","gWheel()"],["❌","Tic-Tac-Toe","gTTT()"],["🃏","Memory","gMemory()"],["🔢","Guess the Number","gGuess()"],["✊","Rock Paper Scissors","gRPS()"],["🎲","Dice Duel","gDice()"]];
+  const games=[["🎰","Lucky 77 Pro","luckyOpen()"],["🚀","Crash Rocket","crashOpen()"],["🎡","Lucky Wheel","gWheel()"],["❌","Tic-Tac-Toe","gTTT()"],["🃏","Memory","gMemory()"],["🔢","Guess the Number","gGuess()"],["✊","Rock Paper Scissors","gRPS()"],["🎲","Dice Duel","gDice()"]];
   openModal(`<div class="fgrid">${items.map(([e,n,f])=>`<button class="ftile" onclick="${f}"><span class="em">${e}</span>${n}</button>`).join("")}</div>
     <div class="shead" style="margin:16px 0 10px"><h3 style="font-size:15px">Quick Games</h3><small style="color:#aaa">${games.length}</small></div>
     <div class="fgrid">${games.map(([e,n,f])=>`<button class="ftile" onclick="${f}"><span class="em">${e}</span>${n}</button>`).join("")}</div>`,{title:"✨ Fun Center",dark:true});
@@ -1749,7 +1980,7 @@ function _oldGiftRank(){
   openModal(l.map(([id,p],i)=>`<div class="lb"><span class="rk2">${["🥇","🥈","🥉"][i]||i+1}</span>${avHTML(p,38)}<b style="flex:1">${esc(p.nick)}</b><span>🎁 ${fmt(p.giftsSent)}</span></div>`).join("")||'<div class="empty">No gifts sent yet</div>',{title:"💝 Top Gifters"});
 }
 function openAllGames(){
-  const g=[["🚀","Crash Rocket","crashOpen()"],["🎡","Lucky Wheel","gWheel()"],["❌","Tic-Tac-Toe","gTTT()"],["🃏","Memory Match","gMemory()"],["🔢","Guess the Number","gGuess()"],["✊","Rock Paper Scissors","gRPS()"],["🎲","Dice Duel","gDice()"]];
+  const g=[["🎰","Lucky 77 Pro","luckyOpen()"],["🚀","Crash Rocket","crashOpen()"],["🎡","Lucky Wheel","gWheel()"],["❌","Tic-Tac-Toe","gTTT()"],["🃏","Memory Match","gMemory()"],["🔢","Guess the Number","gGuess()"],["✊","Rock Paper Scissors","gRPS()"],["🎲","Dice Duel","gDice()"]];
   openModal(`<div class="fgrid">${g.map(([e,n,f])=>`<button class="ftile" style="background:#fff;color:var(--ink);border-color:var(--line)" onclick="${f}"><span class="em">${e}</span>${n}</button>`).join("")}</div>`,{title:"🎮 All games"});
 }
 
@@ -2515,6 +2746,20 @@ const DICT_ROWS=[
 ["Signed in as","چوویتە ژوورەوە وەک","Wek têketî","تم تسجيل الدخول باسم","Giriş yapan"],
 ["Sign out","چوونەدەرەوە","Derkeve","تسجيل الخروج","Çıkış yap"],
 ["Live voice","دەنگی ڕاستەوخۆ","Dengê zindî","صوت مباشر","Canlı ses"],
+["Lucky 77 Pro","لاکی ٧٧ پرۆ","Lucky 77 Pro","لاكي 77 برو","Lucky 77 Pro"],
+["Spin & win 8x","بسوڕێنە و ٨ هێندە ببە","Bizivirîne û 8 carî bi dest bixe","أدر واربح 8 أضعاف","Çevir ve 8 kat kazan"],
+["Result","ئەنجام","Encam","النتيجة","Sonuç"],
+["Repeat","دووبارە","Dubare","إعادة","Tekrarla"],
+["Clear","پاککردنەوە","Paqij bike","مسح","Temizle"],
+["You won","بردتەوە","Te bir","لقد ربحت","Kazandın"],
+["No luck this time","ئەم جارە شانس نەبوو","Vê carê şans tune bû","لا حظ هذه المرة","Bu sefer şans yok"],
+["Betting closed","بەشداری داخراوە","Beşdarî girtî ye","أغلق الرهان","Bahis kapandı"],
+["No previous bet","بەشداری پێشوو نییە","Beşdariya berê tune","لا رهان سابق","Önceki bahis yok"],
+["Players","یاریزانەکان","Lîstikvan","اللاعبون","Oyuncular"],
+["No bets yet","هێشتا بەشداری نییە","Hê beşdarî tune","لا رهانات بعد","Henüz bahis yok"],
+["Choose a chip, tap a symbol to bet, then watch the wheel.","جەتۆنێک هەڵبژێرە، دەستت لە هێما بدە بۆ بەشداری، پاشان چەرخەکە ببینە.","Jetonek hilbijêre, li sembolê bitikîne û çerxê temaşe bike.","اختر رقاقة، المس رمزاً للمراهنة ثم شاهد العجلة.","Bir jeton seç, bahis için bir sembole dokun ve çarkı izle."],
+["If the wheel stops on your symbol you win the bet times the multiplier.","ئەگەر چەرخەکە لەسەر هێماکەت وەستا بڕی بەشداریت لەگەڵ ژمارەکە ئەبێتە بردنەوە.","Heke çerx li ser sembola te bisekine tu pereyê xwe carî hejmarê distînî.","إذا توقفت العجلة عند رمزك تربح الرهان مضروباً بالمضاعف.","Çark sembolünde durursa bahsin çarpanla kazanılır."],
+["A new round starts every 25 seconds, the same for everyone in the room.","هەر ٢٥ چرکە خولێکی نوێ دەست پێدەکات، بۆ هەموو ژوورەکە یەکسانە.","Her 25 çirkeyan gerrek nû dest pê dike, ji bo hemû odeyê wekhev e.","تبدأ جولة جديدة كل 25 ثانية للجميع في الغرفة.","Her 25 saniyede yeni tur başlar, odadaki herkes için aynı."],
 ["Crash Rocket","مووشەکی تەقیو","Rokêta Teqînê","صاروخ الانفجار","Roket Çarpışması"],
 ["Fly & cash out","بفڕە و پارەکەت وەربگرە","Bifire û pere bistîne","حلّق واسحب أرباحك","Uç ve parayı al"],
 ["Invest","بەشداری","Beşdar be","راهن","Yatır"],
