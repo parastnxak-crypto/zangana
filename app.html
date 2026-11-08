@@ -97,9 +97,9 @@ input,textarea,select{font-family:inherit;font-size:15px}
 .lvcard .ls{left:37%;width:32%;top:52%;height:12.4%;font-size:2.5cqw;font-weight:600;color:#f6ead0;justify-content:flex-start;overflow:hidden}
 .lvcard .lp{left:83.1%;width:11.6%;top:23.4%;height:13.1%;font-size:3.3cqw;font-weight:800;color:#fff;text-shadow:0 0 1cqw rgba(200,150,255,.7)}
 .lvcard .lc{left:11.8%;width:7.6%;top:60%;height:23.3%;font-weight:900;background:linear-gradient(180deg,#fff6c8,#ffd54a 50%,#e39a14);-webkit-background-clip:text;background-clip:text;color:transparent}
-.lvcard .lb{left:28.8%;width:41.6%;top:70.2%;height:8.7%;border-radius:99px;overflow:hidden;justify-content:flex-start}
-.lvcard .lb i{display:block;height:100%;min-width:4%;border-radius:99px;background:linear-gradient(180deg,#fff0a0,#ffc51f 45%,#f08a00);box-shadow:0 0 1.6cqw rgba(255,190,40,.75);position:relative;overflow:hidden;transition:width .6s cubic-bezier(.2,.8,.2,1)}
-.lvcard .lb i:after{content:"";position:absolute;inset:0;background:linear-gradient(105deg,transparent 30%,rgba(255,255,255,.65) 50%,transparent 70%);background-size:250% 100%;animation:vipSweep 2.6s ease-in-out infinite}
+.lvcard .lvb{left:28.8%;width:41.6%;top:70.2%;height:8.7%;border-radius:99px;overflow:hidden;justify-content:flex-start;align-items:stretch}
+.lvcard .lvb i{display:block;height:auto;min-width:4%;border-radius:99px;background:linear-gradient(180deg,#fff0a0,#ffc51f 45%,#f08a00);box-shadow:0 0 1.6cqw rgba(255,190,40,.75);position:relative;overflow:hidden;transition:width .6s cubic-bezier(.2,.8,.2,1)}
+.lvcard .lvb i:after{content:"";position:absolute;inset:0;background:linear-gradient(105deg,transparent 30%,rgba(255,255,255,.65) 50%,transparent 70%);background-size:250% 100%;animation:vipSweep 2.6s ease-in-out infinite}
 .lvcard .lx{left:71.2%;width:27%;top:69.5%;height:10.9%;font-weight:800;color:#fff}
 .lvcard .lx b{color:#ffd54a;font-weight:800}
 /* home feature cards (Top Players / Daily Missions / Sign-in Rewards / Level Awards) */
@@ -1007,8 +1007,8 @@ function viewHome(){
     <span class="ls">${esc(t("Stay active to level up"))}</span>
     <span class="lp">Lv.${l}</span>
     <span class="lc" style="font-size:${String(l).length>3?2.6:String(l).length>2?3.4:4.2}cqw">${l}</span>
-    <span class="lb"><i style="width:${pct}%"></i></span>
-    <span class="lx" style="font-size:${Math.min(2.5,25/((m.xp||0)+" / "+nx+" XP").length).toFixed(2)}cqw"><b>${m.xp||0}</b>&nbsp;/ ${nx} XP</span>
+    <span class="lvb"><i style="width:${pct}%"></i></span>
+    <span class="lx" style="font-size:${Math.min(2.6,44/((m.xp||0)+" / "+nx+" XP").length).toFixed(2)}cqw"><b>${m.xp||0}</b>&nbsp;/ ${nx} XP</span>
   </button>
   <div class="sect"><h3>🎮 Games</h3><a onclick="openAllGames()">All games</a></div>
   <div class="hscroll">${games.map(([e,n,s,bg,f])=>`<button class="gtile" style="background:${bg}" onclick="${f}"><span class="em">${e}</span><span>${n}</span><small>${s}</small></button>`).join("")}</div>
