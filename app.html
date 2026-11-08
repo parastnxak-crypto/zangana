@@ -573,6 +573,93 @@ input:focus,textarea:focus,select:focus{outline:none;box-shadow:0 0 0 3px rgba(2
 /* short screens */
 @media (max-height:640px){ .seats{gap:8px 2px;padding:8px 6px}.seat span.n{font-size:9.5px} }
 @media (prefers-reduced-motion:reduce){ *{animation-duration:.01ms!important;animation-iteration-count:1!important;transition:none!important} }
+/* ===================== CRASH ROCKET ===================== */
+.crx{position:absolute;inset:0;z-index:45;display:flex;flex-direction:column;background:linear-gradient(180deg,#0a1f55,#06143a 30%,#040c26);color:#fff;font-family:Poppins,"Noto Sans Arabic",system-ui,sans-serif;animation:crIn .35s cubic-bezier(.2,.8,.2,1);overflow:hidden;padding-bottom:var(--safe-b,0)}
+.crx.inroom{top:34%;border-radius:22px 22px 0 0;box-shadow:0 -10px 30px rgba(0,0,0,.5);border-top:2px solid #3f8cff}
+@keyframes crIn{from{transform:translateY(40px);opacity:0}}
+.crtop{display:flex;align-items:center;gap:8px;padding:8px 10px;background:linear-gradient(180deg,#1a4bb8,#0d2f86);border-bottom:2px solid #3f8cff;box-shadow:inset 0 1px 0 rgba(255,255,255,.25)}
+.crcoin{display:flex;align-items:center;gap:5px;background:rgba(0,0,0,.35);border:1px solid #5aa0ff;border-radius:16px;padding:4px 10px 4px 5px;font-size:14px}
+.crbest{flex:1;text-align:center;margin:0 6px;padding:2px 0;border:2px solid #7cc4ff;border-radius:16px;background:linear-gradient(180deg,#0c2a72,#081b4d);box-shadow:0 0 12px rgba(90,170,255,.5),inset 0 0 10px rgba(90,170,255,.3);line-height:1.05}
+.crbest small{display:block;font-size:9px;font-weight:800;letter-spacing:2px;color:#9fd2ff}.crbest b{font-size:17px;color:#ffd84d;text-shadow:0 0 8px rgba(255,200,60,.6)}
+.crib{width:32px;height:32px;border-radius:10px;background:rgba(255,255,255,.12);color:#fff;font-size:15px}
+.crhist{display:flex;align-items:center;gap:4px;padding:6px 6px;background:#0a2466;border-bottom:1px solid #2a5fd0}
+.crhist>div{flex:1;display:flex;gap:4px;overflow:hidden}.crhist>button{color:#9fd2ff;font-size:16px;padding:0 6px;font-weight:900}
+.chip{display:inline-flex;align-items:center;justify-content:center;min-width:46px;padding:3px 6px;border-radius:9px;font-weight:800;font-size:12px;color:#fff;border:1px solid rgba(255,255,255,.35);box-shadow:inset 0 1px 0 rgba(255,255,255,.4),0 2px 4px rgba(0,0,0,.35);text-shadow:0 1px 1px rgba(0,0,0,.4);animation:crIn .3s}
+.chip.blue{background:linear-gradient(180deg,#3fa3ff,#1555c9)}.chip.green{background:linear-gradient(180deg,#5fd94a,#1c8a1f)}.chip.gold{background:linear-gradient(180deg,#ffc53d,#d77b00)}.chip.red{background:linear-gradient(180deg,#ff5a4f,#b3140c)}
+.crstage{position:relative;flex:1;min-height:150px;overflow:hidden;background:radial-gradient(ellipse at 70% 30%,rgba(120,60,200,.35),transparent 55%),radial-gradient(ellipse at 20% 80%,rgba(30,90,220,.35),transparent 60%),#050b22}
+.crstars,.crstars.s2{position:absolute;inset:-50%;background-image:radial-gradient(1.5px 1.5px at 20px 30px,#fff,transparent),radial-gradient(1px 1px at 80px 120px,#cfe3ff,transparent),radial-gradient(1.5px 1.5px at 150px 60px,#fff,transparent),radial-gradient(1px 1px at 200px 180px,#fff,transparent),radial-gradient(1px 1px at 260px 90px,#9cc8ff,transparent);background-size:280px 220px;opacity:.7}
+.crstars.s2{background-size:190px 170px;opacity:.45}
+.crstage.flying .crstars{animation:crStar 2.2s linear infinite}.crstage.flying .crstars.s2{animation-duration:3.5s}
+@keyframes crStar{to{transform:translate(-280px,220px)}}
+.crplanet{position:absolute;width:44%;aspect-ratio:1;right:-10%;bottom:-18%;border-radius:50%;background:radial-gradient(circle at 35% 30%,#f7a8ff,#8a3ec2 45%,#2a0e55 75%);box-shadow:0 0 40px rgba(200,100,255,.35);opacity:.85}
+.crplanet:after{content:"";position:absolute;inset:38% -30%;border:3px solid rgba(255,190,120,.5);border-radius:50%;transform:rotate(-18deg)}
+.crplanet.p2{width:16%;right:auto;left:22%;top:12%;bottom:auto;background:radial-gradient(circle at 35% 30%,#a8f0ff,#2a82c2 55%,#0b2a55);opacity:.6}.crplanet.p2:after{display:none}
+.crlabel{position:absolute;left:0;top:0;bottom:0;width:30px;display:flex;align-items:center;justify-content:center;background:linear-gradient(90deg,rgba(255,200,80,.12),transparent);border-right:2px solid #c9a24a}
+.crlabel span{transform:rotate(-90deg);white-space:nowrap;font-weight:900;letter-spacing:2px;font-size:13px;color:#ffd76a;text-shadow:0 0 8px rgba(255,200,80,.6)}
+.crticks{position:absolute;right:4px;top:6%;bottom:6%;display:flex;flex-direction:column;justify-content:space-between}
+.crticks i{width:0;height:0;border:5px solid transparent;border-right:7px solid #5fc2ff;opacity:.8}
+.crstage.flying .crticks i{animation:crTick 1s linear infinite}.crticks i:nth-child(odd){animation-delay:.5s!important}
+@keyframes crTick{50%{opacity:.2}}
+.crinfo{position:absolute;left:36px;top:6px;display:flex;gap:10px;font-size:13px;background:rgba(0,0,0,.35);border-radius:10px;padding:2px 8px;align-items:center;z-index:3}
+.crround{position:absolute;left:36px;top:32px;font-size:12px;color:#9fb8e8;z-index:3}.crround b{color:#fff}
+.crtrail{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.crrocket{position:absolute;width:30px;height:60px;z-index:4;transition:opacity .2s;filter:drop-shadow(0 0 12px rgba(255,160,60,.9))}
+.crrocket .rksvg{position:absolute;inset:0;width:100%;height:100%;z-index:2}
+.crrocket .flame{position:absolute;left:50%;bottom:-16px;margin-left:-11px;width:22px;height:30px;border-radius:50%;background:radial-gradient(circle,#fff6b0,#ff8a00 50%,transparent 70%);animation:crFl .12s ease-in-out infinite alternate}
+@keyframes crFl{to{transform:scale(1.35);opacity:.75}}
+.crboom{position:absolute;font-size:64px;transform:translate(-50%,-50%) scale(0);z-index:5;pointer-events:none}
+.crboom.show{animation:crBoom .6s ease-out forwards}
+@keyframes crBoom{0%{transform:translate(-50%,-50%) scale(.2)}60%{transform:translate(-50%,-50%) scale(1.5)}100%{transform:translate(-50%,-50%) scale(1.2);opacity:.85}}
+.crstage.crashed{animation:crShake .45s}
+@keyframes crShake{20%{transform:translate(-5px,3px)}40%{transform:translate(5px,-3px)}60%{transform:translate(-3px,2px)}80%{transform:translate(2px,-1px)}}
+.crmid{position:absolute;left:30px;right:0;top:28%;text-align:center;z-index:3;pointer-events:none}
+.crword{min-height:0;font-size:clamp(28px,10vw,46px);font-weight:900;font-style:italic;color:#a4ff3a;-webkit-text-stroke:1px #2f6b00;text-shadow:0 3px 0 #2f6b00,0 0 18px rgba(160,255,60,.6)}
+.crword.pop{animation:popIn .4s cubic-bezier(.2,1.6,.4,1)}
+.crmult{font-size:clamp(30px,10vw,44px);font-weight:900;text-shadow:0 0 14px rgba(120,190,255,.8),0 3px 0 #0b2a6b}
+.crmult i{font-style:normal;color:#a4ff3a;font-size:.75em;margin-inline-start:2px}
+.crmult.red{color:#ff5a4f}.crmult.red i{color:#ff8a80}
+.crcrash{font-size:22px;font-weight:900;color:#ff8a80;text-transform:uppercase;letter-spacing:1px}
+.crcount{position:absolute;left:50%;top:50%;width:min(46%,170px);aspect-ratio:1;transform:translate(-40%,-50%) scale(.6);opacity:0;transition:.3s;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:3;pointer-events:none}
+.crcount.show{opacity:1;transform:translate(-40%,-50%) scale(1)}
+.crcount svg{position:absolute;inset:0;transform:rotate(-90deg);filter:drop-shadow(0 0 10px #2f8cff)}
+.crcount .bg{fill:rgba(5,20,60,.85);stroke:#123a8a;stroke-width:10}.crcount .fg{fill:none;stroke:#4fb2ff;stroke-width:10;stroke-linecap:round;stroke-dasharray:326.7;transition:stroke-dashoffset .1s linear}
+.crcount b{position:relative;font-size:clamp(28px,9vw,40px);font-weight:900}.crcount small{position:relative;font-size:10px;color:#9fd2ff;font-weight:700}
+.crfloat{position:absolute;left:50%;bottom:20%;transform:translateX(-50%);font-size:28px;font-weight:900;color:#ffd84d;text-shadow:0 0 12px rgba(255,200,60,.8);animation:crUp 1.6s ease-out forwards;z-index:6}
+@keyframes crUp{to{transform:translate(-50%,-90px);opacity:0}}
+.crstats{position:absolute;inset:0;z-index:7;background:rgba(6,18,55,.96);padding:10px 14px;overflow:auto;display:none}
+.crstats.show{display:block;animation:crIn .25s}
+.crstats p{font-size:12px;color:#cfe0ff;margin:8px 0 6px}.crstats .x{position:absolute;right:10px;top:8px;color:#fff;font-size:16px}
+.crg{display:flex;flex-wrap:wrap;gap:6px}.crg.grid .chip{flex:0 0 calc(20% - 5px);min-width:0}
+.crpod{position:absolute;inset:0;z-index:8;display:none;align-items:center;justify-content:center;background:rgba(3,10,30,.6)}
+.crpod.show{display:flex;animation:crIn .3s}
+.pdbox{position:relative;width:min(92%,340px);border-radius:18px;background:linear-gradient(180deg,#1b56c9,#0b2a77 30%,#081c52);border:2px solid #4f9bff;box-shadow:0 0 30px rgba(60,140,255,.5);padding:12px 10px 0;text-align:center;overflow:hidden}
+.pdt{position:absolute;right:10px;top:8px;font-size:13px;color:#cfe0ff}
+.pdm{font-size:30px;font-weight:900;background:linear-gradient(180deg,#fff6c8,#ffb52e);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 2px 0 #7a3f00)}
+.pdh{font-size:17px;font-weight:900;color:#ffd84d;margin-bottom:8px;text-shadow:0 2px 0 #7a3f00}
+.pdrow{display:flex;align-items:flex-end;justify-content:center;gap:6px}
+.pd{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;min-width:0}
+.pd b{font-size:11px;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.pd small{font-size:11px;color:#ffd84d;font-weight:800}
+.pd .shield{position:relative;width:66px;height:76px;display:flex;align-items:center;justify-content:center;clip-path:polygon(50% 0,100% 18%,100% 70%,50% 100%,0 70%,0 18%);background:linear-gradient(180deg,#f2f6ff,#9fb0c8);box-shadow:inset 0 0 0 4px rgba(255,255,255,.6)}
+.pd.p1 .shield{width:78px;height:90px;background:linear-gradient(180deg,#fff2a8,#e0a321 60%,#b87a0f)}
+.pd.p3 .shield{background:linear-gradient(180deg,#ffd0b0,#c9774a 60%,#8d4a24)}
+.pd .no{position:absolute;top:6px;font-size:12px;font-weight:900;color:#5a3a00}
+.pd .base{width:100%;height:30px;margin-top:4px;border-radius:12px 12px 0 0;background:linear-gradient(180deg,#5fb8ff,#1555c9);box-shadow:inset 0 2px 0 rgba(255,255,255,.5)}
+.pd.p1 .base{height:44px}.pd.p3 .base{height:22px}
+.crctrl{display:flex;align-items:stretch;gap:0;padding:8px 6px 10px;background:linear-gradient(180deg,#1d5ad6,#0e3596);border-top:2px solid #5aa0ff}
+.crslot{flex:1;display:flex;flex-direction:column;gap:6px;min-width:0}
+.crsep{width:26px;display:flex;align-items:flex-end;justify-content:center;font-size:16px;padding-bottom:10px;opacity:.85}
+.crrow{display:flex;align-items:center;justify-content:space-between;background:linear-gradient(180deg,#0b2463,#123a8f);border:2px solid #9fc8ff;border-radius:14px;padding:2px;box-shadow:inset 0 2px 4px rgba(0,0,0,.4)}
+.crrow b{font-size:16px;font-weight:900;white-space:nowrap}.crrow b i{font-style:normal;color:#a4ff3a;font-size:12px;margin-inline-start:2px}.crrow.amt b i{color:#7cc4ff}
+.crrow button{width:30px;height:28px;border-radius:10px;background:linear-gradient(180deg,#eaf2ff,#9fb8e0);color:#14306f;font-weight:900;font-size:17px;box-shadow:0 2px 0 #4a6aa8}
+.crgo{display:flex;height:40px;border-radius:20px;overflow:hidden;border:2px solid #cfe3ff;box-shadow:0 3px 0 #0a2466}
+.crgo .auto{width:40%;font-weight:900;font-size:12px;color:#7a4300;background:linear-gradient(180deg,#ffe28a,#f5a300)}
+.crgo .auto.on{background:linear-gradient(180deg,#a4ff3a,#3fb21a);color:#123d00;box-shadow:inset 0 0 10px rgba(255,255,255,.6)}
+.crgo .inv{flex:1;font-weight:900;font-size:13px;color:#fff;background:linear-gradient(180deg,#8bf05a,#2fa31a);text-shadow:0 1px 1px rgba(0,0,0,.4);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:0 4px}
+.crgo .inv.cash{background:linear-gradient(180deg,#ffd84d,#ff8a00);color:#4a2400;text-shadow:none;animation:pkWinP .8s infinite}
+.crgo .inv.cancel{background:linear-gradient(180deg,#8fa9d8,#4a6aa8)}
+.crgo .inv.won{background:linear-gradient(180deg,#ffe28a,#e0a321);color:#4a2a00;text-shadow:none}
+.crgo .inv.lost{background:linear-gradient(180deg,#ff8a80,#c4170c)}
+@media (max-width:360px){ .crrow b{font-size:13px}.crrow button{width:26px}.crgo{height:36px}.crgo .inv{font-size:11.5px} }
 </style>
 </head>
 <body>
@@ -888,6 +975,194 @@ function pkShowWinner(pk){
     ${mvp?`<div class="mvp">${avHTML(prof(mvp[0]),44)}<div><small>MVP</small><b class="nt">${esc(prof(mvp[0]).nick)}</b><small>🪙 ${fmt(mvp[1])}</small></div></div>`:""}</div>`;
   el.onclick=()=>el.remove(); $("#roomView").appendChild(el); playSnd&&playSnd("fanfare"); setTimeout(()=>el.remove(),7000);
 }
+/* ================= CRASH ROCKET =================
+   Everyone in the same room plays the same rounds: every round's crash point and timing come
+   from the clock with a fixed formula, so all phones agree without a server.
+   Bets are virtual DANGI coins only. */
+const CR={open:false,el:null,raf:0,room:"lobby",rk:null,bets:[],unsub:null,podium:null,stats:false,
+  slots:[{cash:2,amt:1000,auto:false,bet:null,queued:false},{cash:5,amt:500,auto:false,bet:null,queued:false}],cache:null,lastPhase:null,lastSec:-1,word:""};
+const CR_K=0.09, CR_BET=8000, CR_END=4500, CR_CASH=[1.1,1.2,1.3,1.5,1.8,2,2.5,3,4,5,7,10,15,20,30,50,100], CR_AMT=[100,200,500,1000,2000,5000,10000,20000,50000,100000];
+function crRand(day,r){ let t=(Math.imul(day,2654435761)^Math.imul(r+1,40503)^0x5bd1e995)>>>0; t=(t+0x6D2B79F5)>>>0; t=Math.imul(t^t>>>15,t|1); t^=t+Math.imul(t^t>>>7,t|61); return ((t^t>>>14)>>>0)/4294967296; }
+function crPoint(day,r){ return Math.max(1,Math.min(100,Math.floor(97/(1-crRand(day,r)))/100)); }
+const crFly=c=>Math.log(c)/CR_K*1000;
+const crLen=(day,r)=>CR_BET+crFly(crPoint(day,r))+CR_END;
+function crState(now){
+  const day=Math.floor(now/864e5); let c=CR.cache;
+  if(!c||c.day!==day||c.start>now){ c={day,r:0,start:day*864e5,best:0,hist:[]}; }
+  while(c.start+crLen(day,c.r)<=now){ const p=crPoint(day,c.r); c.best=Math.max(c.best,p); c.hist.unshift(p); if(c.hist.length>20) c.hist.pop(); c.start+=crLen(day,c.r); c.r++; }
+  CR.cache=c;
+  const crash=crPoint(day,c.r), fly=crFly(crash), tIn=now-c.start;
+  let phase="bet", mult=1;
+  if(tIn>=CR_BET){ const ft=tIn-CR_BET; if(ft<fly){ phase="fly"; mult=Math.min(crash,Math.exp(CR_K*ft/1000)); } else { phase="crash"; mult=crash; } }
+  return {day,r:c.r,rk:day+"_"+c.r,crash,phase,mult,tIn,fly,best:c.best,hist:c.hist,left:CR_BET-tIn};
+}
+const crCls=m=>m>=10?"red":m>=5?"gold":m>=2?"green":"blue";
+const crWord=m=>m>=20?"Legendary":m>=10?"Incredible":m>=5?"Amazing":m>=3?"Great":m>=2?"Nice":"";
+function crashOpen(){
+  closeModal(); if(CR.open) return;
+  CR.open=true; CR.room=S.cur?S.cur.id:"lobby"; CR.rk=null; CR.lastPhase=null; CR.stats=false;
+  const el=document.createElement("div"); el.id="crashx"; el.className="crx"+(S.cur?" inroom":"");
+  const host=S.cur?$("#roomView"):$("#app"); host.appendChild(el); CR.el=el;
+  el.innerHTML=`
+  <div class="crtop">
+    <div class="crcoin"><span class="coin s">K</span><b id="crbal">0</b></div>
+    <div class="crbest"><small>${esc(t("BEST TODAY"))}</small><b id="crbestv">—</b></div>
+    <button class="crib" onclick="toggleSound();crSnd()" id="crsnd">🔊</button>
+    <button class="crib" onclick="crashClose()">✕</button>
+  </div>
+  <div class="crhist"><div id="crchips"></div><button onclick="crToggleStats()">•••</button></div>
+  <div class="crstage" id="crstage">
+    <div class="crstars"></div><div class="crstars s2"></div><div class="crplanet"></div><div class="crplanet p2"></div>
+    <div class="crlabel"><span>CRASH ROCKET</span></div>
+    <div class="crticks">${"<i></i>".repeat(14)}</div>
+    <div class="crinfo"><span>👤 <b id="crpl">0</b></span><span><span class="coin s">K</span> <b id="crpot">0</b></span></div>
+    <div class="crround">${esc(t("Round"))}: <b id="crrd">1</b></div>
+    <svg class="crtrail" viewBox="0 0 1000 600" preserveAspectRatio="none"><defs><linearGradient id="crg" x1="0" x2="1"><stop offset="0" stop-color="#ff3d00" stop-opacity=".05"/><stop offset=".6" stop-color="#ff9a1f"/><stop offset="1" stop-color="#fff3b0"/></linearGradient><filter id="crglow"><feGaussianBlur stdDeviation="6"/></filter></defs>
+      <path id="crpath2" d="" stroke="url(#crg)" stroke-width="22" fill="none" filter="url(#crglow)" opacity=".7"/><path id="crpath" d="" stroke="url(#crg)" stroke-width="7" fill="none" stroke-linecap="round"/></svg>
+    <div class="crrocket" id="crrocket"><svg viewBox="0 0 40 80" class="rksvg"><defs><linearGradient id="crb1" x1="0" x2="1"><stop offset="0" stop-color="#cfd8e8"/><stop offset=".5" stop-color="#fff"/><stop offset="1" stop-color="#9aa8c0"/></linearGradient></defs><path d="M20 2C30 14 32 30 30 52H10C8 30 10 14 20 2Z" fill="url(#crb1)" stroke="#6a7a96" stroke-width="1.2"/><path d="M20 2C25 8 28 14 29 20H11C12 14 15 8 20 2Z" fill="#ff4d3d"/><circle cx="20" cy="30" r="6" fill="#2a8cff" stroke="#e8f2ff" stroke-width="2"/><path d="M10 40L2 58L10 54Z M30 40L38 58L30 54Z" fill="#ff4d3d"/><path d="M13 52H27L24 58H16Z" fill="#7a869e"/></svg><span class="flame"></span></div>
+    <div class="crboom" id="crboom">💥</div>
+    <div class="crmid" id="crmid"><div class="crword" id="crw"></div><div class="crcrash" id="crcr"></div><div class="crmult" id="crm"></div></div>
+    <div class="crcount" id="crcount"><svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="52" class="bg"/><circle cx="60" cy="60" r="52" class="fg" id="crring"/></svg><b id="crsec">8.0</b><small>${esc(t("Place your bets"))}</small></div>
+    <div class="crstats" id="crstats"></div>
+    <div class="crpod" id="crpod"></div>
+  </div>
+  <div class="crctrl">${[0,1].map(i=>`
+    <div class="crslot">
+      <div class="crrow"><button onclick="crCash(${i},-1)">‹</button><b id="crc${i}"></b><button onclick="crCash(${i},1)">›</button></div>
+      <div class="crrow amt"><button onclick="crAmt(${i},-1)">−</button><b id="cra${i}"></b><button onclick="crAmt(${i},1)">＋</button></div>
+      <div class="crgo"><button class="auto" id="crau${i}" onclick="crAuto(${i})">AUTO</button><button class="inv" id="crb${i}" onclick="crInvest(${i})">${esc(t("Invest"))}</button></div>
+    </div>`).join(`<div class="crsep">🚀</div>`)}
+  </div>`;
+  crSnd(); crSlotsUi();
+  const loop=()=>{ if(!CR.open) return; crTick(); CR.raf=requestAnimationFrame(loop); };
+  CR.raf=requestAnimationFrame(loop);
+}
+function crashClose(){
+  CR.open=false; cancelAnimationFrame(CR.raf); if(CR.unsub){ try{CR.unsub()}catch(e){} CR.unsub=null; }
+  // bets still waiting are refunded; bets in the air stay (they are settled by the crash)
+  CR.slots.forEach(s=>{ if(s.bet&&s.bet.rk===CR.rk&&CR.lastPhase==="bet"){ addCoinsQuiet(s.bet.amt); s.bet=null; } s.queued=false; s.auto=false; });
+  if(CR.el){ CR.el.remove(); CR.el=null; }
+}
+function addCoinsQuiet(n){ saveMe({coins:Math.max(0,(S.me.coins||0)+n)}); }
+function crSnd(){ const b=$("#crsnd"); if(b) b.textContent=S.sound?"🔊":"🔇"; }
+function crToggleStats(){ CR.stats=!CR.stats; crStatsUi(); }
+function crStatsUi(){ const el=$("#crstats"); if(!el) return; el.classList.toggle("show",CR.stats); if(!CR.stats) return; const s=crState(Date.now()), h=s.hist;
+  const avg=h.length?(h.reduce((a,b)=>a+b,0)/h.length):0;
+  el.innerHTML=`<button class="x" onclick="crToggleStats()">✕</button>
+    <p>${esc(t("Highest multiplier today"))}</p><div class="crg"><span class="chip ${crCls(s.best||1)}">${(s.best||0).toFixed(2)}</span></div>
+    <p>${esc(t("Average of the last 20 rounds"))}</p><div class="crg"><span class="chip ${crCls(avg)}">${avg.toFixed(2)}</span></div>
+    <p>${esc(t("Last 20 rounds"))}</p><div class="crg grid">${h.map(m=>`<span class="chip ${crCls(m)}">${m.toFixed(2)}</span>`).join("")}</div>`; }
+function crCash(i,d){ const s=CR.slots[i]; if(s.bet&&!s.bet.out&&CR.lastPhase==="fly") return; let k=CR_CASH.findIndex(v=>v>=s.cash); k=Math.max(0,Math.min(CR_CASH.length-1,k+d)); s.cash=CR_CASH[k]; crSlotsUi(); }
+function crAmt(i,d){ const s=CR.slots[i]; if(s.bet) return; let k=CR_AMT.findIndex(v=>v>=s.amt); k=Math.max(0,Math.min(CR_AMT.length-1,k+d)); s.amt=CR_AMT[k]; crSlotsUi(); }
+function crAuto(i){ const s=CR.slots[i]; s.auto=!s.auto; if(s.auto&&!s.bet) crInvest(i,true); crSlotsUi(); }
+function crPlace(i){
+  const s=CR.slots[i], st=crState(Date.now());
+  if((S.me.coins||0)<s.amt){ s.auto=false; s.queued=false; toast("🪙 "+t("Not enough coins")); crSlotsUi(); return false; }
+  addCoinsQuiet(-s.amt); s.bet={rk:st.rk,amt:s.amt,out:0,cash:s.cash}; s.queued=false;
+  crWrite(i); playSnd&&playSnd("pop"); return true;
+}
+function crInvest(i,silent){
+  const s=CR.slots[i], st=crState(Date.now());
+  if(s.bet&&s.bet.rk===st.rk){
+    if(st.phase==="bet"){ addCoinsQuiet(s.bet.amt); s.bet=null; s.auto=false; crWrite(i,true); }       // cancel
+    else if(st.phase==="fly"&&!s.bet.out) crCashOut(i,st.mult);                                        // cash out
+  } else if(s.queued){ s.queued=false; s.auto=false; }
+  else if(st.phase==="bet") crPlace(i);
+  else { s.queued=true; if(!silent) toast("⏳ "+t("Your bet joins the next round")); }
+  crSlotsUi();
+}
+function crCashOut(i,m){
+  const s=CR.slots[i]; if(!s.bet||s.bet.out) return; m=Math.floor(m*100)/100; s.bet.out=m;
+  const win=Math.floor(s.bet.amt*m); addCoinsQuiet(win); crWrite(i);
+  playSnd&&playSnd("chime"); crFloat(`+${fmt(win)}`);
+  if(m>=5&&S.cur&&CR.room===S.cur.id) postRoom({type:"game",text:`🚀 cashed out at ${m.toFixed(2)}x in Crash Rocket and won ${fmt(win)} coins!`});
+  crSlotsUi();
+}
+function crWrite(i,del){
+  const s=CR.slots[i], b=s.bet; const id=`${CR.room}_${CR.rk}_${S.uid}_${i}`.replace(/[\/]/g,"-");
+  try{ const ref=S.db.doc("crash/"+id); if(del) ref.set({room:CR.room,rk:CR.rk,uid:S.uid,slot:i,amt:0,out:0,at:Date.now()}).catch(()=>{});
+       else if(b) ref.set({room:CR.room,rk:b.rk,uid:S.uid,slot:i,amt:b.amt,out:b.out||0,at:Date.now()}).catch(()=>{}); }catch(e){}
+}
+function crFloat(txt){ const st=$("#crstage"); if(!st) return; const f=document.createElement("div"); f.className="crfloat"; f.textContent=txt; st.appendChild(f); setTimeout(()=>f.remove(),1600); }
+function crSlotsUi(){
+  if(!CR.el) return; const st=crState(Date.now());
+  CR.slots.forEach((s,i)=>{
+    $("#crc"+i).innerHTML=`${s.cash.toFixed(2)}<i>x</i>`; $("#cra"+i).innerHTML=`${fmt(s.amt)}<i>coins</i>`;
+    $("#crau"+i).classList.toggle("on",s.auto);
+    const b=$("#crb"+i); let lbl=t("Invest"), cls="";
+    if(s.bet&&s.bet.rk===st.rk){
+      if(st.phase==="bet"){ lbl=t("Cancel"); cls="cancel"; }
+      else if(st.phase==="fly"&&!s.bet.out){ lbl=`${t("Cash out")} ${fmt(Math.floor(s.bet.amt*st.mult))}`; cls="cash"; }
+      else if(s.bet.out){ lbl=`✓ ${s.bet.out.toFixed(2)}x`; cls="won"; }
+      else { lbl=t("Lost"); cls="lost"; }
+    } else if(s.queued){ lbl=t("Waiting…"); cls="cancel"; }
+    if(b.textContent!==lbl) b.textContent=lbl; b.className="inv "+cls;
+  });
+}
+function crSub(rk){
+  if(CR.unsub){ try{CR.unsub()}catch(e){} CR.unsub=null; } CR.bets=[];
+  try{ CR.unsub=S.db.collection("crash").where("room","==",CR.room).where("rk","==",rk).limit(300).onSnapshot(s=>{ CR.bets=s.docs.map(d=>d.data()).filter(b=>b.amt>0); crInfo(); },()=>{}); }catch(e){}
+}
+function crInfo(){ const p=$("#crpl"), q=$("#crpot"); if(!p) return; const u=new Set(CR.bets.map(b=>b.uid)); p.textContent=u.size; q.textContent=fmt(CR.bets.reduce((a,b)=>a+(b.amt||0),0)); }
+function crPodium(st){
+  const el=$("#crpod"); if(!el) return;
+  const wins=CR.bets.filter(b=>b.rk===st.rk&&b.out>0).map(b=>({uid:b.uid,win:Math.floor(b.amt*b.out),out:b.out}));
+  const by={}; wins.forEach(w=>{ if(!by[w.uid]||by[w.uid].win<w.win) by[w.uid]=w; });
+  const top=Object.values(by).sort((a,b)=>b.win-a.win).slice(0,3);
+  const card=(w,n)=>{ const p=w?prof(w.uid):null; return `<div class="pd p${n}"><div class="shield"><span class="no">${n}</span>${p?avHTML(p,40):""}</div>${p?`<b class="nt">${esc(p.nick||"")}</b><small>+${fmt(w.win)}</small>`:`<b>—</b><small>&nbsp;</small>`}<div class="base"></div></div>`; };
+  el.innerHTML=`<div class="pdbox"><span class="pdt" id="crpdt">4s</span><div class="pdm">${st.crash.toFixed(2)}x</div><div class="pdh">${esc(t("Flight height"))}</div>
+    <div class="pdrow">${card(top[1],2)}${card(top[0],1)}${card(top[2],3)}</div></div>`;
+  el.classList.add("show");
+}
+function crTick(){
+  const now=Date.now(), st=crState(now);
+  // new round: subscribe, settle auto bets
+  if(st.rk!==CR.rk){
+    CR.rk=st.rk; crSub(st.rk); $("#crpod")&&$("#crpod").classList.remove("show"); CR.word="";
+    CR.slots.forEach((s,i)=>{ if(s.bet&&s.bet.rk!==st.rk) s.bet=null; if(st.phase==="bet"&&(s.queued||s.auto)) crPlace(i); });
+    crStatsUi();
+  }
+  if(st.phase!==CR.lastPhase){
+    if(st.phase==="fly"){ playSnd&&playSnd("whoosh"); CR.slots.forEach(s=>{ if(s.bet&&s.bet.rk===st.rk) s.bet.cash=s.cash; }); }
+    if(st.phase==="crash"&&CR.lastPhase){ try{ noise(ac().currentTime+.02,.6,.35,"lowpass",900); }catch(e){}
+      CR.slots.forEach(s=>{ if(s.bet&&s.bet.rk===st.rk&&!s.bet.out) s.bet.lost=true; });
+      setTimeout(()=>{ if(CR.open&&CR.rk===st.rk) crPodium(st); },900); }
+    CR.lastPhase=st.phase; crSlotsUi();
+  }
+  // auto cash-out
+  if(st.phase==="fly") CR.slots.forEach((s,i)=>{ if(s.bet&&s.bet.rk===st.rk&&!s.bet.out&&st.mult>=s.bet.cash) crCashOut(i,s.bet.cash); });
+  // ---- draw ----
+  const bal=$("#crbal"); if(bal) bal.textContent=fmt(S.me.coins||0);
+  $("#crbestv").textContent=st.best?st.best.toFixed(2)+"x":"—"; $("#crrd").textContent=st.r+1;
+  const chips=st.hist.slice(0,10).map(m=>`<span class="chip ${crCls(m)}">${m.toFixed(2)}</span>`).join(""); if($("#crchips").dataset.k!==st.rk){ $("#crchips").innerHTML=chips; $("#crchips").dataset.k=st.rk; }
+  const stage=$("#crstage"), mid=$("#crmid"), rk=$("#crrocket"), cnt=$("#crcount"), boom=$("#crboom");
+  stage.classList.toggle("flying",st.phase==="fly"); stage.classList.toggle("crashed",st.phase==="crash");
+  cnt.classList.toggle("show",st.phase==="bet");
+  if(st.phase==="bet"){
+    const left=Math.max(0,st.left); $("#crsec").textContent=(left/1000).toFixed(1);
+    $("#crring").style.strokeDashoffset=(326.7*(1-left/CR_BET)).toFixed(1);
+    const sec=Math.ceil(left/1000); if(sec!==CR.lastSec&&sec<=3&&sec>0){ try{ tone(880,ac().currentTime+.01,.12,"sine",.08); }catch(e){} } CR.lastSec=sec;
+    $("#crm").innerHTML=""; $("#crw").textContent=""; $("#crcr").textContent=""; rk.style.opacity=0; boom.classList.remove("show"); $("#crpath").setAttribute("d",""); $("#crpath2").setAttribute("d","");
+  } else {
+    // rocket position: x grows with time, y with multiplier (log scale)
+    const ft=Math.min(st.tIn-CR_BET,st.fly), W=1000, H=600;
+    const px=t=>60+Math.min(1,t/Math.max(9000,st.phase==="fly"?ft:st.fly))*860;
+    const py=m=>H-60-Math.min(1,Math.log(m)/Math.log(Math.max(2.2,st.mult*1.25)))*440;
+    const N=24; let d=""; for(let k=0;k<=N;k++){ const tt=ft*k/N, m=Math.exp(CR_K*tt/1000); d+=(k?"L":"M")+px(tt).toFixed(1)+","+py(m).toFixed(1); }
+    $("#crpath").setAttribute("d",d); $("#crpath2").setAttribute("d",d);
+    const x=px(ft), y=py(st.mult), x0=px(Math.max(0,ft-250)), y0=py(Math.exp(CR_K*Math.max(0,ft-250)/1000));
+    const sw=stage.clientWidth||1, sh=stage.clientHeight||1, ang=Math.atan2((y-y0)/600*sh,(x-x0)/1000*sw)*180/Math.PI;
+    rk.style.left=(x/10)+"%"; rk.style.top=(y/6)+"%"; rk.style.transform=`translate(-50%,-50%) rotate(${(isFinite(ang)?ang:-40)+90}deg)`; rk.style.opacity=st.phase==="fly"?1:0;
+    boom.style.left=(x/10)+"%"; boom.style.top=(y/6)+"%"; boom.classList.toggle("show",st.phase==="crash");
+    const w=st.phase==="fly"?crWord(st.mult):"", cm=$("#crm");
+    cm.innerHTML=`${(st.phase==="fly"?st.mult:st.crash).toFixed(2)}<i>x</i>`; cm.classList.toggle("red",st.phase==="crash");
+    const cc=$("#crcr"), ctx=st.phase==="crash"?t("Flew away!"):""; if(cc.textContent!==ctx) cc.textContent=ctx;
+    if(w!==CR.word){ CR.word=w; const ww=$("#crw"); ww.textContent=w?t(w):""; ww.classList.remove("pop"); void ww.offsetWidth; ww.classList.add("pop"); if(w) try{ tone(660+Math.min(st.mult,20)*40,ac().currentTime+.01,.2,"triangle",.07); }catch(e){} }
+    const pt=$("#crpdt"); if(pt) pt.textContent=Math.max(0,Math.ceil((st.fly+CR_BET+CR_END-st.tIn)/1000))+"s";
+  }
+  if(st.phase==="fly"||st.phase==="bet") crSlotsUiThrottled();
+}
+let crUiT=0; function crSlotsUiThrottled(){ const n=Date.now(); if(n-crUiT>120){ crUiT=n; crSlotsUi(); } }
 function hideSplash(){ $("#splash").classList.add("hide"); }
 
 function subscribeAll(){
@@ -985,7 +1260,7 @@ function viewHome(){
   const m=S.me, l=level(m.xp), nx=lvlXp(l+1), cur=lvlXp(l), pct=Math.min(100,Math.round(((m.xp||0)-cur)/(nx-cur)*100));
   const dailyReady = m.lastDaily!==today();
   const feats=[["🏆","Top Players","openRankings('wealth')"],["📜","Daily Missions","openMissions()"],["🎁","Sign-in Rewards","openDaily()"],["🏅","Level Awards","openLevels()"]];
-  const games=[["🎡","Lucky Wheel","Daily spin","linear-gradient(160deg,#ff512f,#dd2476)","gWheel()"],
+  const games=[["🚀","Crash Rocket","Fly & cash out","linear-gradient(160deg,#1a4bb8,#06143a)","crashOpen()"],["🎡","Lucky Wheel","Daily spin","linear-gradient(160deg,#ff512f,#dd2476)","gWheel()"],
     ["❌","Tic-Tac-Toe","+100 🪙","linear-gradient(160deg,#1d976c,#93f9b9)","gTTT()"],
     ["🃏","Memory Match","+80 🪙","linear-gradient(160deg,#4776e6,#8e54e9)","gMemory()"],
     ["🔢","Guess the Number","+60 🪙","linear-gradient(160deg,#f7971e,#ffd200)","gGuess()"],
@@ -1164,7 +1439,7 @@ async function enterRoom(id){
 async function leaveRoom(silent){
   if(!S.cur) return;
   if(typeof lvLeave==="function") lvLeave();
-  clearInterval(S.pkTimer);
+  clearInterval(S.pkTimer); if(CR.open) crashClose();
   const c=S.cur; S.cur=null;
   c.unsub.forEach(f=>{try{f()}catch(e){}});
   try{ c.named && await c.named.leave(); }catch(e){}
@@ -1253,7 +1528,7 @@ function _unusedSend(t){
 }
 function openFun(){
   const items=[["🎲","Dice","funDice()"],["🔢","Lucky Number","funLucky()"],["❓","Truth or Dare","funTD()"],["🪙","Coin Flip","funCoin()"],["⚔️","1v1 Dice","funDuel()"],["⏱️","Room Timer","funTimer()"]];
-  const games=[["🎡","Lucky Wheel","gWheel()"],["❌","Tic-Tac-Toe","gTTT()"],["🃏","Memory","gMemory()"],["🔢","Guess the Number","gGuess()"],["✊","Rock Paper Scissors","gRPS()"],["🎲","Dice Duel","gDice()"]];
+  const games=[["🚀","Crash Rocket","crashOpen()"],["🎡","Lucky Wheel","gWheel()"],["❌","Tic-Tac-Toe","gTTT()"],["🃏","Memory","gMemory()"],["🔢","Guess the Number","gGuess()"],["✊","Rock Paper Scissors","gRPS()"],["🎲","Dice Duel","gDice()"]];
   openModal(`<div class="fgrid">${items.map(([e,n,f])=>`<button class="ftile" onclick="${f}"><span class="em">${e}</span>${n}</button>`).join("")}</div>
     <div class="shead" style="margin:16px 0 10px"><h3 style="font-size:15px">Quick Games</h3><small style="color:#aaa">${games.length}</small></div>
     <div class="fgrid">${games.map(([e,n,f])=>`<button class="ftile" onclick="${f}"><span class="em">${e}</span>${n}</button>`).join("")}</div>`,{title:"✨ Fun Center",dark:true});
@@ -1474,7 +1749,7 @@ function _oldGiftRank(){
   openModal(l.map(([id,p],i)=>`<div class="lb"><span class="rk2">${["🥇","🥈","🥉"][i]||i+1}</span>${avHTML(p,38)}<b style="flex:1">${esc(p.nick)}</b><span>🎁 ${fmt(p.giftsSent)}</span></div>`).join("")||'<div class="empty">No gifts sent yet</div>',{title:"💝 Top Gifters"});
 }
 function openAllGames(){
-  const g=[["🎡","Lucky Wheel","gWheel()"],["❌","Tic-Tac-Toe","gTTT()"],["🃏","Memory Match","gMemory()"],["🔢","Guess the Number","gGuess()"],["✊","Rock Paper Scissors","gRPS()"],["🎲","Dice Duel","gDice()"]];
+  const g=[["🚀","Crash Rocket","crashOpen()"],["🎡","Lucky Wheel","gWheel()"],["❌","Tic-Tac-Toe","gTTT()"],["🃏","Memory Match","gMemory()"],["🔢","Guess the Number","gGuess()"],["✊","Rock Paper Scissors","gRPS()"],["🎲","Dice Duel","gDice()"]];
   openModal(`<div class="fgrid">${g.map(([e,n,f])=>`<button class="ftile" style="background:#fff;color:var(--ink);border-color:var(--line)" onclick="${f}"><span class="em">${e}</span>${n}</button>`).join("")}</div>`,{title:"🎮 All games"});
 }
 
@@ -2240,6 +2515,23 @@ const DICT_ROWS=[
 ["Signed in as","چوویتە ژوورەوە وەک","Wek têketî","تم تسجيل الدخول باسم","Giriş yapan"],
 ["Sign out","چوونەدەرەوە","Derkeve","تسجيل الخروج","Çıkış yap"],
 ["Live voice","دەنگی ڕاستەوخۆ","Dengê zindî","صوت مباشر","Canlı ses"],
+["Crash Rocket","مووشەکی تەقیو","Rokêta Teqînê","صاروخ الانفجار","Roket Çarpışması"],
+["Fly & cash out","بفڕە و پارەکەت وەربگرە","Bifire û pere bistîne","حلّق واسحب أرباحك","Uç ve parayı al"],
+["Invest","بەشداری","Beşdar be","راهن","Yatır"],
+["Cash out","وەرگرتن","Bistîne","اسحب","Çek"],
+["Lost","دۆڕا","Winda bû","خسارة","Kaybetti"],
+["Waiting…","چاوەڕێ…","Li bendê…","انتظار…","Bekleniyor…"],
+["BEST TODAY","باشترینی ئەمڕۆ","BAŞTIRÎNA ÎRO","الأفضل اليوم","BUGÜNÜN EN İYİSİ"],
+["Round","خول","Gerr","الجولة","Tur"],
+["Place your bets","بەشداری بکە","Beşdar bibe","ضع رهانك","Bahsini yap"],
+["Flew away!","فڕی!","Firiya!","طار!","Uçtu!"],
+["Flight height","بەرزی فڕین","Bilindahiya firînê","ارتفاع الطيران","Uçuş yüksekliği"],
+["Highest multiplier today","بەرزترین ژمارەی ئەمڕۆ","Hejmara herî bilind a îro","أعلى مضاعف اليوم","Bugünün en yüksek çarpanı"],
+["Average of the last 20 rounds","تێکڕای ٢٠ خولی کۆتایی","Navîniya 20 gerrên dawî","متوسط آخر 20 جولة","Son 20 turun ortalaması"],
+["Last 20 rounds","٢٠ خولی کۆتایی","20 gerrên dawî","آخر 20 جولة","Son 20 tur"],
+["Your bet joins the next round","بەشدارییەکەت بۆ خولی داهاتووە","Beşdariya te ji bo gerra din e","رهانك في الجولة القادمة","Bahsin bir sonraki turda"],
+["Not enough coins","زێڕت بەس نییە","Zêrê te têr nake","العملات غير كافية","Yeterli jeton yok"],
+["Nice","باشە","Baş","جميل","Güzel"],["Great","نایابە","Pir baş","رائع","Harika"],["Amazing","سەرسوڕهێنەرە","Ecêb","مذهل","Muhteşem"],["Incredible","باوەڕنەکراوە","Bawernekirî","لا يصدق","İnanılmaz"],["Legendary","ئەفسانەییە","Efsanewî","أسطوري","Efsanevi"],
 ["PK Battle","پێشبڕکێی PK","Pêşbaziya PK","تحدي PK","PK Savaşı"],
 ["Blue team","تیمی شین","Tîma şîn","الفريق الأزرق","Mavi takım"],
 ["Red team","تیمی سوور","Tîma sor","الفريق الأحمر","Kırmızı takım"],
