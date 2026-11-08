@@ -2,7 +2,7 @@
 <html lang="en" dir="ltr">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
 <title>DANGI KURDISTAN</title>
 <meta name="description" content="DANGI KURDISTAN — voice chat rooms, gifts, games and friends for Kurds worldwide.">
 <meta name="theme-color" content="#c9a24a">
@@ -409,6 +409,111 @@ input,textarea,select{font-family:inherit;font-size:15px}
 .wallg div{background:#fff;border:1px solid var(--line);border-radius:12px;text-align:center;padding:8px 2px;font-size:11px}
 .wallg div.off{opacity:.35;filter:grayscale(1)}
 .wallg .em{font-size:30px;display:block}
+/* ===================== PK BATTLE ===================== */
+#pkbar.pk{position:relative;z-index:2;margin:4px 10px 0;padding:8px 10px 10px;border-radius:18px;background:linear-gradient(135deg,rgba(31,95,214,.35),rgba(20,16,40,.6) 45%,rgba(20,16,40,.6) 55%,rgba(209,32,61,.35));border:1px solid rgba(255,255,255,.14);box-shadow:0 8px 24px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.12);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);animation:pkIn .35s ease-out}
+@keyframes pkIn{from{opacity:0;transform:translateY(-8px) scale(.98)}}
+.pktitle{text-align:center;font-weight:800;font-size:14px;color:#ffe8a3;margin-bottom:6px}.pktitle small{display:block;font-weight:500;font-size:10.5px;color:#cfc8e8;margin-top:1px}
+.pkrow{display:flex;align-items:center;justify-content:space-between;gap:6px}
+.pkjoin{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:8px 6px;border-radius:14px;font-weight:700;font-size:12px;color:#fff;border:1px solid rgba(255,255,255,.25);transition:transform .15s}
+.pkjoin:active{transform:scale(.96)}
+.pkjoin i{width:10px;height:10px;border-radius:50%;background:#fff;box-shadow:0 0 8px #fff}
+.pkjoin b{font-size:11px;opacity:.85;font-weight:600}
+.pkjoin.blue{background:linear-gradient(180deg,#4b9bff,#1a54c4)}.pkjoin.red{background:linear-gradient(180deg,#ff5f7a,#c4173a)}
+.pkjoin.on{box-shadow:0 0 0 2px #fff,0 0 18px rgba(255,255,255,.45)}
+.pkvs{font-weight:900;font-style:italic;font-size:18px;background:linear-gradient(180deg,#fff6c8,#ffb52e);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 2px 2px rgba(0,0,0,.5));padding:0 2px}
+.pkadm{display:flex;gap:6px;justify-content:center;align-items:center;margin-top:8px;flex-wrap:wrap}
+.pkadm button{padding:6px 12px;border-radius:12px;background:rgba(255,255,255,.1);color:#eee;font-size:12px;font-weight:600}
+.pkadm .pkgo{background:linear-gradient(180deg,#ffe28a,#e0a72c);color:#3d2a05;font-weight:800;box-shadow:0 3px 10px rgba(224,167,44,.4)}
+.pks{display:flex;align-items:center;gap:6px;flex:1;min-width:0}.pks.red{justify-content:flex-end}
+.pks b{font-size:17px;font-weight:900;color:#fff;text-shadow:0 2px 6px rgba(0,0,0,.5)}
+.pks.blue b{color:#bcd8ff}.pks.red b{color:#ffc4cf}
+.pks.win b{color:#ffe28a}.pks.win{animation:pkWinP 1.2s ease-in-out infinite}
+@keyframes pkWinP{50%{transform:scale(1.06)}}
+.pkavs{display:flex}.pkav{margin-inline-start:-6px}.pkav:first-child{margin:0}
+.pkmid{display:flex;flex-direction:column;align-items:center;min-width:64px}
+.pktm{font-variant-numeric:tabular-nums;font-weight:800;font-size:13px;color:#fff;background:rgba(0,0,0,.35);border-radius:10px;padding:1px 8px;margin-top:1px}
+.pktm.hot{color:#ff8a8a;animation:pkWinP .8s infinite}
+.pkres{font-size:22px}
+.pkmeter{position:relative;display:flex;height:10px;border-radius:8px;overflow:visible;margin-top:8px;background:rgba(0,0,0,.4)}
+.pkmeter i{display:block;height:100%;transition:width .6s cubic-bezier(.2,.8,.2,1)}
+.pkmeter .b{background:linear-gradient(90deg,#1a54c4,#5aa9ff);border-radius:8px 0 0 8px;box-shadow:0 0 12px rgba(90,169,255,.6)}
+.pkmeter .r{background:linear-gradient(90deg,#ff6b81,#c4173a);border-radius:0 8px 8px 0;box-shadow:0 0 12px rgba(255,107,129,.6)}
+.pkspark{position:absolute;top:50%;width:18px;height:18px;margin:-9px 0 0 -9px;border-radius:50%;background:radial-gradient(circle,#fff,#ffe28a 40%,transparent 70%);animation:pkSp .7s ease-in-out infinite alternate;transition:left .6s cubic-bezier(.2,.8,.2,1)}
+@keyframes pkSp{to{transform:scale(1.35);opacity:.8}}
+.pkrow.mini{margin-top:8px}.pkrow.mini .pkjoin{padding:5px;font-size:11px}
+.pkwin{font-weight:800;font-size:13px;padding:4px 12px;border-radius:12px;background:rgba(255,226,138,.15);color:#ffe28a}
+.seat .s.pk-blue{border:2px solid #4b9bff!important;box-shadow:0 0 0 3px rgba(75,155,255,.3),0 0 14px rgba(75,155,255,.55)}
+.seat .s.pk-red{border:2px solid #ff5f7a!important;box-shadow:0 0 0 3px rgba(255,95,122,.3),0 0 14px rgba(255,95,122,.55)}
+.seat .s.pk-blue .mb.on{background:#1a54c4;border-color:#8cc0ff}.seat .s.pk-red .mb.on{background:#c4173a;border-color:#ffb3c0}
+.pkon .seat .s:not(.taken) svg.mic{fill:#cdbfff}
+.talkbtn.team-blue{background:radial-gradient(circle at 40% 35%,#9cc9ff,#1a54c4 70%);border-color:#cfe4ff;box-shadow:0 0 16px rgba(75,155,255,.6)}
+.talkbtn.team-red{background:radial-gradient(circle at 40% 35%,#ffb3c0,#c4173a 70%);border-color:#ffd6de;box-shadow:0 0 16px rgba(255,95,122,.6)}
+.talkbtn.live.team-blue,.talkbtn.live.team-red{animation:liveP 1.6s ease-in-out infinite}
+.pkinfo{text-align:center;margin-bottom:12px}.pkinfo p{font-size:13px;line-height:1.6;color:#d6d0e6}
+.pkinfo-vs{display:flex;justify-content:center;align-items:center;gap:14px;font-size:38px}.pkinfo-vs b{font-size:26px;font-style:italic;color:#ffd76a}
+.pkwinfx{position:absolute;inset:0;z-index:30;display:flex;align-items:center;justify-content:center;background:rgba(5,4,12,.72);overflow:hidden;animation:pkIn .3s}
+.pkburst{position:absolute;width:160vmax;height:160vmax;background:repeating-conic-gradient(from 0deg,rgba(255,226,138,.16) 0 10deg,transparent 10deg 20deg);animation:spin 14s linear infinite}
+.pkwinfx.blue .pkburst{background:repeating-conic-gradient(rgba(90,169,255,.2) 0 10deg,transparent 10deg 20deg)}
+.pkwinfx.red .pkburst{background:repeating-conic-gradient(rgba(255,107,129,.2) 0 10deg,transparent 10deg 20deg)}
+.pkwinfx .cf{position:absolute;top:-12px;width:8px;height:14px;border-radius:2px;animation:cfall 2.6s linear infinite}
+@keyframes cfall{to{transform:translateY(110vh) rotate(720deg)}}
+.pkwincard{position:relative;text-align:center;padding:22px 26px;border-radius:26px;background:linear-gradient(180deg,rgba(40,30,70,.95),rgba(15,12,30,.95));border:2px solid #ffd76a;box-shadow:0 0 50px rgba(255,215,106,.35);animation:popIn .5s cubic-bezier(.2,1.6,.4,1)}
+@keyframes popIn{from{transform:scale(.4);opacity:0}}
+.pkwincard .tro{font-size:64px;filter:drop-shadow(0 6px 12px rgba(255,200,60,.6));animation:pkWinP 1.4s ease-in-out infinite}
+.pkwincard .ttl{font-size:24px;font-weight:900;margin:4px 0 8px;background:linear-gradient(180deg,#fff6c8,#ffb52e);-webkit-background-clip:text;background-clip:text;color:transparent}
+.pkwinfx.blue .ttl{background-image:linear-gradient(180deg,#e3f0ff,#5aa9ff)}.pkwinfx.red .ttl{background-image:linear-gradient(180deg,#ffe3e8,#ff6b81)}
+.pkwincard .sc{display:flex;gap:16px;justify-content:center;font-weight:800;font-size:16px}.pkwincard .sc .b{color:#9cc9ff}.pkwincard .sc .r{color:#ffb3c0}
+.pkwincard .mvp{display:flex;align-items:center;gap:10px;justify-content:center;margin-top:14px;text-align:start}.pkwincard .mvp small{display:block;color:#ffd76a;font-size:10px;font-weight:700}
+.dkbtn.pkhead{background:linear-gradient(135deg,rgba(75,155,255,.35),rgba(255,95,122,.35))}
+
+/* ===================== DESIGN SYSTEM v3: polish + every screen size ===================== */
+:root{--r:18px;--safe-b:env(safe-area-inset-bottom,0px);--safe-t:env(safe-area-inset-top,0px);
+  --shadow:0 6px 18px rgba(110,80,20,.11),0 1px 3px rgba(110,80,20,.08);--ease:cubic-bezier(.2,.8,.2,1)}
+html,body{height:100%;height:100dvh;overscroll-behavior:none}
+body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-rendering:optimizeLegibility;-webkit-text-size-adjust:100%}
+#app{width:100%;height:100%;height:100dvh}
+.view{inset:0 0 calc(64px + var(--safe-b)) 0;padding-top:var(--safe-t);scroll-behavior:smooth;-webkit-overflow-scrolling:touch}
+#nav{height:calc(64px + var(--safe-b));padding-bottom:var(--safe-b);background:rgba(255,250,240,.88);backdrop-filter:blur(16px) saturate(1.5);-webkit-backdrop-filter:blur(16px) saturate(1.5);border-top:1px solid rgba(201,162,74,.28);box-shadow:0 -8px 24px rgba(110,80,20,.08)}
+#nav button{transition:background .2s var(--ease),color .2s,transform .15s}
+#nav button:active{transform:scale(.92)}
+#nav button.on{background:linear-gradient(180deg,#f6e2a8,#e3c172);box-shadow:inset 0 0 0 1px rgba(201,162,74,.8),0 4px 12px rgba(201,162,74,.35)}
+button,.gbtn,.chip,.cat,.rcard,.fcard,.gtile,.lb,.mission{transition:transform .15s var(--ease),box-shadow .2s var(--ease),background .2s}
+.rcard:active,.fcard:active,.gtile:active,.lb:active,.chip:active,.cat:active{transform:scale(.97)}
+.gbtn{border-radius:14px;letter-spacing:.1px}
+.coinbar,.vip,.fcard,.gtile,.mission{border-radius:var(--r)}
+.coinbar,.mission{box-shadow:var(--shadow)}
+.sheet{border-radius:26px 26px 0 0;padding-bottom:calc(22px + var(--safe-b));box-shadow:0 -10px 40px rgba(0,0,0,.18)}
+.sheet:before{content:"";display:block;width:40px;height:5px;border-radius:3px;background:rgba(138,106,31,.25);margin:2px auto 8px}
+input:focus,textarea:focus,select:focus{outline:none;box-shadow:0 0 0 3px rgba(201,162,74,.35)!important;border-color:#c9a24a!important}
+.fab{bottom:calc(78px + var(--safe-b));transition:transform .2s var(--ease)}
+.fab:active{transform:scale(.94)}
+.fab.wide{width:auto;height:48px;border-radius:24px;padding:0 18px 0 12px;gap:6px;font-size:14px}
+.fab.wide span{font-size:24px;line-height:1}.fab.wide b{white-space:nowrap}
+#roomView .rhead{padding-top:calc(10px + var(--safe-t))}
+.rbar{height:calc(62px + var(--safe-b));padding-bottom:var(--safe-b)}
+.chatwrap{bottom:calc(62px + var(--safe-b));transition:top .25s var(--ease)}
+.speakbar{bottom:calc(70px + var(--safe-b))}
+.seats{gap:12px 2px;padding:12px 6px}
+.seat .s{width:min(54px,13.5vw);height:min(54px,13.5vw);transition:box-shadow .3s,border-color .3s}
+.seat .s img{border-radius:50%}
+#roomView .msgs .bub{border-radius:4px 16px 16px 16px}
+/* tablets & desktop: show the app as a centred phone */
+@media (min-width:540px){
+  body{background:radial-gradient(circle at 15% 10%,#fff4d6,transparent 45%),radial-gradient(circle at 85% 90%,#e3c67f,transparent 45%),#e2d1a8}
+  #app{max-width:440px;height:min(calc(100dvh - 40px),940px);margin:20px auto;border-radius:34px;box-shadow:0 30px 80px rgba(60,40,10,.35),0 0 0 9px #17161b,0 0 0 10px #4a4250}
+}
+/* small phones (iPhone SE, small Androids) */
+@media (max-width:360px){
+  body{font-size:13px}
+  .feat{gap:6px;padding:0 8px}.fcard .em{font-size:28px;height:42px}.fcard b{font-size:10.5px;min-height:26px}
+  #nav button{padding:6px 5px;font-size:10px}#nav button svg{width:20px;height:20px}
+  .rbar{gap:5px;padding-inline:6px}.rbtn{width:34px!important;height:34px!important}.talkbtn{width:44px;height:44px}
+  .pks b{font-size:14px}.pkav .av{width:22px!important;height:22px!important}
+  .gtile{flex-basis:104px}
+}
+/* short screens */
+@media (max-height:640px){ .seats{gap:8px 2px;padding:8px 6px}.seat span.n{font-size:9.5px} }
+@media (prefers-reduced-motion:reduce){ *{animation-duration:.01ms!important;animation-iteration-count:1!important;transition:none!important} }
 </style>
 </head>
 <body>
@@ -621,11 +726,114 @@ function earnGifts(list){
   saveMe({coins:(S.me.coins||0)+n,earnAt:mx,giftsGot:(S.me.giftsGot||0)+n});
   if(n) toast(`💝 +${fmt(n)} 🪙 ${t("from gifts you received (50%)")}`);
 }
+/* ================= PK BATTLE: Blue team vs Red team ================= */
+const PK_MAX=15, PK_DUR=10*60e3;
+const pkOf=()=>(S.cur&&S.cur.data&&S.cur.data.pk)||null;
+const pkActive=()=>{ const p=pkOf(); return !!(p&&p.state&&p.state!=="off"); };
+function pkTeamOf(uid,pk){ pk=pk||pkOf(); if(!pk||!pk.state||pk.state==="off") return null; return (pk.blue||[]).includes(uid)?"blue":(pk.red||[]).includes(uid)?"red":null; }
+const pkLeft=pk=>Math.max(0,(pk.end||0)-Date.now());
+const mmss=ms=>{ const s=Math.ceil(ms/1000); return Math.floor(s/60)+":"+String(s%60).padStart(2,"0"); };
+async function pkWrite(pk){
+  if(!S.cur) return; const id=S.cur.id;
+  try{
+    if(S.fb) await S.fb.fs.doc("rooms/"+id).update({pk});
+    else { const s=await S.db.doc("rooms/"+id).get(); const d=s.data()||{}; d.pk=pk; await S.db.doc("rooms/"+id).set(d); }
+    if(S.cur&&S.cur.id===id){ S.cur.data={...S.cur.data,pk}; renderPK(); renderSeats(); micUi(); }
+  }catch(e){ writeFail(e); }
+}
+function pkAddScore(to,cost){
+  const pk=pkOf(); if(!pk||pk.state!=="live"||pkLeft(pk)<=0) return;
+  const tm=pkTeamOf(to,pk); if(!tm) return; const k=tm==="blue"?"sb":"sr", id=S.cur.id;
+  if(S.fb){ const FV=firebase.firestore.FieldValue; S.fb.fs.doc("rooms/"+id).update({["pk."+k]:FV.increment(cost),["pk.pts."+to]:FV.increment(cost)}).catch(()=>{}); }
+  else pkWrite({...pk,[k]:(pk[k]||0)+cost,pts:{...(pk.pts||{}),[to]:((pk.pts||{})[to]||0)+cost}});
+}
+async function pkJoin(team){
+  const pk=pkOf(); if(!pk||!pk.state||pk.state==="off") return;
+  if(pk.state==="done") return toast(t("This battle is over"));
+  const other=team==="blue"?"red":"blue", cur=pkTeamOf(S.uid,pk);
+  if(cur===team) return;
+  if(cur&&pk.state==="live") return toast(t("You can't switch teams during the battle"));
+  if((pk[team]||[]).length>=PK_MAX) return toast(t("This team is full"));
+  if(S.fb){ const FV=firebase.firestore.FieldValue; try{ await S.fb.fs.doc("rooms/"+S.cur.id).update({["pk."+team]:FV.arrayUnion(S.uid),["pk."+other]:FV.arrayRemove(S.uid)}); }catch(e){ return writeFail(e); } }
+  else await pkWrite({...pk,[team]:[...(pk[team]||[]),S.uid],[other]:(pk[other]||[]).filter(x=>x!==S.uid)});
+  playSnd&&playSnd("chime"); toast(team==="blue"?"🔵 "+t("You joined the Blue team"):"🔴 "+t("You joined the Red team"));
+}
+function pkNew(){ return {state:"setup",blue:[],red:[],sb:0,sr:0,pts:{},by:S.uid,at:Date.now()}; }
+async function pkOpenSetup(){ if(!isRoomAdmin(S.uid)) return; closeModal(); await pkWrite(pkNew()); postRoom({type:"sys",text:"opened a PK battle ⚔️ — pick a team!"}); }
+async function pkAutoSplit(){
+  const pk=pkOf()||pkNew(); const seated=roomPeople().filter(p=>p.seat!=null).sort((a,b)=>a.seat-b.seat).map(p=>p.uid);
+  const blue=[...(pk.blue||[])], red=[...(pk.red||[])];
+  seated.forEach(u=>{ if(blue.includes(u)||red.includes(u)) return; (blue.length<=red.length&&blue.length<PK_MAX?blue:red.length<PK_MAX?red:blue).push(u); });
+  await pkWrite({...pk,blue:blue.slice(0,PK_MAX),red:red.slice(0,PK_MAX)});
+}
+async function pkStart(){
+  const pk=pkOf(); if(!pk||!isRoomAdmin(S.uid)) return;
+  if(!(pk.blue||[]).length||!(pk.red||[]).length) return toast(t("Each team needs at least 1 player"));
+  const now=Date.now(); await pkWrite({...pk,state:"live",start:now,end:now+PK_DUR,sb:0,sr:0,pts:{},winner:null});
+  postRoom({type:"sys",text:"started the PK battle ⚔️ 10 minutes!"});
+}
+async function pkRematch(){ const pk=pkOf(); if(!pk) return; await pkWrite({...pkNew(),blue:pk.blue||[],red:pk.red||[]}); }
+async function pkClose(){ if(!isRoomAdmin(S.uid)) return; closeModal(); await pkWrite({state:"off"}); }
+function pkWinner(pk){ const b=pk.sb||0, r=pk.sr||0; return b>r?"blue":r>b?"red":"draw"; }
+function pkTick(){
+  const pk=pkOf(); if(!pk||!S.cur) return;
+  if(pk.state==="live"){
+    if(pkLeft(pk)<=0){ const w=pkWinner(pk); pkWrite({...pk,state:"done",winner:w}); pkShowWinner({...pk,winner:w}); }
+    else { const el=$("#pktm"); if(el) el.textContent=mmss(pkLeft(pk)); if(el) el.classList.toggle("hot",pkLeft(pk)<60e3); }
+  }
+  if(pk.state==="done"&&S.pkShown!==pk.start) pkShowWinner(pk);
+}
+function pkMvp(pk,team){ const pts=pk.pts||{}; return (pk[team]||[]).map(u=>[u,pts[u]||0]).sort((a,b)=>b[1]-a[1]); }
+function pkAvs(pk,team,n=3){ return pkMvp(pk,team).slice(0,n).map(([u])=>`<span class="pkav">${avHTML(prof(u),26)}</span>`).join(""); }
+function renderPK(){
+  const el=$("#pkbar"); if(!el||!S.cur) return; const pk=pkOf();
+  if(!pk||!pk.state||pk.state==="off"){ el.innerHTML=""; el.className=""; layoutRoom(); return; }
+  const adm=isRoomAdmin(S.uid), me=pkTeamOf(S.uid,pk), nb=(pk.blue||[]).length, nr=(pk.red||[]).length;
+  const b=pk.sb||0, r=pk.sr||0, tot=b+r, pb=tot?Math.max(6,Math.min(94,b/tot*100)):50;
+  const joinBtns=`<button class="pkjoin blue ${me==="blue"?"on":""}" onclick="pkJoin('blue')"><i></i>${esc(t("Blue team"))} <b>${nb}/${PK_MAX}</b></button><span class="pkvs">VS</span><button class="pkjoin red ${me==="red"?"on":""}" onclick="pkJoin('red')"><i></i>${esc(t("Red team"))} <b>${nr}/${PK_MAX}</b></button>`;
+  el.className="pk "+pk.state;
+  if(pk.state==="setup"){
+    el.innerHTML=`<div class="pktitle">⚔️ ${esc(t("PK Battle"))} <small>${esc(t("Pick a team · 10 minutes · most coins wins"))}</small></div>
+      <div class="pkrow">${joinBtns}</div>
+      ${adm?`<div class="pkadm"><button class="pkgo" onclick="pkStart()">▶ ${esc(t("Start"))} 10:00</button><button onclick="pkAutoSplit()">🪑 ${esc(t("Auto split seats"))}</button><button onclick="pkClose()">✕</button></div>`:""}`;
+  } else {
+    const live=pk.state==="live", w=pk.winner;
+    el.innerHTML=`<div class="pkrow score">
+        <div class="pks blue ${!live&&w==="blue"?"win":""}"><div class="pkavs">${pkAvs(pk,"blue")}</div><b>${fmt(b)}</b></div>
+        <div class="pkmid">${live?`<span class="pkvs">VS</span><span class="pktm" id="pktm">${mmss(pkLeft(pk))}</span>`:`<span class="pkres">${w==="draw"?"🤝 "+esc(t("Draw")):"🏆"}</span>`}</div>
+        <div class="pks red ${!live&&w==="red"?"win":""}"><b>${fmt(r)}</b><div class="pkavs">${pkAvs(pk,"red")}</div></div>
+      </div>
+      <div class="pkmeter"><i class="b" style="width:${pb}%"></i><i class="r" style="width:${100-pb}%"></i><span class="pkspark" style="left:${pb}%"></span></div>
+      ${live&&!me?`<div class="pkrow mini">${joinBtns}</div>`:""}
+      ${!live?`<div class="pkadm"><span class="pkwin ${w}">${w==="draw"?esc(t("Draw")):w==="blue"?"🔵 "+esc(t("Blue team wins!")):"🔴 "+esc(t("Red team wins!"))}</span>${adm?`<button class="pkgo" onclick="pkRematch()">↻ ${esc(t("Rematch"))}</button><button onclick="pkClose()">✕</button>`:""}</div>`:""}`;
+  }
+  layoutRoom();
+}
+function openPK(){
+  const pk=pkOf(), adm=isRoomAdmin(S.uid);
+  const rules=`<div class="pkinfo"><div class="pkinfo-vs"><span class="b">🔵</span><b>VS</b><span class="r">🔴</span></div>
+    <p>${esc(t("Two teams of up to 15 players. For 10 minutes, every gift a team member receives adds coins to their team. The team with the most coins wins."))}</p></div>`;
+  if(!pk||!pk.state||pk.state==="off"){
+    openModal(rules+(adm?`<button class="gbtn" style="width:100%;padding:12px" onclick="pkOpenSetup()">⚔️ ${esc(t("Open a PK battle"))}</button>`:`<p class="center" style="color:#aaa">${esc(t("Only the room owner or admins can start a battle."))}</p>`),{title:"⚔️ "+t("PK Battle"),dark:true});
+  } else {
+    openModal(rules+`<div class="row" style="margin-top:6px"><button class="gbtn" style="background:linear-gradient(180deg,#5aa9ff,#1f5fd6);color:#fff" onclick="pkJoin('blue');closeModal()">🔵 ${esc(t("Blue team"))}</button><button class="gbtn" style="background:linear-gradient(180deg,#ff6b81,#d1203d);color:#fff" onclick="pkJoin('red');closeModal()">🔴 ${esc(t("Red team"))}</button></div>${adm?`<button style="width:100%;margin-top:12px;color:#ff8a8a;padding:8px" onclick="pkClose()">✕ ${esc(t("End the PK battle"))}</button>`:""}`,{title:"⚔️ "+t("PK Battle"),dark:true});
+  }
+}
+function pkShowWinner(pk){
+  if(!S.cur||!$("#roomView").classList.contains("show")) return; S.pkShown=pk.start;
+  const w=pk.winner||pkWinner(pk), mvp=w!=="draw"?pkMvp(pk,w)[0]:null;
+  const el=document.createElement("div"); el.className="pkwinfx "+w;
+  el.innerHTML=`<div class="pkburst"></div>${Array.from({length:28},(_,i)=>`<i class="cf" style="left:${(i*37)%100}%;animation-delay:${(i%7)*.18}s;background:${["#ffd76a","#5aa9ff","#ff6b81","#fff","#b388ff"][i%5]}"></i>`).join("")}
+    <div class="pkwincard"><div class="tro">${w==="draw"?"🤝":"🏆"}</div><div class="ttl">${w==="draw"?esc(t("Draw")):w==="blue"?esc(t("Blue team wins!")):esc(t("Red team wins!"))}</div>
+    <div class="sc"><span class="b">🔵 ${fmt(pk.sb||0)}</span><span class="r">${fmt(pk.sr||0)} 🔴</span></div>
+    ${mvp?`<div class="mvp">${avHTML(prof(mvp[0]),44)}<div><small>MVP</small><b class="nt">${esc(prof(mvp[0]).nick)}</b><small>🪙 ${fmt(mvp[1])}</small></div></div>`:""}</div>`;
+  el.onclick=()=>el.remove(); $("#roomView").appendChild(el); playSnd&&playSnd("fanfare"); setTimeout(()=>el.remove(),7000);
+}
 function hideSplash(){ $("#splash").classList.add("hide"); }
 
 function subscribeAll(){
   S.db.collection("profiles").limit(500).onSnapshot(s=>{ const m={}; s.docs.forEach(d=>m[d.id]={...d.data(),_id:d.id}); S.profiles=m; resolveVerified(); if(m[S.uid]&&S.me&&!S.me._local) {/* keep local copy authoritative */} render(); }, e=>console.warn(e));
-  S.db.collection("rooms").orderBy("score","desc").limit(200).onSnapshot(s=>{ S.rooms=s.docs.map(d=>({id:d.id,...d.data()})); if(S.cur){ const r=S.rooms.find(x=>x.id===S.cur.id); if(r){ S.cur.data=r; if(isBannedIn(r,S.uid)){ toast(t("You were removed from this room")); leaveRoom(); } else { if(LV.on&&isMutedIn(r,S.uid)){ micOff(true); toast(t("You are muted in this room")); } renderRoomHead(); renderSeats(); } } else if(!S.local){ toast("This room was deleted"); leaveRoom(); } }
+  S.db.collection("rooms").orderBy("score","desc").limit(200).onSnapshot(s=>{ S.rooms=s.docs.map(d=>({id:d.id,...d.data()})); if(S.cur){ const r=S.rooms.find(x=>x.id===S.cur.id); if(r){ S.cur.data=r; if(isBannedIn(r,S.uid)){ toast(t("You were removed from this room")); leaveRoom(); } else { if(LV.on&&isMutedIn(r,S.uid)){ micOff(true); toast(t("You are muted in this room")); } renderRoomHead(); renderPK(); renderSeats(); } } else if(!S.local){ toast("This room was deleted"); leaveRoom(); } }
     if(S.pendingRoom&&S.me&&S.rooms.some(r=>r.id===S.pendingRoom)){ const id=S.pendingRoom; S.pendingRoom=null; enterRoom(id); }
     render(); }, e=>console.warn(e));
   S.db.collection("posts").orderBy("at","desc").limit(60).onSnapshot(s=>{ S.posts=s.docs.map(d=>({id:d.id,...d.data()})); render(); }, e=>console.warn(e));
@@ -702,8 +910,9 @@ function go(t){ S.tab=t; $("#view").scrollTop=0; render(); }
 function render(){
   if(!S.me) return;
   renderNav();
-  $("#fab").style.display = S.tab==="rooms"||S.tab==="moments" ? "flex":"none";
-  $("#fab").onclick = S.tab==="moments" ? openNewPost : openCreateRoom;
+  $("#fab").style.display = S.tab==="rooms"||S.tab==="moments"||S.tab==="home" ? "flex":"none";
+  $("#fab").onclick = S.tab==="moments" ? openNewPost : ()=>openCreateRoom();
+  $("#fab").classList.toggle("wide",S.tab!=="moments"); $("#fab").innerHTML=S.tab==="moments"?"＋":`<span>＋</span><b>${esc(t("Create a room"))}</b>`;
   const v=$("#view");
   const keep = v.querySelector("input:focus");
   if (keep) return; // don't clobber typing
@@ -832,6 +1041,7 @@ async function enterRoom(id){
     <div class="rhead">
       <div class="rpill" id="rpill"></div>
       <div style="flex:1"></div>
+      <button class="dkbtn pkhead" onclick="openPK()" title="PK">⚔️</button>
       <button class="dkbtn" id="sndbtn" onclick="toggleSound()" title="Sound">${S.sound?"🔊":"🔇"}</button>
       <button class="dkbtn" onclick="shareRoom()" title="Share">🔗</button>
       <button class="dkbtn" onclick="leaveRoom()" title="Leave">⏻</button>
@@ -840,6 +1050,7 @@ async function enterRoom(id){
       <button class="trophy" id="trophy" onclick="openRankings('rooms')"></button>
       <button class="onl" id="onl" onclick="openOnline()"></button>
     </div>
+    <div id="pkbar"></div>
     <div class="seats" id="seats"></div>
     <div class="speakbar" id="speakbar"></div>
     <div class="chatwrap" id="chatwrap"><div class="msgs" id="msgs"></div></div>
@@ -851,7 +1062,8 @@ async function enterRoom(id){
       <button class="rbtn gold" onclick="openGifts({kind:'room'})" title="Gift">🎁</button>
       <button class="rbtn" onclick="openFun()" title="Games">🎲</button>
     </div>`;
-  renderRoomHead(); renderSeats(); setupTalk();
+  renderRoomHead(); renderPK(); renderSeats(); setupTalk();
+  clearInterval(S.pkTimer); S.pkTimer=setInterval(pkTick,1000);
   // messages
   const u=S.db.collection("rooms/"+id+"/msgs").orderBy("at","desc").limit(80).onSnapshot(s=>{
     if(!S.cur||S.cur.id!==id) return;
@@ -888,6 +1100,7 @@ async function enterRoom(id){
 async function leaveRoom(silent){
   if(!S.cur) return;
   if(typeof lvLeave==="function") lvLeave();
+  clearInterval(S.pkTimer);
   const c=S.cur; S.cur=null;
   c.unsub.forEach(f=>{try{f()}catch(e){}});
   try{ c.named && await c.named.leave(); }catch(e){}
@@ -920,15 +1133,18 @@ function renderSeats(){
   const talking=new Set((S.cur.msgs||[]).filter(m=>m.type==="text"&&Date.now()-m.at<20000).map(m=>m.uid));
   const speaking=S.cur.speaking||(TALK.rec?S.uid:null);
   const bySeat={}; ppl.forEach(p=>{ if(p.seat!=null && bySeat[p.seat]==null) bySeat[p.seat]=p; });
+  const pkOn=pkActive(); $("#roomView").classList.toggle("pkon",pkOn);
   let h="";
   for(let i=0;i<MAX_SEATS;i++){
     const p=bySeat[i];
-    if(p){ const pr=prof(p.uid); h+=`<button class="seat" data-u="${esc(p.uid)}" onclick="${p.uid===S.uid?"toggleSeat()":"openUser(this.dataset.u)"}"><div class="s taken ${p.uid===S.uid?"me":""} ${speaking===p.uid||LV.speaking.has(p.uid)?"speak":talking.has(p.uid)?"talk":""}" style="background:${AVBG[(pr.c||0)%AVBG.length]}">${p.uid===owner?'<span class="crown">👑</span>':""}${(()=>{const src=avatarSrc(pr);return src?`<img src="${esc(src)}" alt="" style="width:100%;height:100%;border-radius:50%;object-fit:cover">`:esc(pr.av||"👤")})()}${liveVoice()?`<span class="mb ${(p.uid===S.uid?LV.on:p.mic)?"on":""}">${(p.uid===S.uid?LV.on:p.mic)?"🎙️":"🔇"}</span>`:""}</div><span class="n">${esc(pr.nick||"...")}</span></button>`; }
+    if(p){ const pr=prof(p.uid); h+=`<button class="seat" data-u="${esc(p.uid)}" onclick="${p.uid===S.uid?"toggleSeat()":"openUser(this.dataset.u)"}"><div class="s taken ${p.uid===S.uid?"me":""} ${pkOn&&pkTeamOf(p.uid)?"pk-"+pkTeamOf(p.uid):""} ${speaking===p.uid||LV.speaking.has(p.uid)?"speak":talking.has(p.uid)?"talk":""}" style="background:${AVBG[(pr.c||0)%AVBG.length]}">${p.uid===owner?'<span class="crown">👑</span>':""}${(()=>{const src=avatarSrc(pr);return src?`<img src="${esc(src)}" alt="" style="width:100%;height:100%;border-radius:50%;object-fit:cover">`:esc(pr.av||"👤")})()}${liveVoice()?`<span class="mb ${(p.uid===S.uid?LV.on:p.mic)?"on":""}">${(p.uid===S.uid?LV.on:p.mic)?"🎙️":"🔇"}</span>`:""}</div><span class="n">${esc(pr.nick||"...")}</span></button>`; }
     else if((S.cur.data.lockedSeats||[]).includes(i)) h+=`<button class="seat" onclick="${isRoomAdmin(S.uid)?`openSeatMenu(${i})`:`toast(t('This seat is locked'))`}"><div class="s" style="opacity:.6">🔒</div><span class="n">${i+1}</span></button>`;
     else h+=`<button class="seat" onclick="${isRoomAdmin(S.uid)&&i>0?`openSeatMenu(${i})`:`takeSeat(${i})`}"><div class="s">${i===0?'<span class="crown">👑</span>':""}<svg class="mic" viewBox="0 0 24 24" fill="#fff"><path d="M12 14a3 3 0 0 0 3-3V5a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.9V21h2v-3.1A7 7 0 0 0 19 11z"/></svg></div><span class="n">${i===0?"Owner":i+1}</span></button>`;
   }
   $("#seats").innerHTML=h;
+  layoutRoom();
 }
+function layoutRoom(){ const cw=$("#chatwrap"), sb=$("#seats"); if(cw&&sb) cw.style.top=(sb.offsetTop+sb.offsetHeight+4)+"px"; }
 function takeSeat(i,quiet){
   if(i===0 && S.cur.data.ownerId!==S.uid) return toast("This seat is reserved for the room owner 👑");
   if((S.cur.data.lockedSeats||[]).includes(i)) return toast(t("This seat is locked"));
@@ -946,7 +1162,7 @@ function renderMsgs(){
   const atBottom=el.scrollHeight-el.scrollTop-el.clientHeight<60;
   let h=`<div class="notice"><b>Official announcement:</b> ${esc(S.cur.data.notice||"Welcome 🌹")}</div>`;
   for(const m of S.cur.msgs){
-    if(isBlocked(m.uid)||m.type==="voice") continue;
+    if(isBlocked(m.uid)||m.type==="voice"||(m.at||0)<S.cur.t0-1500) continue;
     const p=prof(m.uid), nick=esc(p.nick||m.nick||"Guest"), vc=VIPC[vipOf(p)]||"";
     if(m.type==="sys") h+=`<div class="sys">${avHTML(m.target?prof(m.target):p,20)} <b style="color:#ddd" class="nt">${m.target?esc(prof(m.target).nick):nick}</b> ${vipBadge(m.target?prof(m.target):p)} <span>${esc(m.text)}</span></div>`;
     else if(m.type==="game") h+=`<div class="gamemsg">🎮 <b style="color:#f3c94f">${nick}</b> ${esc(m.text)}</div>`;
@@ -1368,6 +1584,7 @@ async function sendGift(ctx,to,g,qty){
   const toName = to==="room"||!to ? "the room" : prof(to).nick;
   if(ctx.kind==="room" && S.cur){
     await postRoom({type:"gift",gift:g.k,qty,to:to||"room",text:`sent ${g.n} to ${toName}`});
+    pkAddScore(to,cost);
     S.db.doc("rooms/"+S.cur.id).update({score:(S.cur.data.score||0)+cost}).catch(()=>{});
   } else if(ctx.kind==="dm" && S.dm){
     const at=Date.now();
@@ -1957,6 +2174,27 @@ const DICT_ROWS=[
 ["Signed in as","چوویتە ژوورەوە وەک","Wek têketî","تم تسجيل الدخول باسم","Giriş yapan"],
 ["Sign out","چوونەدەرەوە","Derkeve","تسجيل الخروج","Çıkış yap"],
 ["Live voice","دەنگی ڕاستەوخۆ","Dengê zindî","صوت مباشر","Canlı ses"],
+["PK Battle","پێشبڕکێی PK","Pêşbaziya PK","تحدي PK","PK Savaşı"],
+["Blue team","تیمی شین","Tîma şîn","الفريق الأزرق","Mavi takım"],
+["Red team","تیمی سوور","Tîma sor","الفريق الأحمر","Kırmızı takım"],
+["Blue team wins!","تیمی شین بردییەوە!","Tîma şîn bi ser ket!","فاز الفريق الأزرق!","Mavi takım kazandı!"],
+["Red team wins!","تیمی سوور بردییەوە!","Tîma sor bi ser ket!","فاز الفريق الأحمر!","Kırmızı takım kazandı!"],
+["Draw","یەکسان","Wekhev","تعادل","Berabere"],
+["Start","دەستپێکردن","Dest pê bike","ابدأ","Başlat"],
+["Rematch","دووبارە","Dîsa","إعادة","Rövanş"],
+["Auto split seats","دابەشکردنی کورسییەکان","Kursiyan parve bike","تقسيم المقاعد تلقائياً","Koltukları otomatik böl"],
+["Pick a team · 10 minutes · most coins wins","تیمێک هەڵبژێرە · ١٠ خولەک · زۆرترین زێڕ دەباتەوە","Tîmekê hilbijêre · 10 deqe · zêrê herî zêde bi ser dikeve","اختر فريقاً · 10 دقائق · الأكثر عملات يفوز","Takım seç · 10 dakika · en çok jeton kazanır"],
+["Open a PK battle","کردنەوەی پێشبڕکێی PK","Pêşbaziya PK veke","افتح تحدي PK","PK savaşı aç"],
+["End the PK battle","کۆتاییهێنان بە پێشبڕکێ","Pêşbaziyê biqedîne","إنهاء التحدي","PK savaşını bitir"],
+["Only the room owner or admins can start a battle.","تەنها خاوەنی ژوور یان ئەدمینەکان دەتوانن پێشبڕکێ دەستپێبکەن.","Tenê xwedî an admînên odeyê dikarin pêşbaziyê dest pê bikin.","فقط مالك الغرفة أو المشرفون يمكنهم بدء التحدي.","Savaşı sadece oda sahibi veya yöneticiler başlatabilir."],
+["Two teams of up to 15 players. For 10 minutes, every gift a team member receives adds coins to their team. The team with the most coins wins.","دوو تیم، هەر تیمێک تا ١٥ یاریزان. بۆ ماوەی ١٠ خولەک، هەر دیارییەک بۆ ئەندامێکی تیم بێت زێڕەکەی بۆ تیمەکەی حیساب دەکرێت. ئەو تیمەی زۆرترین زێڕی هەبێت دەیباتەوە.","Du tîm, her yek heta 15 lîstikvan. 10 deqe, her diyariya ku endamek distîne zêr li tîma wî zêde dike. Tîma bi zêrê herî zêde bi ser dikeve.","فريقان حتى 15 لاعباً لكل فريق. لمدة 10 دقائق، كل هدية يتلقاها عضو تضيف عملات لفريقه. الفريق صاحب أكثر العملات يفوز.","15 kişiye kadar iki takım. 10 dakika boyunca bir üyenin aldığı her hediye takımına jeton ekler. En çok jetonu olan takım kazanır."],
+["This team is full","ئەم تیمە پڕە","Ev tîm tije ye","هذا الفريق ممتلئ","Bu takım dolu"],
+["This battle is over","ئەم پێشبڕکێیە تەواو بووە","Ev pêşbazî qediya","انتهى هذا التحدي","Bu savaş bitti"],
+["You can't switch teams during the battle","لە کاتی پێشبڕکێدا ناتوانیت تیم بگۆڕیت","Di dema pêşbaziyê de nikarî tîmê biguherînî","لا يمكنك تغيير الفريق أثناء التحدي","Savaş sırasında takım değiştiremezsin"],
+["Each team needs at least 1 player","هەر تیمێک لانیکەم یەک یاریزانی پێویستە","Her tîm herî kêm 1 lîstikvan dixwaze","يحتاج كل فريق إلى لاعب واحد على الأقل","Her takımın en az 1 oyuncusu olmalı"],
+["You joined the Blue team","چوویتە ناو تیمی شین","Tu ketî tîma şîn","انضممت إلى الفريق الأزرق","Mavi takıma katıldın"],
+["You joined the Red team","چوویتە ناو تیمی سوور","Tu ketî tîma sor","انضممت إلى الفريق الأحمر","Kırmızı takıma katıldın"],
+["Create a room","دروستکردنی ژوور","Odeyekê çêke","أنشئ غرفة","Oda oluştur"],
 ["Change ID","گۆڕینی ئایدی","ID biguherîne","تغيير المعرّف","ID değiştir"],
 ["Coins","زێڕ","Zêr","العملات","Jetonlar"],
 ["Send coins","ناردنی زێڕ","Zêr bişîne","إرسال عملات","Jeton gönder"],
@@ -2675,7 +2913,7 @@ function micOff(silent){
   micUi(); if(S.cur) renderSeats(); if(!silent) toast("🔇 "+t("Mic off"));
 }
 function onSeat(){ if(!S.cur) return false; const me=roomPeople().find(p=>p.uid===S.uid); return !!(me&&me.seat!=null); }
-function micUi(){ const b=$("#talkbtn"); if(!b||!liveVoice()) return; b.style.opacity=(LV.on||onSeat())?"1":".55"; b.classList.toggle("live",LV.on); b.classList.toggle("off",!LV.on); b.textContent=LV.on?"🎙️":"🎤"; b.title=LV.on?t("Turn mic off"):t("Turn mic on"); }
+function micUi(){ const b=$("#talkbtn"); if(b){ const tm=pkActive()?pkTeamOf(S.uid):null; b.classList.toggle("team-blue",tm==="blue"); b.classList.toggle("team-red",tm==="red"); } if(!b||!liveVoice()) return; b.style.opacity=(LV.on||onSeat())?"1":".55"; b.classList.toggle("live",LV.on); b.classList.toggle("off",!LV.on); b.textContent=LV.on?"🎙️":"🎤"; b.title=LV.on?t("Turn mic off"):t("Turn mic on"); }
 function lvSoundSync(){ LV.audios.forEach(a=>a.muted=!S.sound); }
 
 /* ============ local demo seed ============ */
