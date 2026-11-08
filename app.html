@@ -803,10 +803,8 @@ async function enterRoom(id){
     <div class="seats" id="seats"></div>
     <div class="speakbar" id="speakbar"></div>
     <div class="chatwrap" id="chatwrap"><div class="msgs" id="msgs"></div></div>
-    <div class="recbar" id="recbar"><span class="rdot"></span><b id="rectime">0:00</b><span style="flex:1;font-size:12px;opacity:.9">Recording… release or tap 🎤 to send</span><button onclick="talkStop(false)" style="color:#fff;font-size:13px;padding:4px 8px;border:1px solid rgba(255,255,255,.6);border-radius:12px">✕ Cancel</button></div>
-    <input type="file" id="talkfile" accept="audio/*" capture style="display:none" onchange="talkFile(this)">
     <div class="rbar">
-      <button class="talkbtn" id="talkbtn" title="Push to talk">🎤</button>
+      <button class="talkbtn" id="talkbtn" title="Mic">🎤</button>
       <input id="rin" maxlength="300" placeholder="Say something..." onkeydown="if(event.key==='Enter')sendRoomMsg()">
       <button class="rbtn" onclick="sendRoomMsg()">➤</button>
       <button class="rbtn" onclick="openVoiceHub()" title="Voice">🎵</button>
@@ -822,7 +820,6 @@ async function enterRoom(id){
       if(!S.cur.seen.has(m.id) && m.at>S.cur.t0-2000){
         if(m.type==="gift") playGift(m);
         else if(m.type==="sfx") playSfx(m.sfx);
-        else if(m.type==="voice" && m.uid!==S.uid && !isBlocked(m.uid)) queueVoice(m);
         else if(m.type==="sys" && m.join) showEntry(m.uid);
       }
       S.cur.seen.add(m.id);
@@ -897,11 +894,11 @@ function takeSeat(i,quiet){
   if((S.cur.data.lockedSeats||[]).includes(i)) return toast(t("This seat is locked"));
   S.cur.seat=i;
   if(S.cur.named) S.cur.named.presence({uid:S.uid,seat:i}).catch(()=>{});
-  renderSeats(); renderRoomHead(); if(!quiet) toast(t("You took seat {n}",{n:i+1})+" 🎙️");
+  renderSeats(); renderRoomHead(); if(typeof micUi==="function") micUi(); if(!quiet) toast(t("You took seat {n}",{n:i+1})+" 🎙️ "+(liveVoice()&&!LV.on?t("Tap 🎤 to talk"):""));
 }
 function toggleSeat(){
   const ppl=roomPeople(); const mine=ppl.find(p=>p.uid===S.uid);
-  if(mine&&mine.seat!=null){ if(LV.on) micOff(true); S.cur.seat=null; if(S.cur.named) S.cur.named.presence({uid:S.uid,seat:null}).catch(()=>{}); renderSeats(); toast("You left the seat"); }
+  if(mine&&mine.seat!=null){ if(LV.on) micOff(true); S.cur.seat=null; if(S.cur.named) S.cur.named.presence({uid:S.uid,seat:null}).catch(()=>{}); renderSeats(); micUi(); toast("You left the seat"); }
   else{ const taken=new Set(ppl.filter(p=>p.seat!=null).map(p=>p.seat)); for(let i=1;i<MAX_SEATS;i++) if(!taken.has(i)) return takeSeat(i); toast("All seats are taken"); }
 }
 function renderMsgs(){
@@ -909,7 +906,7 @@ function renderMsgs(){
   const atBottom=el.scrollHeight-el.scrollTop-el.clientHeight<60;
   let h=`<div class="notice"><b>Official announcement:</b> ${esc(S.cur.data.notice||"Welcome 🌹")}</div>`;
   for(const m of S.cur.msgs){
-    if(isBlocked(m.uid)) continue;
+    if(isBlocked(m.uid)||m.type==="voice") continue;
     const p=prof(m.uid), nick=esc(p.nick||m.nick||"Guest"), vc=VIPC[vipOf(p)]||"";
     if(m.type==="sys") h+=`<div class="sys">${avHTML(m.target?prof(m.target):p,20)} <b style="color:#ddd" class="nt">${m.target?esc(prof(m.target).nick):nick}</b> ${vipBadge(m.target?prof(m.target):p)} <span>${esc(m.text)}</span></div>`;
     else if(m.type==="game") h+=`<div class="gamemsg">🎮 <b style="color:#f3c94f">${nick}</b> ${esc(m.text)}</div>`;
@@ -1539,9 +1536,8 @@ const TALK={rec:null,t0:0,timer:null,cancel:false,starting:false};
 function setupTalk(){
   const b=$("#talkbtn"); if(!b) return;
   if(liveVoice()){ b.onpointerdown=null; b.onpointerup=null; b.onclick=()=>micToggle(); micUi(); return; }
-  b.onpointerdown=e=>{ if(micBlocked) return; e.preventDefault(); if(TALK.rec) talkStop(true); else talkStart(); };
-  b.onpointerup=()=>{ if(TALK.rec && Date.now()-TALK.t0>800) talkStop(true); };  // hold-to-talk: release sends
-  b.onclick=()=>{ if(micBlocked){ $("#talkfile").click(); } };                    // phone recorder fallback
+  b.onpointerdown=null; b.onpointerup=null;
+  b.onclick=()=>toast("🎙️ "+t("Live voice works on the website: dangi-kurdistan.vercel.app"));
 }
 async function talkStart(){
   if(S.cur&&isMutedIn(S.cur.data,S.uid)) return toast(t("You are muted in this room"));
@@ -1575,8 +1571,7 @@ async function sendTalkBlob(blob){
 
 function openVoiceHub(){
   openModal(`<div style="display:flex;gap:12px;align-items:center;background:rgba(243,201,79,.1);border:1px solid rgba(243,201,79,.35);border-radius:14px;padding:12px;margin-bottom:14px">
-      <div style="font-size:34px">🎤</div><div style="font-size:12.5px;line-height:1.5">${liveVoice()?`<b style="font-size:14px;color:#4cd97b">${esc(t("Live voice"))}</b><br>${esc(t("Tap 🎤 to turn your mic on and talk live. Tap again to turn it off. Everyone in the room hears you in real time."))}`:`<b style="font-size:14px;color:#f3c94f">Push to talk</b><br>Anyone can talk — no seat needed. Hold 🎤 and release to send, or tap once to start and again to send. Everyone in the room hears it automatically.`}${!liveVoice()&&micBlocked?`<br><span style="color:#ffb3b3">Your browser blocks the mic here, so 🎤 opens your phone's voice recorder.</span>`:""}</div></div>
-    <button class="gbtn dark" style="width:100%;padding:11px;margin-bottom:14px" onclick="openRecorder({kind:'room'})">🎙️ Record, listen, then send</button>
+      <div style="font-size:34px">🎤</div><div style="font-size:12.5px;line-height:1.5">${liveVoice()?`<b style="font-size:14px;color:#4cd97b">${esc(t("Live voice"))}</b><br>${esc(t("Sit on a seat, then tap 🎤 to turn your mic on and talk live. Tap again to turn it off. Only people on the seats can talk."))}`:`<b style="font-size:14px;color:#f3c94f">${esc(t("Live voice"))}</b><br>${esc(t("Live voice works on the website: dangi-kurdistan.vercel.app"))}`}</div></div>
     <div class="shead" style="margin:4px 0 10px"><h3 style="font-size:15px">🔊 Sound effects</h3><small style="color:#aaa">Everyone in the room hears it</small></div>
     <div class="sfxgrid">${SFX.map(s=>`<button class="sfx" onclick="sendSfx('${s.k}')"><span class="em">${s.e}</span>${s.n}</button>`).join("")}</div>
     <div style="display:flex;align-items:center;justify-content:space-between;margin-top:14px;font-size:13px;color:#bbb"><span>Room sound (voices, gifts & effects)</span><button class="gbtn dark" style="padding:6px 14px" onclick="toggleSound();openVoiceHub()">${S.sound?"🔊 On":"🔇 Off"}</button></div>`,{title:"🎵 Voice",dark:true});
@@ -1920,6 +1915,10 @@ const DICT_ROWS=[
 ["Signed in as","چوویتە ژوورەوە وەک","Wek têketî","تم تسجيل الدخول باسم","Giriş yapan"],
 ["Sign out","چوونەدەرەوە","Derkeve","تسجيل الخروج","Çıkış yap"],
 ["Live voice","دەنگی ڕاستەوخۆ","Dengê zindî","صوت مباشر","Canlı ses"],
+["Sit on a seat, then tap 🎤 to turn your mic on and talk live. Tap again to turn it off. Only people on the seats can talk.","لەسەر کورسییەک دابنیشە، پاشان 🎤 دابگرە بۆ کردنەوەی مایک و قسەکردنی ڕاستەوخۆ. دووبارە دایبگرە بۆ داخستنی. تەنها ئەوانەی لەسەر کورسین دەتوانن قسە بکەن.","Li ser kursiyekê rûne, paşê 🎤 bitikîne da mîk vebe û zindî biaxivî. Dîsa bitikîne da bigirî. Tenê yên li ser kursiyan dikarin biaxivin.","اجلس على مقعد، ثم اضغط 🎤 لتشغيل المايك والتحدث مباشرة. اضغط مرة أخرى لإيقافه. فقط الجالسون على المقاعد يمكنهم التحدث.","Bir koltuğa otur, sonra mikrofonu açıp canlı konuşmak için 🎤'a dokun. Kapatmak için tekrar dokun. Sadece koltuktakiler konuşabilir."],
+["Sit on a seat first to talk","سەرەتا لەسەر کورسییەک دابنیشە بۆ قسەکردن","Pêşî li ser kursiyekê rûne da biaxivî","اجلس على مقعد أولاً لتتحدث","Konuşmak için önce bir koltuğa otur"],
+["Tap 🎤 to talk","🎤 دابگرە بۆ قسەکردن","Ji bo axaftinê 🎤 bitikîne","اضغط 🎤 للتحدث","Konuşmak için 🎤'a dokun"],
+["Live voice works on the website: dangi-kurdistan.vercel.app","دەنگی ڕاستەوخۆ لەسەر سایتەکە کار دەکات: dangi-kurdistan.vercel.app","Dengê zindî li ser malperê dixebite: dangi-kurdistan.vercel.app","الصوت المباشر يعمل على الموقع: dangi-kurdistan.vercel.app","Canlı ses web sitesinde çalışır: dangi-kurdistan.vercel.app"],
 ["Tap 🎤 to turn your mic on and talk live. Tap again to turn it off. Everyone in the room hears you in real time.","🎤 دابگرە بۆ کردنەوەی مایک و قسەکردنی ڕاستەوخۆ. دووبارە دایبگرە بۆ داخستنی. هەموو کەسێکی ژوورەکە ڕاستەوخۆ گوێیان لێتە.","Ji bo vekirina mîkê û axaftina zindî 🎤 bitikîne. Dîsa bitikîne da bigirî. Her kesê odeyê te zindî dibihîze.","اضغط 🎤 لتشغيل المايك والتحدث مباشرة. اضغط مرة أخرى لإيقافه. الجميع في الغرفة يسمعونك فوراً.","Mikrofonu açıp canlı konuşmak için 🎤'a dokun. Kapatmak için tekrar dokun. Odadaki herkes seni anında duyar."],
 ["Mic on — everyone in the room can hear you","مایک کرایەوە — هەموو کەسێکی ژوورەکە گوێیان لێتە","Mîk vekirî ye — her kesê odeyê te dibihîze","المايك مفعّل — الجميع في الغرفة يسمعك","Mikrofon açık — odadaki herkes seni duyuyor"],
 ["Mic off","مایک داخرا","Mîk girtî ye","المايك مغلق","Mikrofon kapalı"],
@@ -2282,6 +2281,7 @@ function avatarSrc(p){
   if(!p||!p._id) return p&&p._pending||null;
   if(p.pf==="acct"){ const a=S.fb?p.vphoto:p._id===S.uid?S.myAvatar:(S.vp[p._id]&&S.vp[p._id].av); if(a&&/^https:\/\//.test(a)&&!a.startsWith("data:")) return a; }
   if(p.ph) return photoFor(p._id,p.ph);
+  const g=S.fb?p.vphoto:(p._id===S.uid?S.myAvatar:null); if(g&&/^https:\/\//.test(g)) return g;
   return null;
 }
 let _rq=0;
@@ -2556,9 +2556,11 @@ async function micToggle(){ return LV.on?micOff():micOn(); }
 async function micOn(){
   if(!S.cur) return;
   if(isMutedIn(S.cur.data,S.uid)) return toast(t("You are muted in this room"));
+  if(!onSeat()) return toast("🪑 "+t("Sit on a seat first to talk"));
   try{ LV.stream=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true,noiseSuppression:true,autoGainControl:true}}); }
   catch(e){ return toast("🎤 "+t("Allow microphone access in your browser to talk")); }
-  LV.on=true; ensureSeat();
+  if(!onSeat()){ LV.stream.getTracks().forEach(t=>t.stop()); LV.stream=null; return; }
+  LV.on=true;
   const tk=LV.stream.getAudioTracks()[0];
   LV.pcs.forEach(o=>{ if(o.tr) o.tr.sender.replaceTrack(tk).catch(()=>{}); });
   const m=LV.meters.get("me"); if(m){ try{m.src.disconnect()}catch(e){} LV.meters.delete("me"); }
@@ -2575,7 +2577,8 @@ function micOff(silent){
   if(S.cur&&S.cur.named) S.cur.named.presence({mic:false}).catch(()=>{});
   micUi(); if(S.cur) renderSeats(); if(!silent) toast("🔇 "+t("Mic off"));
 }
-function micUi(){ const b=$("#talkbtn"); if(!b||!liveVoice()) return; b.classList.toggle("live",LV.on); b.classList.toggle("off",!LV.on); b.textContent=LV.on?"🎙️":"🎤"; b.title=LV.on?t("Turn mic off"):t("Turn mic on"); }
+function onSeat(){ if(!S.cur) return false; const me=roomPeople().find(p=>p.uid===S.uid); return !!(me&&me.seat!=null); }
+function micUi(){ const b=$("#talkbtn"); if(!b||!liveVoice()) return; b.style.opacity=(LV.on||onSeat())?"1":".55"; b.classList.toggle("live",LV.on); b.classList.toggle("off",!LV.on); b.textContent=LV.on?"🎙️":"🎤"; b.title=LV.on?t("Turn mic off"):t("Turn mic on"); }
 function lvSoundSync(){ LV.audios.forEach(a=>a.muted=!S.sound); }
 
 /* ============ local demo seed ============ */
