@@ -742,6 +742,11 @@ input:focus,textarea:focus,select:focus{outline:none;box-shadow:0 0 0 3px rgba(2
 .rcover .rph img{width:100%;height:100%;object-fit:cover;display:block}
 .rcover .rph.sm{width:84px;height:84px;border-radius:20px}
 .rpicbtns{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+.rcard.hasph .rcover{background-image:linear-gradient(180deg,rgba(0,0,0,0) 55%,rgba(0,0,0,.45))!important}
+.rcard.vipc{position:relative;border:0!important;padding:3px;background:linear-gradient(90deg,#ffd45a,#ff3d9a,#52e5ff,#7dff6a,#ffd45a,#ff3d9a);background-size:300% 100%;animation:vipled 2.5s linear infinite;box-shadow:0 0 12px rgba(255,205,90,.85),0 0 26px rgba(255,61,154,.45)}
+.rcard.vipc .rcover{border-radius:13px 13px 0 0}.rcard.vipc .rmeta{background:#fff8e6;border-radius:0 0 13px 13px}
+.rcard.vipc .vtag{position:absolute;top:8px;left:8px;background:linear-gradient(135deg,#ffe08a,#f0a81c);color:#4a2d00;border-radius:8px;padding:1px 7px;font-size:10px;font-weight:800;box-shadow:0 2px 6px rgba(0,0,0,.4);z-index:2}
+@keyframes vipled{to{background-position:300% 0}}
 </style>
 </head>
 <body>
@@ -1453,7 +1458,7 @@ function roomMin(){
 function roomBubble(){
   let b=$("#rbub"); if(!S.cur||!S.cur.min){ if(b) b.remove(); return; }
   const r=S.cur.data; if(!b){ b=document.createElement("div"); b.id="rbub"; b.className="rbub"; b.onclick=roomRestore; $("#app").appendChild(b); }
-  b.innerHTML=`<div class="rbt"><b>${esc(r.name)}</b><small><span class="eq"><i></i><i></i><i></i></span> ${roomPeople().length} 👤</small></div><button class="rbx" aria-label="Exit" onclick="event.stopPropagation();leaveRoom()">✕</button>`;
+  b.innerHTML=`<div class="rav" style="background:${THEMES[r.theme||0]}">${roomAv(r)}</div><div class="rbt"><b>${esc(r.name)}</b><small><span class="eq"><i></i><i></i><i></i></span> ${roomPeople().length} 👤</small></div><button class="rbx" aria-label="Exit" onclick="event.stopPropagation();leaveRoom()">✕</button>`;
 }
 function roomRestore(){
   if(!S.cur) return; S.cur.min=false; const b=$("#rbub"); if(b) b.remove();
@@ -1654,8 +1659,9 @@ function viewHome(){
 const roomDispId=r=>(r&&r.ownerId&&idOf(r.ownerId))||(r&&r.id)||"";
 function roomCard(r){
   const n=roomCount(r.id);
-  return `<button class="rcard" data-id="${esc(r.id)}" onclick="enterRoom(this.dataset.id)">
-    <div class="rcover" style="background:${THEMES[r.theme||0]}">${n?'<span class="live">LIVE</span>':""}${roomPhoto(r)?`<span class="rph"><img src="${roomPhoto(r)}" alt=""></span>`:""}<span class="cnt">👥 ${n}</span></div>
+  const ph=roomPhoto(r), vp=isVipId(r.ownerId);
+  return `<button class="rcard${ph?" hasph":""}${vp?" vipc":""}" data-id="${esc(r.id)}" onclick="enterRoom(this.dataset.id)">
+    <div class="rcover" style="background:${THEMES[r.theme||0]}${ph?`;background-image:linear-gradient(180deg,rgba(0,0,0,0) 55%,rgba(0,0,0,.45)),url(${ph})!important;background-size:cover!important;background-position:center!important`:""}">${vp?'<span class="vtag">👑 VIP</span>':""}${n?'<span class="live">LIVE</span>':""}<span class="cnt">👥 ${n}</span></div>
     <div class="rmeta"><b>${cflag(r.country)} ${esc(r.name)}</b>${r.cat?`<small>${(ROOM_CATS.find(c=>c[0]===r.cat)||[])[1]||""}</small>`:""}<small>ID:${esc(roomDispId(r))}</small></div></button>`;
 }
 function viewRooms(){
@@ -1694,7 +1700,7 @@ function openCreateRoom(edit){
   const r=edit||{name:"",icon:pick(ROOM_ICONS),theme:rnd(0,THEMES.length-1),country:S.me.country||"ku",cat:"chat",notice:"Welcome to our room 🌹 Please be respectful"};
   const st={...r};
   const draw=()=>openModal(`
-    <div class="rcover" style="background:${THEMES[st.theme]};border-radius:16px;height:150px;margin-bottom:12px">${roomPhoto(st)?`<span class="rph"><img src="${roomPhoto(st)}" alt=""></span>`:""}</div>
+    <div class="rcover" style="background:${THEMES[st.theme]}${roomPhoto(st)?`;background-image:url(${roomPhoto(st)})!important;background-size:cover!important;background-position:center!important`:""};border-radius:16px;height:150px;margin-bottom:12px"></div>
     <label class="field"><span>Room name</span><input id="cr_n" maxlength="28" value="${esc(st.name)}" placeholder="e.g. Kurdish Lounge"></label>
     <div class="field"><span>${esc(t("Room picture"))}</span><div class="rpicbtns"><button class="gbtn" style="padding:8px 14px;font-size:13px" onclick="crPhoto('gallery')">🖼️ ${esc(t("Choose from gallery"))}</button><button class="gbtn dark" style="padding:8px 14px;font-size:13px" onclick="crPhoto('camera')">📷 ${esc(t("Take a photo"))}</button>${roomPhoto(st)?`<button class="gbtn dark" style="padding:8px 14px;font-size:13px;color:#ff8a8a" onclick="crSet('photo','')">🗑️ ${esc(t("Remove"))}</button>`:""}</div></div>
     <div class="field"><span>Theme</span><div class="pick">${THEMES.map((b,i)=>`<button class="swatch ${i===st.theme?"on":""}" style="background:${b}" onclick="crSet('theme',${i})"></button>`).join("")}</div></div>
@@ -1819,7 +1825,7 @@ function roomPeople(){
 }
 function renderRoomHead(){
   if(!S.cur) return; const r=S.cur.data; if(S.cur.min) setTimeout(roomBubble,0);
-  $("#rpill").innerHTML=`<div style="min-width:0"><b>${esc(r.name)}</b><small><span class="lv1">${cflag(r.country)}</span>ID:${esc(roomDispId(r))}</small></div>`;
+  $("#rpill").innerHTML=`<div class="rav" style="background:${THEMES[r.theme||0]}">${roomAv(r)}</div><div style="min-width:0"><b>${esc(r.name)}</b><small><span class="lv1">${cflag(r.country)}</span>ID:${esc(roomDispId(r))}</small></div>`;
   $("#trophy").innerHTML=`🏆 ${fmt(r.score||0)} ›`;
   const ppl=roomPeople();
   $("#onl").innerHTML=`<span style="display:flex">${ppl.slice(0,3).map(p=>`<span style="margin-left:-6px">${avHTML(prof(p.uid),20)}</span>`).join("")}</span> 👤 ${ppl.length}`;
@@ -1911,7 +1917,7 @@ function openOnline(){
 function openRoomRank(){ return openRankings('rooms'); }
 function _oldRoomRank(){
   const l=[...S.rooms].sort((a,b)=>(b.score||0)-(a.score||0)).slice(0,30);
-  openModal(l.map((r,i)=>`<button class="lb" style="width:100%;text-align:start" data-id="${esc(r.id)}" onclick="closeModal();enterRoom(this.dataset.id)"><span class="rk2">${["🥇","🥈","🥉"][i]||i+1}</span><b style="flex:1">${esc(r.name)}</b><span>🏆 ${fmt(r.score||0)}</span></button>`).join("")||'<div class="empty">No rooms</div>',{title:"🏆 Room Ranking"});
+  openModal(l.map((r,i)=>`<button class="lb" style="width:100%;text-align:start" data-id="${esc(r.id)}" onclick="closeModal();enterRoom(this.dataset.id)"><span class="rk2">${["🥇","🥈","🥉"][i]||i+1}</span><div class="rav" style="width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:22px;overflow:hidden;background:${THEMES[r.theme||0]}">${roomAv(r)}</div><b style="flex:1">${esc(r.name)}</b><span>🏆 ${fmt(r.score||0)}</span></button>`).join("")||'<div class="empty">No rooms</div>',{title:"🏆 Room Ranking"});
 }
 
 /* ============ MOMENTS ============ */
@@ -3254,7 +3260,7 @@ async function openRankings(tab="wealth",period="week"){
   } else if(tab==="wealth"&&period==="all"){ Object.entries(S.profiles).forEach(([id,p])=>{ if(p.giftsSent) agg[id]=p.giftsSent; }); }
   else gifts.forEach(g=>{ const k=tab==="wealth"?g.from:g.to; if(k&&k!=="room") agg[k]=(agg[k]||0)+(+g.c||0); });
   const rows=Object.entries(agg).filter(([id])=>tab==="rooms"?S.rooms.some(r=>r.id===id):!isBlocked(id)).sort((a,b)=>b[1]-a[1]).slice(0,50);
-  const item=id=>tab==="rooms"?(()=>{ const r=S.rooms.find(x=>x.id===id); return {name:r.name,av:``,click:`closeModal();enterRoom('${id}')`}; })()
+  const item=id=>tab==="rooms"?(()=>{ const r=S.rooms.find(x=>x.id===id); return {name:r.name,av:`<div style="width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:24px;overflow:hidden;background:${THEMES[r.theme||0]}">${roomAv(r)}</div>`,click:`closeModal();enterRoom('${id}')`}; })()
     :{name:prof(id).nick,av:avHTML(prof(id),44),click:`openUser('${id}')`,vip:vipBadge(prof(id))};
   const pod=rows.slice(0,3), medal=["🥇","🥈","🥉"], order=[1,0,2];
   const podium=pod.length?`<div style="display:flex;justify-content:center;align-items:flex-end;gap:10px;margin:6px 0 14px">${order.filter(i=>pod[i]).map(i=>{ const [id,v]=pod[i], it=item(id);
