@@ -783,6 +783,16 @@ input:focus,textarea:focus,select:focus{outline:none;box-shadow:0 0 0 3px rgba(2
 .fab.wide span,.fab.wide b{position:absolute;z-index:2;top:30%;height:52%;display:flex;align-items:center}
 .fab.wide span{inset-inline-start:36%;font-size:20px;color:#ffd45a;text-shadow:0 1px 2px #000}
 .fab.wide b{inset-inline-start:48%;inset-inline-end:8%;font-size:12.5px;font-weight:800;color:#fff1c2;text-shadow:0 1px 3px rgba(0,0,0,.7);white-space:nowrap;overflow:hidden}
+/* ===== YouTube songs in rooms ===== */
+#ytbar{display:none;align-items:center;gap:10px;margin:4px 10px;padding:6px 8px 6px 6px;border-radius:14px;background:linear-gradient(100deg,rgba(40,24,6,.94),rgba(74,44,10,.94));border:1px solid rgba(243,201,79,.65);color:#fff;position:relative;z-index:5;box-shadow:0 4px 14px rgba(0,0,0,.4)}
+#ytbar .ytv{width:104px;height:58px;border-radius:9px;overflow:hidden;background:#000;flex:none}
+#ytbar .ytv iframe{width:100%;height:100%;border:0;display:block}
+#ytbar .ytt{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px;font-size:12.5px}
+#ytbar .ytt small{color:#e9d9a8;font-size:10.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#ytbar .ytb{display:flex;flex-direction:column;gap:5px}
+#ytbar .ytb button{background:rgba(255,255,255,.12);color:#fff;border-radius:10px;padding:4px 9px;font-size:11px;white-space:nowrap}
+#ytbar .ytb button.all{background:linear-gradient(135deg,#ffe08a,#f0a81c);color:#3b2400;font-weight:800}
+.ytin{flex:1;min-width:0;background:rgba(255,255,255,.08);color:#fff;border:1px solid rgba(255,255,255,.22);border-radius:12px;padding:10px 12px;font-size:13px;direction:ltr}
 </style>
 </head>
 <body>
@@ -1789,6 +1799,7 @@ async function enterRoom(id){
       <button class="onl" id="onl" onclick="openOnline()"></button>
     </div>
     <div id="pkbar"></div>
+    <div id="ytbar"></div>
     <div class="seats" id="seats"></div>
     <div class="speakbar" id="speakbar"></div>
     <div class="chatwrap" id="chatwrap"><div class="msgs" id="msgs"></div></div>
@@ -1811,9 +1822,12 @@ async function enterRoom(id){
         if(m.type==="gift") playGift(m);
         else if(m.type==="sfx") playSfx(m.sfx);
         else if(m.type==="sys" && m.join) showEntry(m.uid);
+        else if(m.type==="music") ytStart(m,0);
+        else if(m.type==="mstop") ytClear();
       }
       S.cur.seen.add(m.id);
     }
+    if(!S.cur.ytInit){ S.cur.ytInit=true; if(!S.cur.yt){ const last=[...msgs].reverse().find(x=>x.type==="music"||x.type==="mstop"); if(last&&last.type==="music"&&Date.now()-last.at<25*60000) ytStart(last,Math.floor((Date.now()-last.at)/1000)); } }
     S.cur.msgs=msgs; renderMsgs(); renderSeats();
   }, e=>console.warn(e));
   S.cur.unsub.push(u);
@@ -1905,6 +1919,7 @@ function renderMsgs(){
     if(m.type==="sys") h+=`<div class="sys">${avHTML(m.target?prof(m.target):p,20)} <b style="color:#ddd" class="nt">${m.target?esc(prof(m.target).nick):nick}</b> ${vipBadge(m.target?prof(m.target):p)} <span>${esc(m.text)}</span></div>`;
     else if(m.type==="game") h+=`<div class="gamemsg">🎮 <b style="color:#f3c94f">${nick}</b> ${esc(m.text)}</div>`;
     else if(m.type==="gift"){ const g=giftOf(m.gift); h+=`<div class="giftmsg">🎁 <b style="color:#ffd0d0">${nick}</b> ${esc(m.text)} <span style="font-size:22px">${g.e}</span>${(m.qty||1)>1?` <b style="color:#ffe066">x${+m.qty}</b>`:""}</div>`; }
+    else if(m.type==="music"||m.type==="mstop") h+=`<div class="sfxmsg">🎵 <b style="color:#ddd">${nick}</b> ${m.type==="music"?esc(t("played a song")):esc(t("stopped the music"))}</div>`;
     else if(m.type==="sfx"){ const s=SFX.find(x=>x.k===m.sfx)||SFX[0]; h+=`<div class="sfxmsg">🔊 <b style="color:#ddd">${nick}</b> ${s.e} ${s.n}</div>`; }
     else if(m.type==="voice") h+=`<div class="m"><button data-u="${esc(m.uid)}" onclick="openUser(this.dataset.u)">${avHTML(p,30)}</button><div><div class="nm" style="${vc?"color:"+vc:""}">${nick} ${vipBadge(p)}</div>${voiceBubble(m)}</div></div>`;
     else h+=`<div class="m"><button data-u="${esc(m.uid)}" onclick="openUser(this.dataset.u)">${avHTML(p,30)}</button><div><div class="nm" style="${vc?"color:"+vc:""}">${nick}${vBadge(m.uid)} ${vipBadge(p)} <span class="lvl" style="font-size:9px;padding:0 5px">Lv.${level(p.xp)}</span>${isRoomAdmin(m.uid)?` <span class="tag own" style="font-size:8.5px">${m.uid===S.cur.data.ownerId?"Owner":"Admin"}</span>`:""}</div><div class="bub" ${vipOf(p)>=5?'style="background:linear-gradient(90deg,#8a6a1f,#c9a24a);color:#fff"':""} data-o="${esc(m.text)}" onclick="trMsg(this,event)" title="Translate">${esc(clean(m.text))}</div></div></div>`;
@@ -2571,9 +2586,41 @@ async function sendTalkBlob(blob){
 function openVoiceHub(){
   openModal(`<div style="display:flex;gap:12px;align-items:center;background:rgba(243,201,79,.1);border:1px solid rgba(243,201,79,.35);border-radius:14px;padding:12px;margin-bottom:14px">
       <div style="font-size:34px">🎤</div><div style="font-size:12.5px;line-height:1.5">${liveVoice()?`<b style="font-size:14px;color:#4cd97b">${esc(t("Live voice"))}</b><br>${esc(t("Sit on a seat, then tap 🎤 to turn your mic on and talk live. Tap again to turn it off. Only people on the seats can talk."))}`:`<b style="font-size:14px;color:#f3c94f">${esc(t("Live voice"))}</b><br>${esc(t("Live voice works on the website: dangi-kurdistan.vercel.app"))}`}</div></div>
+    <div class="shead" style="margin:4px 0 10px"><h3 style="font-size:15px">🎶 YouTube</h3><small style="color:#aaa">${esc(t("Everyone in the room hears it"))}</small></div>
+    <div style="display:flex;gap:8px;margin-bottom:8px"><input id="ytin" class="ytin" placeholder="${esc(t("Paste a YouTube link..."))}" onkeydown="if(event.key==='Enter')ytSubmit()"><button class="gbtn" style="padding:8px 14px" onclick="ytSubmit()">▶ ${esc(t("Play"))}</button></div>
+    ${S.cur&&S.cur.yt&&ytCanStop()?`<button class="gbtn dark" style="width:100%;margin-bottom:12px" onclick="closeModal();ytStop(true)">⏹ ${esc(t("Stop music"))}</button>`:`<div style="height:8px"></div>`}
     <div class="shead" style="margin:4px 0 10px"><h3 style="font-size:15px">🔊 Sound effects</h3><small style="color:#aaa">Everyone in the room hears it</small></div>
     <div class="sfxgrid">${SFX.map(s=>`<button class="sfx" onclick="sendSfx('${s.k}')"><span class="em">${s.e}</span>${s.n}</button>`).join("")}</div>
     <div style="display:flex;align-items:center;justify-content:space-between;margin-top:14px;font-size:13px;color:#bbb"><span>Room sound (voices, gifts & effects)</span><button class="gbtn dark" style="padding:6px 14px" onclick="toggleSound();openVoiceHub()">${S.sound?"🔊 On":"🔇 Off"}</button></div>`,{title:"🎵 Voice",dark:true});
+}
+/* ===== YouTube songs in rooms ===== */
+function ytId(u){ u=(u||"").trim(); const m=u.match(/(?:youtu\.be\/|youtube(?:-nocookie)?\.com\/(?:watch\?(?:[^#\s]*&)?v=|shorts\/|live\/|embed\/|v\/))([\w-]{11})/i); return m?m[1]:(/^[\w-]{11}$/.test(u)?u:null); }
+function ytCanStop(){ const y=S.cur&&S.cur.yt; return !!y&&(y.uid===S.uid||S.cur.data.ownerId===S.uid||isAppOwner()); }
+function ytBar(){
+  const el=$("#ytbar"); if(!el) return; const y=S.cur&&S.cur.yt;
+  if(!y){ el.innerHTML=""; el.style.display="none"; return; }
+  el.style.display="flex";
+  el.innerHTML=`<div class="ytv"><iframe src="https://www.youtube.com/embed/${y.vid}?autoplay=1&playsinline=1&rel=0&modestbranding=1&start=${y.off||0}" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" referrerpolicy="strict-origin-when-cross-origin" title="YouTube"></iframe></div>
+    <div class="ytt"><b>🎵 ${esc(t("Now playing"))}</b><small>${esc(t("Played by"))} ${esc(y.nick||"")}</small></div>
+    <div class="ytb"><button onclick="ytStop(false)">✕ ${esc(t("Hide"))}</button>${ytCanStop()?`<button class="all" onclick="ytStop(true)">⏹ ${esc(t("Stop for everyone"))}</button>`:""}</div>`;
+}
+function ytStart(m,off){
+  if(!S.cur||!m||!m.vid||S.cur.ytOff===m.vid+":"+m.at) return;
+  S.cur.yt={vid:m.vid,uid:m.uid,nick:m.nick,at:m.at,off:off||0}; ytBar();
+}
+function ytClear(){ if(!S.cur) return; S.cur.yt=null; ytBar(); }
+function ytStop(all){
+  if(!S.cur||!S.cur.yt) return;
+  if(all){ if(!ytCanStop()) return; postRoom({type:"mstop",text:"stopped the music"}); }
+  else S.cur.ytOff=S.cur.yt.vid+":"+S.cur.yt.at;
+  ytClear();
+}
+let lastYt=0;
+function ytSubmit(){
+  const i=$("#ytin"); const id=ytId(i&&i.value); if(!id) return toast(t("Invalid YouTube link"));
+  if(isMutedIn(S.cur.data,S.uid)) return toast(t("You are muted in this room"));
+  if(Date.now()-lastYt<8000) return toast("Please wait a moment..."); lastYt=Date.now();
+  closeModal(); postRoom({type:"music",vid:id,text:"played a song"});
 }
 let lastSfx=0;
 function sendSfx(k){ if(isMutedIn(S.cur.data,S.uid)) return toast(t("You are muted in this room")); if(Date.now()-lastSfx<2500) return toast("Please wait a moment..."); lastSfx=Date.now(); closeModal(); postRoom({type:"sfx",sfx:k}); }
@@ -2671,6 +2718,17 @@ const DICT_ROWS=[
 ["Country","وڵات","Welat","الدولة","Ülke"],
 ["Category","پۆل","Kategorî","الفئة","Kategori"],
 ["VIP member","ئەندامی VIP","Endamê VIP","عضو VIP","VIP üye"],
+["Now playing","ئێستا لێدەدرێت","Niha tê lêdan","يُشغَّل الآن","Şimdi çalıyor"],
+["Played by","لەلایەن","Ji aliyê","بواسطة","Çalan"],
+["Hide","شاردنەوە","Veşêre","إخفاء","Gizle"],
+["Stop for everyone","وەستاندن بۆ هەموو","Ji bo hemûyan rawestîne","إيقاف للجميع","Herkes için durdur"],
+["Stop music","وەستاندنی مۆسیقا","Muzîkê rawestîne","إيقاف الموسيقى","Müziği durdur"],
+["Invalid YouTube link","لینکی یوتوب دروست نییە","Lînka YouTube nederbasdar e","رابط يوتيوب غير صالح","Geçersiz YouTube bağlantısı"],
+["Paste a YouTube link...","لینکی یوتوب دابنێ...","Lînka YouTube bixe...","الصق رابط يوتيوب...","YouTube bağlantısı yapıştır..."],
+["Play","لێدان","Lê bide","تشغيل","Oynat"],
+["played a song","گۆرانییەکی لێدا","stranek lêda","شغّل أغنية","bir şarkı çaldı"],
+["stopped the music","مۆسیقاکەی وەستاند","muzîk rawestand","أوقف الموسيقى","müziği durdurdu"],
+["Everyone in the room hears it","هەموو کەسێکی ڕووم دەیبیستێت","Her kesê di odeyê de dibihîze","الجميع في الغرفة يسمعها","Odadaki herkes duyar"],
 ["Room picture","وێنەی ڕووم","Wêneya odeyê","صورة الغرفة","Oda resmi"],
 ["Remove","لابردن","Rake","إزالة","Kaldır"],
 ["Switch","گۆڕین","Biguhere","تبديل","Değiştir"],
