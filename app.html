@@ -1654,7 +1654,7 @@ function go(t){ S.tab=t; $("#view").scrollTop=0; render(); }
 function render(){
   if(!S.me) return;
   renderNav();
-  $("#fab").style.display = S.tab==="rooms"||S.tab==="moments"||S.tab==="home" ? "flex":"none";
+  $("#fab").style.display = S.tab==="rooms"||S.tab==="moments" ? "flex":"none";
   $("#fab").onclick = S.tab==="moments" ? openNewPost : ()=>openCreateRoom();
   $("#fab").classList.toggle("wide",S.tab!=="moments"); $("#fab").innerHTML=S.tab==="moments"?"＋":`<span>＋</span><b>${esc(t("Create a room"))}</b>`;
   const v=$("#view");
