@@ -716,6 +716,26 @@ input:focus,textarea:focus,select:focus{outline:none;box-shadow:0 0 0 3px rgba(2
 .l7intro .f1,.l7intro .f2{position:absolute;width:64px;height:54px}.l7intro .f1{right:10%;top:30%;animation:l7fl 1.6s ease-in-out infinite alternate}.l7intro .f2{left:10%;top:34%;animation:l7fl 1.6s ease-in-out infinite alternate-reverse}
 @keyframes l7fl{to{transform:translateY(-12px) rotate(8deg)}}
 @media (max-height:700px){.l7box .frame{max-height:48px}.l7chip{width:38px;height:38px;font-size:11px}.l7box .mul{font-size:18px}}
+/* ===== official announcement, switch, minimize, invite ===== */
+:root{--annimg:url(data:image/avif;base64,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)}
+.offan{position:relative;box-sizing:border-box;height:84px;margin:6px 6px;padding:23px 4px 15px 4px;border-style:solid;border-width:0 32px 0 110px;border-image:var(--annimg) 0 78 0 265 fill/0 32px 0 110px stretch;display:flex;align-items:center;color:#2a1a05;direction:ltr;filter:drop-shadow(0 4px 8px rgba(0,0,0,.3))}
+.offan .ot{flex:1;min-width:0;text-align:center;direction:ltr}
+.offan .ot b{display:block;font-size:14px;font-weight:800;line-height:1.15;color:#1c1204;unicode-bidi:plaintext}
+.offan .ot span{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;font-size:11.5px;line-height:1.25;font-weight:600;color:#4a3410;unicode-bidi:plaintext}
+.offan .ox{position:absolute;right:-31px;top:30px;width:30px;height:30px;border-radius:50%;background:transparent}
+.swp,.rmn{position:absolute;z-index:30;border-radius:28px;background:rgba(48,44,68,.62);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.14);box-shadow:0 10px 30px rgba(0,0,0,.45);animation:crIn .18s}
+.swp button,.rmn button{display:flex;align-items:center;gap:12px;color:#fff;font-size:16px;font-weight:500;padding:14px 22px;white-space:nowrap}
+.rmn{top:52px;right:10px;min-width:210px;border-radius:24px;padding:6px 0}.rmn button{width:100%;padding:13px 20px}
+.rbub{position:absolute;right:10px;bottom:86px;z-index:26;display:flex;align-items:center;gap:8px;max-width:230px;padding:6px 8px 6px 6px;border-radius:30px;background:linear-gradient(135deg,#3b2a8c,#1c1050);border:2px solid #ffd45a;color:#fff;box-shadow:0 8px 20px rgba(0,0,0,.45);animation:crIn .25s;cursor:pointer}
+.rbub .rav{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;flex:none;box-shadow:0 0 0 2px rgba(255,255,255,.4)}
+.rbub .rbt{min-width:0;display:flex;flex-direction:column;line-height:1.15}.rbub .rbt b{font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.rbub .rbt small{font-size:11px;color:#cfc2ff;display:flex;align-items:center;gap:4px}
+.rbub .rbx{width:24px;height:24px;border-radius:50%;background:rgba(255,255,255,.15);color:#fff;font-size:12px;flex:none}
+.eq{display:inline-flex;gap:2px;align-items:flex-end;height:10px}.eq i{width:3px;background:#4cd97b;border-radius:2px;animation:eqb .8s ease-in-out infinite}.eq i:nth-child(2){animation-delay:.2s}.eq i:nth-child(3){animation-delay:.4s}
+@keyframes eqb{0%,100%{height:3px}50%{height:10px}}
+.invrow{display:flex;align-items:center;gap:10px;width:100%}.invb{padding:6px 14px;font-size:13px}.invb.done{background:#2f7d4a;opacity:.85}
+.invpop{position:absolute;left:8px;right:8px;top:10px;z-index:58;display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:18px;background:linear-gradient(135deg,#3b2a8c,#1c1050);border:2px solid #ffd45a;color:#fff;box-shadow:0 10px 28px rgba(0,0,0,.5);animation:crIn .3s}
+.invpop .it{flex:1;min-width:0;display:flex;flex-direction:column}.invpop .it b{font-size:14px}.invpop .it small{font-size:12px;color:#d8ccff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.invpop .ix{color:#fff;opacity:.7;font-size:15px}
 </style>
 </head>
 <body>
@@ -1394,6 +1414,75 @@ function l7Tick(){
   if(h&&h.dataset.k!==key){ h.dataset.k=key; const arr=[]; const base=st.phase==="bet"?st.r-1:(st.phase==="show"?st.r:st.r-1);
     for(let i=0;i<9;i++) arr.push(l7Sym(l7Res(base-i))); h.innerHTML=arr.map((k,i)=>`<span class="${i===0?"new":""}">${l7Ico(k)}${i===0?"<em>NEW</em>":""}</span>`).join(""); }
 }
+/* ===== official announcement banner / seat switch / minimize / invite ===== */
+function annBanner(text,kind){ return `<div class="offan"><div class="ot"><b>${esc(t("Official announcement"))}</b><span class="nt">${esc(text)}</span></div><button class="ox" aria-label="Close" onclick="annHide('${kind}')"></button></div>`; }
+function annHide(k){ if(k==="g"){ S.annHide=(S.announce&&S.announce.at)||1; render(); } else if(S.cur){ S.cur.noticeHide=true; renderMsgs(); } }
+function seatTap(i,ev){
+  if(!S.cur) return; const mine=roomPeople().find(p=>p.uid===S.uid);
+  if(i===0&&S.cur.data.ownerId!==S.uid) return toast("This seat is reserved for the room owner 👑");
+  if(mine&&mine.seat!=null&&mine.seat!==i&&ev&&ev.currentTarget){ seatSwitchPop(i,ev.currentTarget); } else takeSeat(i);
+}
+function closeSwp(){ const d=$("#swp"); if(d) d.remove(); }
+function seatSwitchPop(i,btn){
+  closeSwp(); const rv=$("#roomView"), b=btn.getBoundingClientRect(), r=rv.getBoundingClientRect();
+  const d=document.createElement("div"); d.id="swp"; d.className="swp";
+  d.innerHTML=`<button onclick="event.stopPropagation();closeSwp();takeSeat(${i})"><svg viewBox="0 0 24 24" width="22" height="22" fill="#fff"><path d="M12 14a3 3 0 0 0 3-3V5a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.9V21h2v-3.1A7 7 0 0 0 19 11z"/></svg><span>${esc(t("Switch"))}</span></button>`;
+  rv.appendChild(d);
+  const w=d.offsetWidth; let x=b.left-r.left+b.width/2-w/2; x=Math.max(8,Math.min(r.width-w-8,x));
+  d.style.left=x+"px"; d.style.top=(b.top-r.top+b.height*.15)+"px";
+  setTimeout(()=>{ const off=e=>{ if(!e.target.closest||!e.target.closest("#swp")) closeSwp(); rv.removeEventListener("click",off,true); }; rv.addEventListener("click",off,true); },0);
+}
+function roomMenu(ev){
+  const old=$("#rmn"); if(old){ old.remove(); return; }
+  const rv=$("#roomView"), d=document.createElement("div"); d.id="rmn"; d.className="rmn";
+  d.innerHTML=`<button onclick="roomMin()"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><path d="M14 10l7-7M21 8V3h-5M10 14l-7 7M3 16v5h5"/><path d="M10 14l-3 0M14 10l3 0" opacity="0"/></svg><span>${esc(t("Minimize"))}</span></button>
+    <button onclick="document.getElementById('rmn').remove();leaveRoom()"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><path d="M12 3v9M6.3 6.5a8 8 0 1 0 11.4 0"/></svg><span>${esc(t("Exit"))}</span></button>`;
+  rv.appendChild(d);
+  setTimeout(()=>{ const off=e=>{ const m=$("#rmn"); if(m&&!m.contains(e.target)) m.remove(); rv.removeEventListener("click",off,true); }; rv.addEventListener("click",off,true); },0);
+}
+function roomMin(){
+  if(!S.cur) return; const m=$("#rmn"); if(m) m.remove(); closeSwp();
+  S.cur.min=true; $("#roomView").classList.remove("show"); setHash(""); roomBubble(); render();
+}
+function roomBubble(){
+  let b=$("#rbub"); if(!S.cur||!S.cur.min){ if(b) b.remove(); return; }
+  const r=S.cur.data; if(!b){ b=document.createElement("div"); b.id="rbub"; b.className="rbub"; b.onclick=roomRestore; $("#app").appendChild(b); }
+  b.innerHTML=`<div class="rav" style="background:${THEMES[r.theme||0]}">${esc(r.icon||"🏰")}</div><div class="rbt"><b>${esc(r.name)}</b><small><span class="eq"><i></i><i></i><i></i></span> ${roomPeople().length} 👤</small></div><button class="rbx" aria-label="Exit" onclick="event.stopPropagation();leaveRoom()">✕</button>`;
+}
+function roomRestore(){
+  if(!S.cur) return; S.cur.min=false; const b=$("#rbub"); if(b) b.remove();
+  $("#roomView").classList.add("show"); try{ setHash("room-"+S.cur.id); }catch(e){} renderSeats(); renderMsgs();
+}
+/* ---- invite people to the room ---- */
+function openInvite(){
+  if(!S.cur) return;
+  const inRoom=new Set(roomPeople().map(p=>p.uid)), sent=(S.cur.invited=S.cur.invited||new Set());
+  const online=new Set((S.lobbyPeers||[]).map(p=>p.by||(p.presence&&p.presence.uid)).filter(Boolean));
+  const fol=new Set(S.me.following||[]), ok=u=>u&&u!==S.uid&&!inRoom.has(u)&&!isBlocked(u)&&S.profiles[u];
+  const A=[...new Set([...fol,...online,...Object.keys(S.profiles)])].filter(ok).sort((a,b)=>(online.has(b)?2:0)+(fol.has(b)?1:0)-(online.has(a)?2:0)-(fol.has(a)?1:0)).slice(0,60);
+  const row=u=>{ const p=prof(u); return `<div class="u invrow">${avHTML(p,40)}<div style="flex:1;min-width:0"><b class="nt">${esc(p.nick)}</b> ${onlineDot(u)}<div style="font-size:11px;color:#9aa">${fol.has(u)?esc(t("Following")):""}</div></div><button class="gbtn invb ${sent.has(u)?"done":""}" data-u="${esc(u)}" onclick="inviteSend(this)">${sent.has(u)?"✓ "+esc(t("Sent")):esc(t("Invite"))}</button></div>`; };
+  openModal(`<button class="gbtn dark" style="width:100%;margin-bottom:10px" onclick="shareRoom()">🔗 ${esc(t("Copy link"))}</button>
+    <div class="ulist">${A.map(row).join("")||`<div class="empty"><div class="em">👥</div>${esc(t("No one to invite"))}</div>`}</div>`,{title:"📨 "+t("Invite to this room"),dark:true});
+}
+function inviteSend(btn){
+  if(!S.cur) return; const u=btn.dataset.u; const sent=(S.cur.invited=S.cur.invited||new Set()); if(sent.has(u)) return;
+  sent.add(u); const r=S.cur.data; notify(u,"invite",{room:S.cur.id,rname:r.name||"",ricon:r.icon||"🏰"});
+  btn.textContent="✓ "+t("Sent"); btn.classList.add("done"); try{ playSnd&&playSnd("pop"); }catch(e){}
+}
+function inviteWatch(){
+  if(!S.me||!S.notifs) return; S.invShown=S.invShown||new Set(); const now=Date.now();
+  for(const n of S.notifs){
+    if(n.type!=="invite"||isBlocked(n.from)||now-n.at>90000||S.invShown.has(n.id)) continue;
+    S.invShown.add(n.id); if(S.cur&&S.cur.id===n.room&&!S.cur.min) continue; showInvite(n); break;
+  }
+}
+function showInvite(n){
+  const old=$("#invpop"); if(old) old.remove(); const p=prof(n.from), room=String(n.room||"").replace(/\W/g,"");
+  const d=document.createElement("div"); d.id="invpop"; d.className="invpop";
+  d.innerHTML=`${avHTML(p,40)}<div class="it"><b class="nt">${esc(p.nick)}</b><small>${esc(t("invited you to"))} ${esc(n.ricon||"🏰")} ${esc(n.rname||"")}</small></div><button class="gbtn" onclick="document.getElementById('invpop').remove();enterRoom('${room}')">${esc(t("Join"))}</button><button class="ix" onclick="document.getElementById('invpop').remove()">✕</button>`;
+  $("#app").appendChild(d); try{ playSnd&&playSnd("chime"); }catch(e){}
+  setTimeout(()=>{ if(d.isConnected) d.remove(); },15000);
+}
 function hideSplash(){ $("#splash").classList.add("hide"); }
 
 function subscribeAll(){
@@ -1402,7 +1491,7 @@ function subscribeAll(){
     if(S.pendingRoom&&S.me&&S.rooms.some(r=>r.id===S.pendingRoom)){ const id=S.pendingRoom; S.pendingRoom=null; enterRoom(id); }
     render(); }, e=>console.warn(e));
   S.db.collection("posts").orderBy("at","desc").limit(60).onSnapshot(s=>{ S.posts=s.docs.map(d=>({id:d.id,...d.data()})); render(); }, e=>console.warn(e));
-  S.db.collection("notifs").where("to","==",S.uid).limit(200).onSnapshot(s=>{ S.notifs=s.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>(b.at||0)-(a.at||0)); render(); },()=>{});
+  S.db.collection("notifs").where("to","==",S.uid).limit(200).onSnapshot(s=>{ S.notifs=s.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>(b.at||0)-(a.at||0)); try{inviteWatch()}catch(e){} render(); },()=>{});
   S.db.doc("system/announce").onSnapshot(s=>{ S.announce=s.exists?s.data():null; render(); },()=>{});
   S.db.collection("vipids").limit(1000).onSnapshot(s=>{ const m={}; s.docs.forEach(d=>{ const v=d.data(); if(v&&v.sid) m[d.id]=String(v.sid); }); S.vipIds=m; render(); if(S.cur){ renderSeats(); renderMsgs(); } },()=>{});
   S.db.collection("grants").where("to","==",S.uid).limit(100).onSnapshot(s=>s.docs.forEach(claimGrant),()=>{});
@@ -1505,7 +1594,7 @@ function viewHome(){
     <button class="iconbtn" onclick="openNotifs()" title="Notifications" style="position:relative">🔔${unreadNotifs()?`<i class="badge" style="position:absolute;top:-4px;inset-inline-end:-4px;font-size:10px">${unreadNotifs()}</i>`:""}</button>
     <button class="iconbtn" onclick="openSettings()" title="Settings">⚙️</button>
   </div>
-  ${S.announce&&S.announce.text?`<div class="annc">📢 <span class="nt" style="flex:1">${esc(S.announce.text)}</span></div>`:""}
+  ${S.announce&&S.announce.text&&S.annHide!==(S.announce.at||1)?annBanner(S.announce.text,"g"):""}
   <div class="coinbar"><span class="coin">K</span><b style="font-size:17px;flex:1">${fmt(m.coins)}</b><button class="gbtn" onclick="openDaily()">Get coins ＋</button></div>
   <div class="feat">${feats.map(([e,n,f],i)=>`<button class="fcard fimg" title="${n}" aria-label="${n}" onclick="${f}"><span class="fb f${i}"></span></button>`).join("")}</div>
   <button class="lvcard" onclick="openLevels()" aria-label="Level ${l}">
@@ -1603,6 +1692,7 @@ async function doDeleteRoom(){ const id=S.cur.id; closeModal(); try{ await S.db.
 async function enterRoom(id){
   const r=S.rooms.find(x=>x.id===id); if(!r) return toast("Room not found");
   if(isBannedIn(r,S.uid)) return toast(t("You were removed from this room"));
+  if(S.cur&&S.cur.id===id){ roomRestore(); return; }
   if (S.cur) await leaveRoom(true);
   S.cur={id,data:r,peers:[],msgs:[],unsub:[],named:null,seat:null,seen:new Set(),t0:Date.now()};
   const rv=$("#roomView"); rv.classList.add("show");
@@ -1613,8 +1703,8 @@ async function enterRoom(id){
       <div style="flex:1"></div>
       <button class="dkbtn pkhead" onclick="openPK()" title="PK">⚔️</button>
       <button class="dkbtn" id="sndbtn" onclick="toggleSound()" title="Sound">${S.sound?"🔊":"🔇"}</button>
-      <button class="dkbtn" onclick="shareRoom()" title="Share">🔗</button>
-      <button class="dkbtn" onclick="leaveRoom()" title="Leave">⏻</button>
+      <button class="dkbtn" onclick="openInvite()" title="Invite">🔗</button>
+      <button class="dkbtn" onclick="roomMenu(event)" title="Menu">⏻</button>
     </div>
     <div style="display:flex;align-items:center;justify-content:space-between;padding:0 12px 0 0;position:relative">
       <button class="trophy" id="trophy" onclick="openRankings('rooms')"></button>
@@ -1671,7 +1761,7 @@ async function leaveRoom(silent){
   if(!S.cur) return;
   if(typeof lvLeave==="function") lvLeave();
   clearInterval(S.pkTimer); if(CR.open) crashClose(); if(L7.open) luckyClose();
-  const c=S.cur; S.cur=null;
+  const c=S.cur; S.cur=null; { const bb=$("#rbub"); if(bb) bb.remove(); const mm=$("#rmn"); if(mm) mm.remove(); }
   c.unsub.forEach(f=>{try{f()}catch(e){}});
   try{ c.named && await c.named.leave(); }catch(e){}
   try{ S.room && S.room.presence({inRoom:null}).catch(()=>{}); }catch(e){}
@@ -1690,7 +1780,7 @@ function roomPeople(){
   return [...out.values()];
 }
 function renderRoomHead(){
-  if(!S.cur) return; const r=S.cur.data;
+  if(!S.cur) return; const r=S.cur.data; if(S.cur.min) setTimeout(roomBubble,0);
   $("#rpill").innerHTML=`<div class="rav" style="background:${THEMES[r.theme||0]}">${esc(r.icon||"🏰")}</div><div style="min-width:0"><b>${esc(r.name)}</b><small><span class="lv1">${cflag(r.country)}</span>ID:${esc(roomDispId(r))}</small></div>`;
   $("#trophy").innerHTML=`🏆 ${fmt(r.score||0)} ›`;
   const ppl=roomPeople();
@@ -1709,7 +1799,7 @@ function renderSeats(){
     const p=bySeat[i];
     if(p){ const pr=prof(p.uid); h+=`<button class="seat" data-u="${esc(p.uid)}" onclick="${p.uid===S.uid?"toggleSeat()":"openUser(this.dataset.u)"}"><div class="s taken ${p.uid===S.uid?"me":""} ${pkOn&&pkTeamOf(p.uid)?"pk-"+pkTeamOf(p.uid):""} ${speaking===p.uid||LV.speaking.has(p.uid)?"speak":talking.has(p.uid)?"talk":""}" style="background:${AVBG[(pr.c||0)%AVBG.length]}">${p.uid===owner?'<span class="crown">👑</span>':""}${(()=>{const src=avatarSrc(pr);return src?`<img src="${esc(src)}" alt="" style="width:100%;height:100%;border-radius:50%;object-fit:cover">`:esc(pr.av||"👤")})()}${liveVoice()?`<span class="mb ${(p.uid===S.uid?LV.on:p.mic)?"on":""}">${(p.uid===S.uid?LV.on:p.mic)?"🎙️":"🔇"}</span>`:""}</div><span class="n">${esc(pr.nick||"...")}</span></button>`; }
     else if((S.cur.data.lockedSeats||[]).includes(i)) h+=`<button class="seat" onclick="${isRoomAdmin(S.uid)?`openSeatMenu(${i})`:`toast(t('This seat is locked'))`}"><div class="s" style="opacity:.6">🔒</div><span class="n">${i+1}</span></button>`;
-    else h+=`<button class="seat" onclick="${isRoomAdmin(S.uid)&&i>0?`openSeatMenu(${i})`:`takeSeat(${i})`}"><div class="s">${i===0?'<span class="crown">👑</span>':""}<svg class="mic" viewBox="0 0 24 24" fill="#fff"><path d="M12 14a3 3 0 0 0 3-3V5a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.9V21h2v-3.1A7 7 0 0 0 19 11z"/></svg></div><span class="n">${i===0?"Owner":i+1}</span></button>`;
+    else h+=`<button class="seat" onclick="${isRoomAdmin(S.uid)&&i>0?`openSeatMenu(${i})`:`seatTap(${i},event)`}"><div class="s">${i===0?'<span class="crown">👑</span>':""}<svg class="mic" viewBox="0 0 24 24" fill="#fff"><path d="M12 14a3 3 0 0 0 3-3V5a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.9V21h2v-3.1A7 7 0 0 0 19 11z"/></svg></div><span class="n">${i===0?"Owner":i+1}</span></button>`;
   }
   $("#seats").innerHTML=h;
   layoutRoom();
@@ -1730,7 +1820,7 @@ function toggleSeat(){
 function renderMsgs(){
   if(!S.cur) return; const el=$("#msgs"); if(!el) return;
   const atBottom=el.scrollHeight-el.scrollTop-el.clientHeight<60;
-  let h=`<div class="notice"><b>Official announcement:</b> ${esc(S.cur.data.notice||"Welcome 🌹")}</div>`;
+  let h=S.cur.noticeHide?"":annBanner(S.cur.data.notice||"Welcome 🌹","r");
   for(const m of S.cur.msgs){
     if(isBlocked(m.uid)||m.type==="voice"||(m.at||0)<S.cur.t0-1500) continue;
     const p=prof(m.uid), nick=esc(p.nick||m.nick||"Guest"), vc=VIPC[vipOf(p)]||"";
@@ -2502,6 +2592,16 @@ const DICT_ROWS=[
 ["Theme","ڕووکار","Tema","المظهر","Tema"],
 ["Country","وڵات","Welat","الدولة","Ülke"],
 ["Category","پۆل","Kategorî","الفئة","Kategori"],
+["Switch","گۆڕین","Biguhere","تبديل","Değiştir"],
+["Minimize","بچووککردنەوە","Biçûk bike","تصغير","Küçült"],
+["Exit","دەرچوون","Derkeve","خروج","Çık"],
+["Invite","بانگێشت","Vexwîne","دعوة","Davet et"],
+["Invite to this room","بانگێشتکردن بۆ ئەم ڕووم","Vexwendin ji bo vê odeyê","دعوة إلى هذه الغرفة","Bu odaya davet et"],
+["Copy link","کۆپیکردنی بەستەر","Lînkê kopî bike","نسخ الرابط","Bağlantıyı kopyala"],
+["Sent","نێردرا","Hate şandin","تم الإرسال","Gönderildi"],
+["No one to invite","کەس نییە بۆ بانگێشت","Kes tune ku were vexwendin","لا أحد للدعوة","Davet edilecek kimse yok"],
+["invited you to","بانگێشتی کردیت بۆ","te vexwend ji bo","دعاك إلى","seni davet etti:"],
+["Join","بەشدار بە","Beşdar be","انضم","Katıl"],
 ["Official announcement","ڕاگەیاندنی فەرمی","Daxuyaniya fermî","إعلان رسمي","Resmi duyuru"],
 ["Save","پاشەکەوتکردن","Tomar bike","حفظ","Kaydet"],
 ["Delete room","سڕینەوەی ژوور","Odeyê jê bibe","حذف الغرفة","Odayı sil"],
@@ -3069,13 +3169,14 @@ function notifText(n){
   if(n.type==="comment") return t("commented on your post");
   if(n.type==="gift"){ const g=giftOf(n.gift); return t("sent you a gift")+` ${g.e}${n.qty>1?" x"+n.qty:""}`; }
   if(n.type==="admin") return t("made you a room admin");
+  if(n.type==="invite") return t("invited you to")+" "+(n.ricon||"🏰")+" "+(n.rname||"");
   return "";
 }
 function openNotifs(){
   const list=S.notifs.filter(n=>!isBlocked(n.from)).slice(0,100);
   const ann=S.announce&&S.announce.text?`<div class="mission" style="border-color:var(--gold)"><div style="font-size:24px">📢</div><div class="t"><b>DANGI KURDISTAN</b><small class="nt">${esc(S.announce.text)}</small></div></div>`:"";
   openModal(ann+(list.map(n=>{ const p=prof(n.from), seen=n.at<=(S.me.notifSeen||0);
-    return `<button class="lb" style="width:100%;${seen?"opacity:.7":""}" data-u="${esc(n.from)}" onclick="${n.type==="follow"||n.type==="gift"?"openUser(this.dataset.u)":"closeModal();go('moments')"}">${avHTML(p,40)}<div style="flex:1;text-align:start"><b class="nt">${esc(p.nick)}</b> <span>${notifText(n)}</span><div style="font-size:11px;color:var(--muted)">${ago(n.at)}</div></div>${seen?"":'<span class="badge">●</span>'}</button>`; }).join("")||(ann?"":`<div class="empty"><div class="em">🔔</div>No notifications yet</div>`)),{title:"🔔 Notifications"});
+    return `<button class="lb" style="width:100%;${seen?"opacity:.7":""}" data-u="${esc(n.from)}" onclick="${n.type==="invite"?`closeModal();enterRoom('${String(n.room||"").replace(/\W/g,"")}')`:n.type==="follow"||n.type==="gift"?"openUser(this.dataset.u)":"closeModal();go('moments')"}">${avHTML(p,40)}<div style="flex:1;text-align:start"><b class="nt">${esc(p.nick)}</b> <span>${notifText(n)}</span><div style="font-size:11px;color:var(--muted)">${ago(n.at)}</div></div>${seen?"":'<span class="badge">●</span>'}</button>`; }).join("")||(ann?"":`<div class="empty"><div class="em">🔔</div>No notifications yet</div>`)),{title:"🔔 Notifications"});
   saveMe({notifSeen:Date.now(),annSeen:Date.now()});
 }
 
@@ -3152,7 +3253,7 @@ const onlineDot=uid=>isOnline(uid)?`<span class="on-dot" title="Online"></span>`
 function setHash(h){ try{ if(h) location.hash=h; else if(location.hash) history.replaceState(null,"",location.pathname+location.search); }catch(e){} }
 function routeHash(){
   const m=(location.hash||"").match(/^#room-(\d{6})$/); if(!m||!S.me) return;
-  if(S.cur&&S.cur.id===m[1]) return;
+  if(S.cur&&S.cur.id===m[1]){ if(S.cur.min) roomRestore(); return; }
   if(S.rooms.some(r=>r.id===m[1])) enterRoom(m[1]); else S.pendingRoom=m[1];
 }
 window.addEventListener("hashchange",routeHash);
