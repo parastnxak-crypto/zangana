@@ -1697,8 +1697,7 @@ function viewHome(){
   </button>
   <div class="sect"><h3>🎮 Games</h3><a onclick="openAllGames()">All games</a></div>
   <div class="hscroll">${games.map(([e,n,s,bg,f])=>`<button class="gtile" style="background:${bg}" onclick="${f}"><span class="em">${e}</span><span>${n}</span><small>${s}</small></button>`).join("")}</div>
-  <div class="sect"><h3>🔥 Active Rooms</h3><a onclick="go('rooms')">All</a></div>
-  ${hot.length?`<div class="grid2">${hot.map(roomCard).join("")}</div>`:`<div class="empty"><div class="em">🏰</div>No rooms yet<br><br><button class="gbtn" onclick="openCreateRoom()">Create the first room</button></div>`}`;
+  `;
 }
 
 /* ============ ROOMS ============ */
