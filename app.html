@@ -789,6 +789,8 @@ input:focus,textarea:focus,select:focus{outline:none;box-shadow:0 0 0 3px rgba(2
 #ytbar .ytv iframe{width:100%;height:100%;border:0;display:block}
 #ytbar .ytt{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px;font-size:12.5px}
 #ytbar .ytt small{color:#e9d9a8;font-size:10.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#ytbar.big .ytv{width:150px;height:84px}
+#ytbar .ytl{display:inline-block;margin-top:3px;background:linear-gradient(135deg,#ffe08a,#f0a81c);color:#3b2400;font-weight:800;font-size:12px;padding:5px 11px;border-radius:10px;text-decoration:none;align-self:flex-start}
 #ytbar .ytb{display:flex;flex-direction:column;gap:5px}
 #ytbar .ytb button{background:rgba(255,255,255,.12);color:#fff;border-radius:10px;padding:4px 9px;font-size:11px;white-space:nowrap}
 #ytbar .ytb button.all{background:linear-gradient(135deg,#ffe08a,#f0a81c);color:#3b2400;font-weight:800}
@@ -2599,13 +2601,32 @@ function ytCanStop(){ const y=S.cur&&S.cur.yt; return !!y&&(y.uid===S.uid||S.cur
 function ytBar(){
   const el=$("#ytbar"); if(!el) return; const y=S.cur&&S.cur.yt;
   if(!y){ el.innerHTML=""; el.style.display="none"; return; }
-  el.style.display="flex";
-  el.innerHTML=`<div class="ytv"><iframe src="https://www.youtube.com/embed/${y.vid}?autoplay=1&playsinline=1&rel=0&modestbranding=1&start=${y.off||0}" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" referrerpolicy="strict-origin-when-cross-origin" title="YouTube"></iframe></div>
-    <div class="ytt"><b>🎵 ${esc(t("Now playing"))}</b><small>${esc(t("Played by"))} ${esc(y.nick||"")}</small></div>
-    <div class="ytb"><button onclick="ytStop(false)">✕ ${esc(t("Hide"))}</button>${ytCanStop()?`<button class="all" onclick="ytStop(true)">⏹ ${esc(t("Stop for everyone"))}</button>`:""}</div>`;
+  el.style.display="flex"; el.classList.toggle("big",!!y.hint);
+  const org=/^https?:/.test(location.origin)?"&origin="+encodeURIComponent(location.origin):"";
+  const link="https://www.youtube.com/watch?v="+y.vid;
+  const mid=`<b>🎵 ${esc(t("Now playing"))}</b><small>${esc(t("Played by"))} ${esc(y.nick||"")}</small>
+      ${y.err?`<small style="color:#ffb3a8;white-space:normal">${esc(t("This video can't be played inside the app"))}</small><a class="ytl" href="${link}" target="_blank" rel="noopener">▶ ${esc(t("Open in YouTube"))}</a>`:y.hint?`<button class="ytl" onclick="ytKick()">▶ ${esc(t("Tap to start"))}</button>`:""}`;
+  const btn=`<button onclick="ytStop(false)">✕ ${esc(t("Hide"))}</button>${ytCanStop()?`<button class="all" onclick="ytStop(true)">⏹ ${esc(t("Stop for everyone"))}</button>`:""}`;
+  const ex=el.querySelector("#ytf");
+  if(ex&&ex.dataset.v===y.vid&&ex.dataset.a===String(y.at)){ el.querySelector(".ytt").innerHTML=mid; el.querySelector(".ytb").innerHTML=btn; }
+  else el.innerHTML=`<div class="ytv"><iframe id="ytf" data-v="${y.vid}" data-a="${y.at}" src="https://www.youtube.com/embed/${y.vid}?autoplay=1&playsinline=1&rel=0&modestbranding=1&enablejsapi=1${org}&start=${y.off||0}" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" referrerpolicy="strict-origin-when-cross-origin" title="YouTube" onload="ytListen()"></iframe></div><div class="ytt">${mid}</div><div class="ytb">${btn}</div>`;
+  clearTimeout(S.cur.ytT); S.cur.ytT=setTimeout(()=>{ const c=S.cur; if(c&&c.yt&&c.yt.vid===y.vid&&!c.yt.playing&&!c.yt.err&&!c.yt.hint){ c.yt.hint=true; ytBar(); } },3500);
 }
+function ytCmd(f,a){ const fr=$("#ytf"); try{ fr&&fr.contentWindow.postMessage(JSON.stringify({event:"command",func:f,args:a||[]}),"*"); }catch(e){} }
+function ytListen(){ const fr=$("#ytf"); try{ fr&&fr.contentWindow.postMessage(JSON.stringify({event:"listening",id:1,channel:"widget"}),"*"); }catch(e){} }
+function ytKick(){ ytCmd("unMute"); ytCmd("setVolume",[100]); ytCmd("playVideo"); }
+window.addEventListener("message",e=>{
+  if(!S.cur||!S.cur.yt||!/(^|\.)youtube(-nocookie)?\.com$/.test((()=>{try{return new URL(e.origin).hostname}catch(_){return ""}})())) return;
+  let d; try{ d=typeof e.data==="string"?JSON.parse(e.data):e.data; }catch(_){ return; } if(!d) return;
+  const y=S.cur.yt, st=d.event==="onStateChange"?d.info:(d.event==="infoDelivery"&&d.info&&d.info.playerState!=null?d.info.playerState:null);
+  const code=d.event==="onError"?d.info:(d.event==="infoDelivery"&&d.info&&d.info.errorCode?d.info.errorCode:null);
+  if(code){ y.err=true; ytBar(); return; }
+  if(st===1||st===3){ if(!y.playing||y.hint){ y.playing=true; y.hint=false; clearTimeout(S.cur.ytT); ytBar(); } }
+  else if(st===0){ ytClear(); }
+});
 function ytStart(m,off){
   if(!S.cur||!m||!m.vid||S.cur.ytOff===m.vid+":"+m.at) return;
+  const c=S.cur.yt; if(c&&c.vid===m.vid&&c.uid===m.uid&&Math.abs((c.at||0)-(m.at||0))<20000) return;
   S.cur.yt={vid:m.vid,uid:m.uid,nick:m.nick,at:m.at,off:off||0}; ytBar();
 }
 function ytClear(){ if(!S.cur) return; S.cur.yt=null; ytBar(); }
@@ -2620,7 +2641,7 @@ function ytSubmit(){
   const i=$("#ytin"); const id=ytId(i&&i.value); if(!id) return toast(t("Invalid YouTube link"));
   if(isMutedIn(S.cur.data,S.uid)) return toast(t("You are muted in this room"));
   if(Date.now()-lastYt<8000) return toast("Please wait a moment..."); lastYt=Date.now();
-  closeModal(); postRoom({type:"music",vid:id,text:"played a song"});
+  closeModal(); S.cur.ytOff=null; ytStart({vid:id,uid:S.uid,nick:S.me.nick,at:Date.now()},0); postRoom({type:"music",vid:id,text:"played a song"});
 }
 let lastSfx=0;
 function sendSfx(k){ if(isMutedIn(S.cur.data,S.uid)) return toast(t("You are muted in this room")); if(Date.now()-lastSfx<2500) return toast("Please wait a moment..."); lastSfx=Date.now(); closeModal(); postRoom({type:"sfx",sfx:k}); }
@@ -2718,6 +2739,9 @@ const DICT_ROWS=[
 ["Country","وڵات","Welat","الدولة","Ülke"],
 ["Category","پۆل","Kategorî","الفئة","Kategori"],
 ["VIP member","ئەندامی VIP","Endamê VIP","عضو VIP","VIP üye"],
+["Tap to start","بۆ دەستپێکردن دابگرە","Ji bo destpêkirinê bitikîne","اضغط للتشغيل","Başlatmak için dokun"],
+["Open in YouTube","لە یوتوب بیکەرەوە","Di YouTube de veke","افتح في يوتيوب","YouTube'da aç"],
+["This video can't be played inside the app","ئەم ڤیدیۆیە لە ناو ئەپەکە ناگیرێت","Ev vîdyo di nav sepanê de nayê lêdan","لا يمكن تشغيل هذا الفيديو داخل التطبيق","Bu video uygulama içinde oynatılamıyor"],
 ["Now playing","ئێستا لێدەدرێت","Niha tê lêdan","يُشغَّل الآن","Şimdi çalıyor"],
 ["Played by","لەلایەن","Ji aliyê","بواسطة","Çalan"],
 ["Hide","شاردنەوە","Veşêre","إخفاء","Gizle"],
