@@ -748,7 +748,7 @@ input:focus,textarea:focus,select:focus{outline:none;box-shadow:0 0 0 3px rgba(2
 .rcard.vipc .vtag{position:absolute;top:8px;left:8px;background:linear-gradient(135deg,#ffe08a,#f0a81c);color:#4a2d00;border-radius:8px;padding:1px 7px;font-size:10px;font-weight:800;box-shadow:0 2px 6px rgba(0,0,0,.4);z-index:2}
 @keyframes vipled{to{background-position:300% 0}}
 /* ===== VIP luxury entrance banner ===== */
-.vbn{position:absolute;top:24%;left:50%;width:min(94%,380px);transform:translateX(-50%);z-index:3;pointer-events:none;animation:vbnIn 5s cubic-bezier(.2,.9,.25,1) forwards}
+.vbn{position:absolute;top:47%;left:50%;width:min(94%,380px);transform:translateX(-50%);z-index:3;pointer-events:none;animation:vbnIn 5s cubic-bezier(.2,.9,.25,1) forwards}
 .vbn .vb{position:relative;display:flex;align-items:center;gap:10px;padding:9px 16px 9px 10px;border-radius:40px;overflow:hidden;color:#fff;background:linear-gradient(100deg,rgba(18,12,4,.94),rgba(52,34,8,.94) 55%,rgba(18,12,4,.94));border:2px solid var(--vc);box-shadow:0 0 0 1px rgba(255,236,170,.55) inset,0 0 18px var(--vc),0 10px 26px rgba(0,0,0,.55)}
 .vbn .vb:before{content:"";position:absolute;inset:0;background:linear-gradient(105deg,transparent 35%,rgba(255,240,190,.55) 50%,transparent 65%);transform:translateX(-120%);animation:vbnShine 1.6s .6s ease-in-out 2}
 .vbn .vav{position:relative;flex:none;border-radius:50%;padding:2px;background:linear-gradient(135deg,#fff2b0,var(--vc),#fff2b0);box-shadow:0 0 10px var(--vc)}
@@ -3256,7 +3256,7 @@ function showEntry(uid){
   const p=prof(uid), v=Math.max(vipOf(p),isVipId(uid)?5:0); if(!v||!$("#roomView").classList.contains("show")) return;
   const vc=["","#c9d3e6","#3fe0c8","#5aa2ff","#b57bff","#ff4fa3","#ff8a3d","#ffd45a"][v]||"#ffd45a";
   const el=document.createElement("div"); el.className="vbn"; el.style.setProperty("--vc",vc);
-  el.innerHTML=`<div class="vb"><div class="vav"><span class="vcr">👑</span>${avHTML(p,40)}</div><div class="vtx"><small>${esc(t("VIP member"))}</small><b>${esc(p.nick)}</b><span>${esc(t("joined the room"))} ✨</span></div><span class="vlv">VIP ${v}</span></div>`;
+  el.innerHTML=`<div class="vb"><div class="vav">${avHTML(p,40)}</div><div class="vtx"><small>${esc(t("VIP member"))}</small><b>${esc(p.nick)}</b><span>${esc(t("joined the room"))} ✨</span></div><span class="vlv">VIP ${v}</span></div>`;
   $("#fxLayer").appendChild(el); setTimeout(()=>el.remove(),5100);
   if(v>=4) playSnd("fanfare");
 }
