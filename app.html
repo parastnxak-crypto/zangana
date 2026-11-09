@@ -736,6 +736,12 @@ input:focus,textarea:focus,select:focus{outline:none;box-shadow:0 0 0 3px rgba(2
 .invpop{position:absolute;left:8px;right:8px;top:10px;z-index:58;display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:18px;background:linear-gradient(135deg,#3b2a8c,#1c1050);border:2px solid #ffd45a;color:#fff;box-shadow:0 10px 28px rgba(0,0,0,.5);animation:crIn .3s}
 .invpop .it{flex:1;min-width:0;display:flex;flex-direction:column}.invpop .it b{font-size:14px}.invpop .it small{font-size:12px;color:#d8ccff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .invpop .ix{color:#fff;opacity:.7;font-size:15px}
+/* ===== room picture ===== */
+.rav{overflow:hidden}.rav .ri{font-weight:800;color:#fff;font-size:17px;text-shadow:0 1px 3px rgba(0,0,0,.5)}
+.rcover .rph{width:104px;height:104px;border-radius:24px;overflow:hidden;border:3px solid rgba(255,255,255,.92);box-shadow:0 8px 20px rgba(0,0,0,.55);background:#222}
+.rcover .rph img{width:100%;height:100%;object-fit:cover;display:block}
+.rcover .rph.sm{width:84px;height:84px;border-radius:20px}
+.rpicbtns{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
 </style>
 </head>
 <body>
@@ -1447,7 +1453,7 @@ function roomMin(){
 function roomBubble(){
   let b=$("#rbub"); if(!S.cur||!S.cur.min){ if(b) b.remove(); return; }
   const r=S.cur.data; if(!b){ b=document.createElement("div"); b.id="rbub"; b.className="rbub"; b.onclick=roomRestore; $("#app").appendChild(b); }
-  b.innerHTML=`<div class="rav" style="background:${THEMES[r.theme||0]}">${esc(r.icon||"🏰")}</div><div class="rbt"><b>${esc(r.name)}</b><small><span class="eq"><i></i><i></i><i></i></span> ${roomPeople().length} 👤</small></div><button class="rbx" aria-label="Exit" onclick="event.stopPropagation();leaveRoom()">✕</button>`;
+  b.innerHTML=`<div class="rav" style="background:${THEMES[r.theme||0]}">${roomAv(r)}</div><div class="rbt"><b>${esc(r.name)}</b><small><span class="eq"><i></i><i></i><i></i></span> ${roomPeople().length} 👤</small></div><button class="rbx" aria-label="Exit" onclick="event.stopPropagation();leaveRoom()">✕</button>`;
 }
 function roomRestore(){
   if(!S.cur) return; S.cur.min=false; const b=$("#rbub"); if(b) b.remove();
@@ -1466,7 +1472,7 @@ function openInvite(){
 }
 function inviteSend(btn){
   if(!S.cur) return; const u=btn.dataset.u; const sent=(S.cur.invited=S.cur.invited||new Set()); if(sent.has(u)) return;
-  sent.add(u); const r=S.cur.data; notify(u,"invite",{room:S.cur.id,rname:r.name||"",ricon:r.icon||"🏰"});
+  sent.add(u); const r=S.cur.data; notify(u,"invite",{room:S.cur.id,rname:r.name||"",ricon:""});
   btn.textContent="✓ "+t("Sent"); btn.classList.add("done"); try{ playSnd&&playSnd("pop"); }catch(e){}
 }
 function inviteWatch(){
@@ -1479,9 +1485,40 @@ function inviteWatch(){
 function showInvite(n){
   const old=$("#invpop"); if(old) old.remove(); const p=prof(n.from), room=String(n.room||"").replace(/\W/g,"");
   const d=document.createElement("div"); d.id="invpop"; d.className="invpop";
-  d.innerHTML=`${avHTML(p,40)}<div class="it"><b class="nt">${esc(p.nick)}</b><small>${esc(t("invited you to"))} ${esc(n.ricon||"🏰")} ${esc(n.rname||"")}</small></div><button class="gbtn" onclick="document.getElementById('invpop').remove();enterRoom('${room}')">${esc(t("Join"))}</button><button class="ix" onclick="document.getElementById('invpop').remove()">✕</button>`;
+  d.innerHTML=`${avHTML(p,40)}<div class="it"><b class="nt">${esc(p.nick)}</b><small>${esc(t("invited you to"))} ${esc(n.rname||"")}</small></div><button class="gbtn" onclick="document.getElementById('invpop').remove();enterRoom('${room}')">${esc(t("Join"))}</button><button class="ix" onclick="document.getElementById('invpop').remove()">✕</button>`;
   $("#app").appendChild(d); try{ playSnd&&playSnd("chime"); }catch(e){}
   setTimeout(()=>{ if(d.isConnected) d.remove(); },15000);
+}
+/* ===== room picture chosen by the owner (replaces the emoji icons) ===== */
+const roomPhoto=r=>r&&typeof r.photo==="string"&&r.photo.startsWith("data:image/")?r.photo:null;
+function roomAv(r){ const p=roomPhoto(r); return p?`<img src="${p}" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:inherit;display:block">`:`<span class="ri">${esc(((r&&r.name)||"?").trim().charAt(0).toUpperCase())}</span>`; }
+async function makeRoomPhoto(file){
+  let bmp; try{ bmp=await createImageBitmap(file); }catch(e){ const url=URL.createObjectURL(file); bmp=await new Promise((res,rej)=>{ const im=new Image(); im.onload=()=>res(im); im.onerror=rej; im.src=url; }); }
+  const W=bmp.width, H=bmp.height, S0=300, tw=Math.min(W,H*1), th=tw; // square crop, centered
+  const c=document.createElement("canvas"); c.width=c.height=S0; const x=c.getContext("2d");
+  x.drawImage(bmp,(W-tw)/2,(H-th)/2,tw,th,0,0,S0,S0);
+  let q=.85, url=c.toDataURL("image/jpeg",q); while(url.length>42000&&q>.35){ q-=.08; url=c.toDataURL("image/jpeg",q); }
+  const blob=await new Promise(r=>c.toBlob(r,"image/jpeg",q)); return {url,blob};
+}
+async function screenRoomPhoto(blob){
+  try{
+    if(!S.sample||!S.sample.limits) return {ok:true};
+    const lim=await S.sample.limits(); if(!lim||!lim.images) return {ok:true};
+    const r=await S.sample(`You are screening a picture for a family-friendly social app's room cover. Approve it unless it contains nudity or sexual content, violence or gore, weapons, hate symbols, or phone numbers/contact details. Logos, art, landscapes, people and cartoons are fine. Reply with JSON only: {"ok": true or false, "reason": "one short sentence in ${LANGS[S.lang].full}"}`,{images:[blob],modelTier:"quick"});
+    const m=(r.text||"").match(/\{[\s\S]*\}/); if(!m) return {ok:true}; const j=JSON.parse(m[0]); return {ok:!!j.ok,reason:String(j.reason||"")};
+  }catch(e){ return {ok:true}; }
+}
+function pickRoomPhoto(mode,done){
+  const inp=document.createElement("input"); inp.type="file"; inp.accept="image/*"; if(mode==="camera") inp.setAttribute("capture","environment");
+  inp.style.display="none"; document.body.appendChild(inp);
+  inp.onchange=async()=>{
+    const f=inp.files&&inp.files[0]; inp.remove(); if(!f) return; toast(t("Checking your photo..."));
+    try{ const {url,blob}=await makeRoomPhoto(f), v=await screenRoomPhoto(blob);
+      if(!v.ok) return toast("🚫 "+(v.reason||t("Photo not accepted")));
+      done(url);
+    }catch(e){ console.warn(e); toast(t("Couldn't read that image")); }
+  };
+  inp.click();
 }
 function hideSplash(){ $("#splash").classList.add("hide"); }
 
@@ -1618,7 +1655,7 @@ const roomDispId=r=>(r&&r.ownerId&&idOf(r.ownerId))||(r&&r.id)||"";
 function roomCard(r){
   const n=roomCount(r.id);
   return `<button class="rcard" data-id="${esc(r.id)}" onclick="enterRoom(this.dataset.id)">
-    <div class="rcover" style="background:${THEMES[r.theme||0]}">${n?'<span class="live">LIVE</span>':""}<span class="em">${esc(r.icon||"🏰")}</span><span class="cnt">👥 ${n}</span></div>
+    <div class="rcover" style="background:${THEMES[r.theme||0]}">${n?'<span class="live">LIVE</span>':""}${roomPhoto(r)?`<span class="rph"><img src="${roomPhoto(r)}" alt=""></span>`:""}<span class="cnt">👥 ${n}</span></div>
     <div class="rmeta"><b>${cflag(r.country)} ${esc(r.name)}</b>${r.cat?`<small>${(ROOM_CATS.find(c=>c[0]===r.cat)||[])[1]||""}</small>`:""}<small>ID:${esc(roomDispId(r))}</small></div></button>`;
 }
 function viewRooms(){
@@ -1657,9 +1694,9 @@ function openCreateRoom(edit){
   const r=edit||{name:"",icon:pick(ROOM_ICONS),theme:rnd(0,THEMES.length-1),country:S.me.country||"ku",cat:"chat",notice:"Welcome to our room 🌹 Please be respectful"};
   const st={...r};
   const draw=()=>openModal(`
-    <div class="rcover" style="background:${THEMES[st.theme]};border-radius:16px;height:120px;margin-bottom:12px"><span class="em">${esc(st.icon)}</span></div>
+    <div class="rcover" style="background:${THEMES[st.theme]};border-radius:16px;height:150px;margin-bottom:12px">${roomPhoto(st)?`<span class="rph"><img src="${roomPhoto(st)}" alt=""></span>`:""}</div>
     <label class="field"><span>Room name</span><input id="cr_n" maxlength="28" value="${esc(st.name)}" placeholder="e.g. Kurdish Lounge"></label>
-    <div class="field"><span>Icon</span><div class="pick">${ROOM_ICONS.map(a=>`<button class="${a===st.icon?"on":""}" onclick="crSet('icon','${a}')">${a}</button>`).join("")}</div></div>
+    <div class="field"><span>${esc(t("Room picture"))}</span><div class="rpicbtns"><button class="gbtn" style="padding:8px 14px;font-size:13px" onclick="crPhoto('gallery')">🖼️ ${esc(t("Choose from gallery"))}</button><button class="gbtn dark" style="padding:8px 14px;font-size:13px" onclick="crPhoto('camera')">📷 ${esc(t("Take a photo"))}</button>${roomPhoto(st)?`<button class="gbtn dark" style="padding:8px 14px;font-size:13px;color:#ff8a8a" onclick="crSet('photo','')">🗑️ ${esc(t("Remove"))}</button>`:""}</div></div>
     <div class="field"><span>Theme</span><div class="pick">${THEMES.map((b,i)=>`<button class="swatch ${i===st.theme?"on":""}" style="background:${b}" onclick="crSet('theme',${i})"></button>`).join("")}</div></div>
     <div class="field"><span>Category</span><div class="catrow" style="padding:0;flex-wrap:wrap">${ROOM_CATS.map(([k,e,n])=>`<button class="cat ${k===(st.cat||"chat")?"on":""}" onclick="crSet('cat','${k}')">${e} ${n}</button>`).join("")}</div></div>
     <label class="field"><span>Country</span><select id="cr_c">${countryOptions(st.country)}</select></label>
@@ -1667,10 +1704,11 @@ function openCreateRoom(edit){
     <button class="gbtn" style="width:100%;padding:12px" onclick="crSave()">${edit?"Save":"Create room 🏰"}</button>
     ${edit?`<button style="width:100%;margin-top:10px;color:var(--red);padding:8px" onclick="deleteRoom()">🗑️ Delete room</button>`:""}`,{title:edit?"✏️ Edit room":"🏰 New room"});
   window.crSet=(k,v)=>{ st.name=$("#cr_n").value; st.notice=$("#cr_a").value; st.country=$("#cr_c").value; st[k]=v; draw(); };
+  window.crPhoto=mode=>{ st.name=$("#cr_n").value; st.notice=$("#cr_a").value; st.country=$("#cr_c").value; pickRoomPhoto(mode,u=>{ st.photo=u; draw(); }); };
   window.crSave=async()=>{
     const name=$("#cr_n").value.trim(); if(!name) return toast("Enter a room name");
     if(!edit){ const d=dayStats(); if((d.rooms||0)>=3) return toast(t("You can create up to 3 rooms per day")); d.rooms=(d.rooms||0)+1; S.me.day=d; }
-    const body={name,icon:st.icon,theme:st.theme,cat:st.cat||"chat",country:$("#cr_c").value,notice:$("#cr_a").value.trim().slice(0,200)};
+    const body={name,icon:st.icon||"🏰",photo:roomPhoto(st)||"",theme:st.theme,cat:st.cat||"chat",country:$("#cr_c").value,notice:$("#cr_a").value.trim().slice(0,200)};
     try{
       if(edit){ await S.db.doc("rooms/"+edit.id).update(body); closeModal(); toast("Saved ✓"); }
       else{
@@ -1781,7 +1819,7 @@ function roomPeople(){
 }
 function renderRoomHead(){
   if(!S.cur) return; const r=S.cur.data; if(S.cur.min) setTimeout(roomBubble,0);
-  $("#rpill").innerHTML=`<div class="rav" style="background:${THEMES[r.theme||0]}">${esc(r.icon||"🏰")}</div><div style="min-width:0"><b>${esc(r.name)}</b><small><span class="lv1">${cflag(r.country)}</span>ID:${esc(roomDispId(r))}</small></div>`;
+  $("#rpill").innerHTML=`<div class="rav" style="background:${THEMES[r.theme||0]}">${roomAv(r)}</div><div style="min-width:0"><b>${esc(r.name)}</b><small><span class="lv1">${cflag(r.country)}</span>ID:${esc(roomDispId(r))}</small></div>`;
   $("#trophy").innerHTML=`🏆 ${fmt(r.score||0)} ›`;
   const ppl=roomPeople();
   $("#onl").innerHTML=`<span style="display:flex">${ppl.slice(0,3).map(p=>`<span style="margin-left:-6px">${avHTML(prof(p.uid),20)}</span>`).join("")}</span> 👤 ${ppl.length}`;
@@ -1873,7 +1911,7 @@ function openOnline(){
 function openRoomRank(){ return openRankings('rooms'); }
 function _oldRoomRank(){
   const l=[...S.rooms].sort((a,b)=>(b.score||0)-(a.score||0)).slice(0,30);
-  openModal(l.map((r,i)=>`<button class="lb" style="width:100%;text-align:start" data-id="${esc(r.id)}" onclick="closeModal();enterRoom(this.dataset.id)"><span class="rk2">${["🥇","🥈","🥉"][i]||i+1}</span><div class="rav" style="width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:22px;background:${THEMES[r.theme||0]}">${esc(r.icon)}</div><b style="flex:1">${esc(r.name)}</b><span>🏆 ${fmt(r.score||0)}</span></button>`).join("")||'<div class="empty">No rooms</div>',{title:"🏆 Room Ranking"});
+  openModal(l.map((r,i)=>`<button class="lb" style="width:100%;text-align:start" data-id="${esc(r.id)}" onclick="closeModal();enterRoom(this.dataset.id)"><span class="rk2">${["🥇","🥈","🥉"][i]||i+1}</span><div class="rav" style="width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:22px;overflow:hidden;background:${THEMES[r.theme||0]}">${roomAv(r)}</div><b style="flex:1">${esc(r.name)}</b><span>🏆 ${fmt(r.score||0)}</span></button>`).join("")||'<div class="empty">No rooms</div>',{title:"🏆 Room Ranking"});
 }
 
 /* ============ MOMENTS ============ */
@@ -2592,6 +2630,8 @@ const DICT_ROWS=[
 ["Theme","ڕووکار","Tema","المظهر","Tema"],
 ["Country","وڵات","Welat","الدولة","Ülke"],
 ["Category","پۆل","Kategorî","الفئة","Kategori"],
+["Room picture","وێنەی ڕووم","Wêneya odeyê","صورة الغرفة","Oda resmi"],
+["Remove","لابردن","Rake","إزالة","Kaldır"],
 ["Switch","گۆڕین","Biguhere","تبديل","Değiştir"],
 ["Minimize","بچووککردنەوە","Biçûk bike","تصغير","Küçült"],
 ["Exit","دەرچوون","Derkeve","خروج","Çık"],
@@ -3169,7 +3209,7 @@ function notifText(n){
   if(n.type==="comment") return t("commented on your post");
   if(n.type==="gift"){ const g=giftOf(n.gift); return t("sent you a gift")+` ${g.e}${n.qty>1?" x"+n.qty:""}`; }
   if(n.type==="admin") return t("made you a room admin");
-  if(n.type==="invite") return t("invited you to")+" "+(n.ricon||"🏰")+" "+(n.rname||"");
+  if(n.type==="invite") return t("invited you to")+" "+(n.rname||"");
   return "";
 }
 function openNotifs(){
@@ -3214,7 +3254,7 @@ async function openRankings(tab="wealth",period="week"){
   } else if(tab==="wealth"&&period==="all"){ Object.entries(S.profiles).forEach(([id,p])=>{ if(p.giftsSent) agg[id]=p.giftsSent; }); }
   else gifts.forEach(g=>{ const k=tab==="wealth"?g.from:g.to; if(k&&k!=="room") agg[k]=(agg[k]||0)+(+g.c||0); });
   const rows=Object.entries(agg).filter(([id])=>tab==="rooms"?S.rooms.some(r=>r.id===id):!isBlocked(id)).sort((a,b)=>b[1]-a[1]).slice(0,50);
-  const item=id=>tab==="rooms"?(()=>{ const r=S.rooms.find(x=>x.id===id); return {name:r.name,av:`<div style="width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:24px;background:${THEMES[r.theme||0]}">${esc(r.icon)}</div>`,click:`closeModal();enterRoom('${id}')`}; })()
+  const item=id=>tab==="rooms"?(()=>{ const r=S.rooms.find(x=>x.id===id); return {name:r.name,av:`<div style="width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:24px;overflow:hidden;background:${THEMES[r.theme||0]}">${roomAv(r)}</div>`,click:`closeModal();enterRoom('${id}')`}; })()
     :{name:prof(id).nick,av:avHTML(prof(id),44),click:`openUser('${id}')`,vip:vipBadge(prof(id))};
   const pod=rows.slice(0,3), medal=["🥇","🥈","🥉"], order=[1,0,2];
   const podium=pod.length?`<div style="display:flex;justify-content:center;align-items:flex-end;gap:10px;margin:6px 0 14px">${order.filter(i=>pod[i]).map(i=>{ const [id,v]=pod[i], it=item(id);
