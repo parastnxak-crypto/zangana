@@ -1453,7 +1453,7 @@ function roomMin(){
 function roomBubble(){
   let b=$("#rbub"); if(!S.cur||!S.cur.min){ if(b) b.remove(); return; }
   const r=S.cur.data; if(!b){ b=document.createElement("div"); b.id="rbub"; b.className="rbub"; b.onclick=roomRestore; $("#app").appendChild(b); }
-  b.innerHTML=`<div class="rav" style="background:${THEMES[r.theme||0]}">${roomAv(r)}</div><div class="rbt"><b>${esc(r.name)}</b><small><span class="eq"><i></i><i></i><i></i></span> ${roomPeople().length} 👤</small></div><button class="rbx" aria-label="Exit" onclick="event.stopPropagation();leaveRoom()">✕</button>`;
+  b.innerHTML=`<div class="rbt"><b>${esc(r.name)}</b><small><span class="eq"><i></i><i></i><i></i></span> ${roomPeople().length} 👤</small></div><button class="rbx" aria-label="Exit" onclick="event.stopPropagation();leaveRoom()">✕</button>`;
 }
 function roomRestore(){
   if(!S.cur) return; S.cur.min=false; const b=$("#rbub"); if(b) b.remove();
@@ -1819,7 +1819,7 @@ function roomPeople(){
 }
 function renderRoomHead(){
   if(!S.cur) return; const r=S.cur.data; if(S.cur.min) setTimeout(roomBubble,0);
-  $("#rpill").innerHTML=`<div class="rav" style="background:${THEMES[r.theme||0]}">${roomAv(r)}</div><div style="min-width:0"><b>${esc(r.name)}</b><small><span class="lv1">${cflag(r.country)}</span>ID:${esc(roomDispId(r))}</small></div>`;
+  $("#rpill").innerHTML=`<div style="min-width:0"><b>${esc(r.name)}</b><small><span class="lv1">${cflag(r.country)}</span>ID:${esc(roomDispId(r))}</small></div>`;
   $("#trophy").innerHTML=`🏆 ${fmt(r.score||0)} ›`;
   const ppl=roomPeople();
   $("#onl").innerHTML=`<span style="display:flex">${ppl.slice(0,3).map(p=>`<span style="margin-left:-6px">${avHTML(prof(p.uid),20)}</span>`).join("")}</span> 👤 ${ppl.length}`;
@@ -1911,7 +1911,7 @@ function openOnline(){
 function openRoomRank(){ return openRankings('rooms'); }
 function _oldRoomRank(){
   const l=[...S.rooms].sort((a,b)=>(b.score||0)-(a.score||0)).slice(0,30);
-  openModal(l.map((r,i)=>`<button class="lb" style="width:100%;text-align:start" data-id="${esc(r.id)}" onclick="closeModal();enterRoom(this.dataset.id)"><span class="rk2">${["🥇","🥈","🥉"][i]||i+1}</span><div class="rav" style="width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:22px;overflow:hidden;background:${THEMES[r.theme||0]}">${roomAv(r)}</div><b style="flex:1">${esc(r.name)}</b><span>🏆 ${fmt(r.score||0)}</span></button>`).join("")||'<div class="empty">No rooms</div>',{title:"🏆 Room Ranking"});
+  openModal(l.map((r,i)=>`<button class="lb" style="width:100%;text-align:start" data-id="${esc(r.id)}" onclick="closeModal();enterRoom(this.dataset.id)"><span class="rk2">${["🥇","🥈","🥉"][i]||i+1}</span><b style="flex:1">${esc(r.name)}</b><span>🏆 ${fmt(r.score||0)}</span></button>`).join("")||'<div class="empty">No rooms</div>',{title:"🏆 Room Ranking"});
 }
 
 /* ============ MOMENTS ============ */
@@ -3254,7 +3254,7 @@ async function openRankings(tab="wealth",period="week"){
   } else if(tab==="wealth"&&period==="all"){ Object.entries(S.profiles).forEach(([id,p])=>{ if(p.giftsSent) agg[id]=p.giftsSent; }); }
   else gifts.forEach(g=>{ const k=tab==="wealth"?g.from:g.to; if(k&&k!=="room") agg[k]=(agg[k]||0)+(+g.c||0); });
   const rows=Object.entries(agg).filter(([id])=>tab==="rooms"?S.rooms.some(r=>r.id===id):!isBlocked(id)).sort((a,b)=>b[1]-a[1]).slice(0,50);
-  const item=id=>tab==="rooms"?(()=>{ const r=S.rooms.find(x=>x.id===id); return {name:r.name,av:`<div style="width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:24px;overflow:hidden;background:${THEMES[r.theme||0]}">${roomAv(r)}</div>`,click:`closeModal();enterRoom('${id}')`}; })()
+  const item=id=>tab==="rooms"?(()=>{ const r=S.rooms.find(x=>x.id===id); return {name:r.name,av:``,click:`closeModal();enterRoom('${id}')`}; })()
     :{name:prof(id).nick,av:avHTML(prof(id),44),click:`openUser('${id}')`,vip:vipBadge(prof(id))};
   const pod=rows.slice(0,3), medal=["🥇","🥈","🥉"], order=[1,0,2];
   const podium=pod.length?`<div style="display:flex;justify-content:center;align-items:flex-end;gap:10px;margin:6px 0 14px">${order.filter(i=>pod[i]).map(i=>{ const [id,v]=pod[i], it=item(id);
